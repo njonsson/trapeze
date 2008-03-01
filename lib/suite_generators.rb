@@ -1,0 +1,1 @@
+module Trapeze::SuiteGenerators; end

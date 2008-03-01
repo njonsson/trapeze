@@ -1,0 +1,13 @@
+Trapeze generates a suite of unit tests or specifications for an existing Ruby
+codebase. Trapeze does this by reflecting on the public interfaces of classes
+and modules (as well as global methods) defined in the codebase. Trapeze then
+calls each public method, stubbing the behavior of arguments, and recording all
+the stubbed behavior for use in generating mock objects. This recorded behavior
+is used to generate a test/specification suite that can be rendered as
+Test::Unit test cases or other TDD/BDD libraries.
+
+There is a suite renderer for Test::Unit. RSpec and Jay Fields’s Expectations
+will be supported soon.
+
+(Support for excluding source code files and method name patterns from scanning
+since the engine executes code in order to inspect it.)
