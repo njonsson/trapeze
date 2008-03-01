@@ -1,0 +1,3 @@
+The following command will run all the automated tests for Trapeze.
+
+  ruby test/SUITE.rb
