@@ -1,3 +1,5 @@
+# Defines Trapeze::SuiteGenerators::TestUnit.
+
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../name_extension")
 require File.expand_path("#{File.dirname __FILE__}/../truncate_extension")

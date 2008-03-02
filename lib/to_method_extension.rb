@@ -1,3 +1,5 @@
+# Defines Trapeze::ToMethodExtension.
+
 # Adds a _to_instance_method_ and a _to_method_ method to String objects.
 module Trapeze::ToMethodExtension
   

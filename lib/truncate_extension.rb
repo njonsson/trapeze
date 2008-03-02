@@ -1,3 +1,5 @@
+# Defines Trapeze::TruncateExtension.
+
 # Adds a _truncate_ method to Dir that removes all contents of the specified
 # directory using a system call.
 # 

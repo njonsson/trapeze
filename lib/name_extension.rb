@@ -1,3 +1,5 @@
+# Defines Trapeze::NameExtension.
+
 # Adds a _name_ method to Method objects that provides the bare name of the
 # method without the class information contained in Method#to_s.
 module Trapeze::NameExtension

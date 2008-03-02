@@ -1,13 +1,16 @@
+# Defines Trapeze::Probes::StandardProbe.
+
 require File.expand_path("#{File.dirname __FILE__}/../probes")
 require File.expand_path("#{File.dirname __FILE__}/../courier")
 require File.expand_path("#{File.dirname __FILE__}/../to_method_extension")
 
-# Probes the source code contained in #loader for code paths.
+# Explores the source code contained in _loader_ in order to discover its
+# behavior.
 class Trapeze::Probes::StandardProbe
   
-  class << self #:nodoc:
+  class << self
     
-    def probe_method(method)
+    def probe_method(method) #:nodoc:
       args = (1..method.arity.abs).collect { |i| Trapeze::Courier.new }
       returned = method.call(*args)
       
@@ -29,8 +32,11 @@ class Trapeze::Probes::StandardProbe
     
   end
   
+  # The Trapeze::Loader object used to drive the probe.
   attr_reader :loader
   
+  # Instantiates a new Trapeze::Probes::StandardProbe with the specified
+  # Trapeze::Loader.
   def initialize(loader)
     @loader = loader
   end

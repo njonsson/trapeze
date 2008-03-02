@@ -1,3 +1,5 @@
+# Defines Trapeze::Courier.
+
 require File.expand_path("#{File.dirname __FILE__}/envelope")
 require File.expand_path("#{File.dirname __FILE__}/message")
 

@@ -1,3 +1,5 @@
+# Defines Trapeze::StringComparisonExtension.
+
 # Adds an implementation of the comparison operator, <=>, to Symbol. The
 # operator compares two Symbol#to_s values.
 module Trapeze::StringComparisonExtension

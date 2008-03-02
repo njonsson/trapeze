@@ -1,3 +1,5 @@
+# Defines Trapeze::Message.
+
 # Describes a call to a method.
 class Trapeze::Message
   

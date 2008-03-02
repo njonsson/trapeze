@@ -1,3 +1,5 @@
+# Defines Trapeze::Loader.
+
 require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
 # Loads Ruby source files and retrieves Class, Module and Method definitions
@@ -6,9 +8,9 @@ class Trapeze::Loader
   
 private
   
-  class << self #:nodoc:
+  class << self
     
-    def extract_class_definitions_and_module_definitions(sandbox)
+    def extract_class_definitions_and_module_definitions(sandbox) #:nodoc:
       classes, modules = [], []
       sandbox.constants.each do |c|
         constant = sandbox.module_eval(c)
@@ -20,14 +22,14 @@ private
       [classes, modules]
     end
     
-    def extract_definitions(sandbox)
+    def extract_definitions(sandbox) #:nodoc:
       classes, modules = extract_class_definitions_and_module_definitions(sandbox)
       {:class_definitions => classes,
        :module_definitions => modules,
        :method_definitions => extract_method_definitions(sandbox)}
     end
     
-    def extract_method_definitions(sandbox)
+    def extract_method_definitions(sandbox) #:nodoc:
       sandbox.instance_methods.collect { |m| m.to_instance_method sandbox }
     end
     
@@ -35,6 +37,7 @@ private
   
 public
   
+  # The paths of Ruby source files to load.
   attr_reader :filenames
   
   # Instantiates a new Trapeze::Loader with the Ruby source files supplied in
