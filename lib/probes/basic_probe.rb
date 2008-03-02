@@ -1,4 +1,4 @@
-# Defines Trapeze::Probes::StandardProbe.
+# Defines Trapeze::Probes::BasicProbe.
 
 require File.expand_path("#{File.dirname __FILE__}/../probes")
 require File.expand_path("#{File.dirname __FILE__}/../courier")
@@ -6,7 +6,7 @@ require File.expand_path("#{File.dirname __FILE__}/../to_method_extension")
 
 # Explores the source code contained in _loader_ in order to discover its
 # behavior.
-class Trapeze::Probes::StandardProbe
+class Trapeze::Probes::BasicProbe
   
   class << self
     
@@ -35,7 +35,7 @@ class Trapeze::Probes::StandardProbe
   # The Trapeze::Loader object used to drive the probe.
   attr_reader :loader
   
-  # Instantiates a new Trapeze::Probes::StandardProbe with the specified
+  # Instantiates a new Trapeze::Probes::BasicProbe with the specified
   # Trapeze::Loader.
   def initialize(loader)
     @loader = loader
