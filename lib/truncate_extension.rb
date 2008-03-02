@@ -1,17 +1,17 @@
-# Adds an _empty_dir!_ method to Dir that removes all contents of the specified
+# Adds a _truncate_ method to Dir that removes all contents of the specified
 # directory using a system call.
 # 
-# Note that the implementation of _empty_dir!_ removes the directory and then
+# Note that the implementation of _truncate_ removes the directory and then
 # creates it again rather than simply emptying it. This is done for performance
 # reasons, but it should be noted that this approach has consequences for
 # filesystem permissions.
-module Trapeze::EmptyDirExtension
+module Trapeze::TruncateExtension
   
   # Defines class methods added to Dir.
   module ClassMethods
     
     # Removes all contents of _path_ using a system call.
-    def empty_dir!(path)
+    def truncate(path)
       if windows_os?
         unless system("rmdir /q /s \"#{path}\"")
           raise "could not remove directory '#{path}'"
@@ -42,4 +42,4 @@ module Trapeze::EmptyDirExtension
   
 end
 
-Dir.class_eval { include Trapeze::EmptyDirExtension }
+Dir.class_eval { include Trapeze::TruncateExtension }

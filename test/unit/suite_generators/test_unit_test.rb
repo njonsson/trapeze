@@ -55,12 +55,12 @@ module Trapeze::SuiteGenerators::TestUnitTest
       end
       
       def test_should_return_self
-        Dir.stubs :empty_dir!
+        Dir.stubs :truncate
         assert_equal @generator, @generator.generate!([])
       end
       
-      def test_should_call_dir_empty_dirEXCLAMATION_with_path
-        Dir.expects(:empty_dir!).with 'foo'
+      def test_should_call_dir_truncate_with_path
+        Dir.expects(:truncate).with 'foo'
         @generator.generate!([])
       end
       
@@ -83,33 +83,36 @@ module Trapeze::SuiteGenerators::TestUnitTest
       end
       
       def test_should_return_self_when_sent_generateEXCLAMATION
-        Dir.stubs :empty_dir!
+        Dir.stubs :truncate
         File.stubs(:open).yields stub_everything
         assert_equal @generator, @generator.generate!(@cases)
       end
       
-      def test_should_call_dir_empty_dirEXCLAMATION_with_path
-        Dir.expects(:empty_dir!).with 'foo'
+      def test_should_call_dir_truncate_with_path
+        Dir.expects(:truncate).with 'foo'
         File.stubs(:open).yields stub_everything
         @generator.generate! @cases
       end
       
       def test_should_create_or_append_to_expected_file_with_expected_content
-        Dir.stubs(:empty_dir!).with 'foo'
-        mock_file = mock
-        mock_file.expects(:puts).with "require 'test/unit'"
-        mock_file.expects(:puts).with "require 'rubygems'"
-        mock_file.expects(:puts).with "require 'mocha'"
-        mock_file.expects(:puts).with ''
-        mock_file.expects(:puts).with 'class BarTest < Test::Unit::TestCase'
-        mock_file.expects(:puts).with '  '
-        mock_file.expects(:puts).with '  def test_truth'
-        mock_file.expects(:puts).with '    assert true'
-        mock_file.expects(:puts).with '  end'
-        mock_file.expects(:puts).with '  '
-        mock_file.expects(:puts).with 'end'
-        File.expects(:open).with('foo/bar_test.rb', 'a').yields mock_file
+        Dir.stubs(:truncate).with 'foo'
+        expected_source = <<-end_expected_source
+require 'test/unit'
+require 'rubygems'
+require 'mocha'
+
+class BarTest < Test::Unit::TestCase
+  
+  def test_bar
+    assert_nil Object.bar
+  end
+  
+end
+        end_expected_source
+        actual_source_io = StringIO.new
+        File.expects(:open).with('foo/bar_test.rb', 'a').yields actual_source_io
         @generator.generate! @cases
+        assert_equal expected_source, actual_source_io.string
       end
       
     end

@@ -1,10 +1,10 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/empty_dir_extension")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/truncate_extension")
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
 
-module Trapeze::EmptyDirExtensionTest
+module Trapeze::TruncateExtensionTest
   
   class Klass < Test::Unit::TestCase
     
@@ -12,14 +12,14 @@ module Trapeze::EmptyDirExtensionTest
       Dir.stubs(:system).returns true
     end
     
-    def test_should_call_windows_osQUESTION_when_sent_empty_dirEXCLAMATION
+    def test_should_call_windows_osQUESTION_when_sent_truncate
       Dir.expects(:windows_os?).returns false
-      Dir.empty_dir! 'foo'
+      Dir.truncate 'foo'
     end
     
-    def test_should_return_self_when_sent_empty_dirEXCLAMATION
+    def test_should_return_self_when_sent_truncate
       Dir.stubs(:windows_os?).returns false
-      assert_equal Dir, Dir.empty_dir!('foo')
+      assert_equal Dir, Dir.truncate('foo')
     end
     
     if RUBY_PLATFORM =~ /mswin/
@@ -40,27 +40,27 @@ module Trapeze::EmptyDirExtensionTest
       Dir.stubs(:windows_os?).returns true
     end
     
-    def test_should_call_system_with_expected_windows_remove_dir_command_when_sent_empty_dirEXCLAMATION_with_path
+    def test_should_call_system_with_expected_windows_remove_dir_command_when_sent_truncate_with_path
       Dir.expects(:system).with('rmdir /q /s "foo"').returns true
       Dir.stubs(:system).with('mkdir "foo"').returns true
-      Dir.empty_dir! 'foo'
+      Dir.truncate 'foo'
     end
     
-    def test_should_raise_runtime_error_when_removing_dir_fails_upon_sending_empty_dirEXCLAMATION_with_path
+    def test_should_raise_runtime_error_when_removing_dir_fails_upon_sending_truncate_with_path
       Dir.stubs(:system).with('rmdir /q /s "foo"').returns false
-      assert_raise(RuntimeError) { Dir.empty_dir! 'foo' }
+      assert_raise(RuntimeError) { Dir.truncate 'foo' }
     end
     
-    def test_should_call_system_with_expected_windows_create_dir_command_when_sent_empty_dirEXCLAMATION_with_path
+    def test_should_call_system_with_expected_windows_create_dir_command_when_sent_truncate_with_path
       Dir.stubs(:system).with('rmdir /q /s "foo"').returns true
       Dir.expects(:system).with('mkdir "foo"').returns true
-      Dir.empty_dir! 'foo'
+      Dir.truncate 'foo'
     end
     
-    def test_should_raise_runtime_error_when_creating_dir_fails_upon_sending_empty_dirEXCLAMATION_with_path
+    def test_should_raise_runtime_error_when_creating_dir_fails_upon_sending_truncate_with_path
       Dir.stubs(:system).with('rmdir /q /s "foo"').returns true
       Dir.stubs(:system).with('mkdir "foo"').returns false
-      assert_raise(RuntimeError) { Dir.empty_dir! 'foo' }
+      assert_raise(RuntimeError) { Dir.truncate 'foo' }
     end
     
   end
@@ -71,27 +71,27 @@ module Trapeze::EmptyDirExtensionTest
       Dir.stubs(:windows_os?).returns false
     end
     
-    def test_should_call_system_with_expected_unix_remove_dir_command_when_sent_empty_dirEXCLAMATION_with_path
+    def test_should_call_system_with_expected_unix_remove_dir_command_when_sent_truncate_with_path
       Dir.expects(:system).with('rm -fr "foo"').returns true
       Dir.stubs(:system).with('mkdir "foo"').returns true
-      Dir.empty_dir! 'foo'
+      Dir.truncate 'foo'
     end
     
-    def test_should_raise_runtime_error_when_removing_dir_fails_upon_sending_empty_dirEXCLAMATION_with_path
+    def test_should_raise_runtime_error_when_removing_dir_fails_upon_sending_truncate_with_path
       Dir.stubs(:system).with('rm -fr "foo"').returns false
-      assert_raise(RuntimeError) { Dir.empty_dir! 'foo' }
+      assert_raise(RuntimeError) { Dir.truncate 'foo' }
     end
     
-    def test_should_call_system_with_expected_unix_create_dir_command_when_sent_empty_dirEXCLAMATION_with_path
+    def test_should_call_system_with_expected_unix_create_dir_command_when_sent_truncate_with_path
       Dir.stubs(:system).with('rm -fr "foo"').returns true
       Dir.expects(:system).with('mkdir "foo"').returns true
-      Dir.empty_dir! 'foo'
+      Dir.truncate 'foo'
     end
     
-    def test_should_raise_runtime_error_when_creating_dir_fails_upon_sending_empty_dirEXCLAMATION_with_path
+    def test_should_raise_runtime_error_when_creating_dir_fails_upon_sending_truncate_with_path
       Dir.stubs(:system).with('rm -fr "foo"').returns true
       Dir.stubs(:system).with('mkdir "foo"').returns false
-      assert_raise(RuntimeError) { Dir.empty_dir! 'foo' }
+      assert_raise(RuntimeError) { Dir.truncate 'foo' }
     end
     
   end
