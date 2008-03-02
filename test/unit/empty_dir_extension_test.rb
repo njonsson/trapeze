@@ -9,7 +9,6 @@ module Trapeze::EmptyDirExtensionTest
   class Klass < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:windows_os?).returns false
       Dir.stubs(:system).returns true
     end
     
@@ -19,7 +18,18 @@ module Trapeze::EmptyDirExtensionTest
     end
     
     def test_should_return_self_when_sent_empty_dirEXCLAMATION
+      Dir.stubs(:windows_os?).returns false
       assert_equal Dir, Dir.empty_dir!('foo')
+    end
+    
+    if RUBY_PLATFORM =~ /mswin/
+      def test_should_return_true_when_sent_windows_osQUESTION_because_these_tests_are_running_on_windows
+        assert_equal true, Dir.send('windows_os?')
+      end
+    else
+      def test_should_return_false_when_sent_windows_osQUESTION_because_these_tests_are_not_running_on_windows
+        assert_equal false, Dir.send('windows_os?')
+      end
     end
     
   end
