@@ -1,17 +1,13 @@
 # Defines Trapeze::Envelope.
 
 require File.expand_path("#{File.dirname __FILE__}/message")
-require 'forwardable'
 
 # A collection of Trapeze::Message objects. This class exists because it is
 # necessary to distinguish an array of Trapeze::Message objects (particularly an
-# empty array) from an empty Array object.
+# empty array) from an empty Array.
 class Trapeze::Envelope
   
-  extend Forwardable
   include Enumerable
-  
-  def_delegators :@messages, :each, :empty?, :first, :last, :length, :size
   
   # Instantiates a new Trapeze::Envelope containing the Trapeze::Message objects
   # supplied in _messages_.
@@ -42,6 +38,36 @@ class Trapeze::Envelope
   def ==(envelope)
     return false unless (envelope.class == self.class)
     return @messages == envelope.instance_variable_get('@messages')
+  end
+  
+  # Calls _block_ once for each element, passing that element as a parameter.
+  def each(&block)
+    @messages.each(&block)
+  end
+  
+  # Returns +true+ if no elements. 
+  def empty?
+    @messages.empty?
+  end
+  
+  # Returns the first element, or +nil+ if no elements.
+  def first
+    @messages.first
+  end
+  
+  # Returns the last element, or +nil+ if no elements.
+  def last
+    @messages.last
+  end
+  
+  # Returns the number of elements. May be zero.
+  def length
+    @messages.length
+  end
+  
+  # Alias for length.
+  def size
+    @messages.size
   end
   
 private
