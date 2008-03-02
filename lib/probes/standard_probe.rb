@@ -15,11 +15,11 @@ class Trapeze::Probes::StandardProbe
       returned = method.call(*args)
       
       args.collect! do |a|
-        begin
+#        begin
           a.__seal_envelope__
-        rescue NoMethodError
-          a
-        end
+#        rescue NoMethodError
+#          a
+#        end
       end
       
       begin

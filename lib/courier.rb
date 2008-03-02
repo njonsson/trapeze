@@ -27,10 +27,10 @@ class Trapeze::Courier
       end
       
       returned = m.returned
-      begin
+#      begin
         returned = returned.__seal_envelope__
-      rescue NoMethodError
-      end
+#      rescue NoMethodError
+#      end
       
       envelope << Trapeze::Message.new(:method_name => m.method_name,
                                        :args => args,
