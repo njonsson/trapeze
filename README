@@ -6,7 +6,7 @@ the stubbed behavior for use in generating mock objects. This recorded behavior
 is used to generate a test/specification suite that can be rendered as
 Test::Unit test cases or other TDD/BDD libraries.
 
-There is a suite renderer for Test::Unit. RSpec and Jay Fields’s Expectations
+There is a suite renderer for Test::Unit. RSpec and Jay Fields's Expectations
 will be supported soon.
 
 (Support for excluding source code files and method name patterns from scanning
