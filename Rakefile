@@ -18,18 +18,18 @@ end
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
   t.verbose = true
-  t.test_files = FileList['test/**/*_test.rb']
+  t.test_files = 'test/SUITE.rb'
 end
 
 namespace :test do
   desc 'Create a code coverage report for the tests'
   Rcov::RcovTask.new(:coverage) do |t|
-    t.test_files = FileList['test/**/*_test.rb']
+    t.test_files = 'test/SUITE.rb'
     t.verbose = true
   end
   
   Rake::TestTask.new(:unit) do |t|
-    t.test_files = FileList['test/unit/**/*_test.rb']
+    t.test_files = 'test/UNIT_TESTS.rb'
     t.verbose = true
   end
   
@@ -37,13 +37,13 @@ namespace :test do
     desc 'Create a code coverage report for the tests in test/unit'
     Rcov::RcovTask.new(:coverage) do |t|
       t.output_dir = 'coverage-unit'
-      t.test_files = FileList['test/unit/**/*_test.rb']
+      t.test_files = 'test/UNIT_TESTS.rb'
       t.verbose = true
     end
   end
   
   Rake::TestTask.new(:system) do |t|
-    t.test_files = FileList['test/system/**/*_test.rb']
+    t.test_files = 'test/SYSTEM_TESTS.rb'
     t.verbose = true
   end
   
@@ -51,7 +51,7 @@ namespace :test do
     desc 'Create a code coverage report for the tests in test/system'
     Rcov::RcovTask.new(:coverage) do |t|
       t.output_dir = 'coverage-system'
-      t.test_files = FileList['test/system/**/*_test.rb']
+      t.test_files = 'test/SYSTEM_TESTS.rb'
       t.verbose = true
     end
   end
