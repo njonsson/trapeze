@@ -50,6 +50,31 @@ module Trapeze::AssertionHelpersExtension
     end
   end
   
+  def assert_raise_message(expected_exception, message)
+    unless expected_exception.kind_of?(Class) &&
+           expected_exception.ancestors.include?(Exception)
+      raise ArgumentError,
+            "`expected_exception' must be Exception, or must descend from it"
+    end
+    
+    begin
+      yield
+    rescue Exception => e
+      with_clean_backtrace do
+        assert_equal expected_exception, e.class
+        if message.kind_of?(Regexp)
+          assert_match message, e.message
+        else
+          assert_equal message, e.message
+        end
+      end
+    else
+      with_clean_backtrace do
+        flunk "<#{expected_exception}> exception expected but none was raised"
+      end
+    end
+  end
+  
 private
   
   def assert_types(expected_descriptions,
