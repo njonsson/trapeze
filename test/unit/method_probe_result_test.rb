@@ -1,13 +1,16 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
 require File.expand_path("#{File.dirname __FILE__}/../../lib/method_probe_result")
 require 'test/unit'
+require File.expand_path("#{File.dirname __FILE__}/assertion_helpers_extension")
 
 module Trapeze::MethodProbeResultTest
   
   class Allocate < Test::Unit::TestCase
     
     def test_should_raise_no_method_error
-      assert_raise(NoMethodError) { Trapeze::MethodProbeResult.allocate }
+      assert_raise_message(NoMethodError, /private method `allocate' called/) do
+        Trapeze::MethodProbeResult.allocate
+      end
     end
     
   end
@@ -15,7 +18,9 @@ module Trapeze::MethodProbeResultTest
   class New < Test::Unit::TestCase
     
     def test_should_raise_no_method_error
-      assert_raise(NoMethodError) { Trapeze::MethodProbeResult.new }
+      assert_raise_message(NoMethodError, /private method `new' called/) do
+        Trapeze::MethodProbeResult.new
+      end
     end
     
   end
@@ -25,7 +30,20 @@ module Trapeze::MethodProbeResultTest
     class WithNoArgs < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) { Trapeze::MethodProbeResult.raised }
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::MethodProbeResult.raised
+        end
+      end
+      
+    end
+    
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::MethodProbeResult.raised :foo => 'bar'
+        end
       end
       
     end
@@ -33,7 +51,8 @@ module Trapeze::MethodProbeResultTest
     class WithNilMethodNameAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => nil
         end
       end
@@ -43,7 +62,7 @@ module Trapeze::MethodProbeResultTest
     class WithMethodNameAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError, ':error attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => 'foo'
         end
       end
@@ -53,7 +72,7 @@ module Trapeze::MethodProbeResultTest
     class WithMethodNameAttributeAndArgsAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError, ':error attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => 'foo',
                                             :args => 'bar'
         end
@@ -64,7 +83,7 @@ module Trapeze::MethodProbeResultTest
     class WithMethodNameAttributeAndBlockAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError, ':error attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => 'foo',
                                             :block => lambda { Time.now }
         end
@@ -75,7 +94,7 @@ module Trapeze::MethodProbeResultTest
     class WithMethodNameAttributeAndArgsAttributeAndBlockAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError, ':error attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => 'foo',
                                             :args => 'bar',
                                             :block => lambda { Time.now }
@@ -309,7 +328,7 @@ module Trapeze::MethodProbeResultTest
     class WithMethodNameAttributeAndNilErrorAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError, ':error attribute required') do
           Trapeze::MethodProbeResult.raised :method_name => 'foo', :error => nil
         end
       end
@@ -404,7 +423,20 @@ module Trapeze::MethodProbeResultTest
     class WithNoArgs < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) { Trapeze::MethodProbeResult.returned }
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::MethodProbeResult.returned
+        end
+      end
+      
+    end
+    
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::MethodProbeResult.returned :foo => 'bar'
+        end
       end
       
     end
@@ -412,7 +444,8 @@ module Trapeze::MethodProbeResultTest
     class WithNilMethodNameAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
           Trapeze::MethodProbeResult.returned :method_name => nil
         end
       end
@@ -628,7 +661,20 @@ module Trapeze::MethodProbeResultTest
     class WithNoArgs < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) { Trapeze::MethodProbeResult.thrown }
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::MethodProbeResult.thrown
+        end
+      end
+      
+    end
+    
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::MethodProbeResult.thrown :foo => 'bar'
+        end
       end
       
     end
@@ -636,7 +682,8 @@ module Trapeze::MethodProbeResultTest
     class WithNilMethodNameAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise(ArgumentError) do
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
           Trapeze::MethodProbeResult.thrown :method_name => nil
         end
       end
