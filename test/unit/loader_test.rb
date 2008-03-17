@@ -14,19 +14,19 @@ module Trapeze::LoaderTest
     end
     
     def test_should_return_empty_array_when_sent_filenames
-      assert_equal([], @loader.filenames)
+      assert_equal [], @loader.filenames
     end
     
     def test_should_return_empty_array_when_sent_class_definitions
-      assert_equal([], @loader.class_definitions)
+      assert_equal [], @loader.class_definitions
     end
     
     def test_should_return_empty_array_when_sent_module_definitions
-      assert_equal([], @loader.module_definitions)
+      assert_equal [], @loader.module_definitions
     end
     
     def test_should_return_empty_array_when_sent_method_definitions
-      assert_equal([], @loader.method_definitions)
+      assert_equal [], @loader.method_definitions
     end
     
   end
@@ -40,7 +40,7 @@ module Trapeze::LoaderTest
       end
       
       def test_should_return_array_of_expected_filenames_when_sent_filenames
-        assert_equal(['empty.rb'], @loader.filenames)
+        assert_equal ['empty.rb'], @loader.filenames
       end
       
       def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -61,7 +61,7 @@ module Trapeze::LoaderTest
       
       def test_should_return_empty_array_when_sent_class_definitions
         File.stubs(:read).returns ''
-        assert_equal([], @loader.class_definitions)
+        assert_equal [], @loader.class_definitions
       end
       
       def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -72,7 +72,7 @@ module Trapeze::LoaderTest
       
       def test_should_return_empty_array_when_sent_module_definitions
         File.stubs(:read).returns ''
-        assert_equal([], @loader.module_definitions)
+        assert_equal [], @loader.module_definitions
       end
       
       def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -83,7 +83,7 @@ module Trapeze::LoaderTest
       
       def test_should_return_empty_array_when_sent_method_definitions
         File.stubs(:read).returns ''
-        assert_equal([], @loader.method_definitions)
+        assert_equal [], @loader.method_definitions
       end
       
     end
@@ -101,7 +101,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['methodless_classes.rb'], @loader.filenames)
+          assert_equal ['methodless_classes.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -134,7 +134,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -145,7 +145,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -171,7 +171,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['classes_with_metaclass_methods.rb'], @loader.filenames)
+          assert_equal ['classes_with_metaclass_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -207,7 +207,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -218,7 +218,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -240,7 +240,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['classes_with_class_methods.rb'], @loader.filenames)
+          assert_equal ['classes_with_class_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -276,7 +276,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -287,7 +287,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -309,7 +309,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['classes_with_instance_methods.rb'], @loader.filenames)
+          assert_equal ['classes_with_instance_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -345,7 +345,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -356,7 +356,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -390,7 +390,8 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb'], @loader.filenames)
+          assert_equal ['classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb'],
+                       @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -434,7 +435,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -445,7 +446,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -465,7 +466,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['methodless_modules.rb'], @loader.filenames)
+          assert_equal ['methodless_modules.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -486,7 +487,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -509,7 +510,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -535,7 +536,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['modules_with_metaclass_methods.rb'], @loader.filenames)
+          assert_equal ['modules_with_metaclass_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -556,7 +557,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -582,7 +583,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -604,7 +605,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['modules_with_class_methods.rb'], @loader.filenames)
+          assert_equal ['modules_with_class_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -625,7 +626,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -651,7 +652,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -673,7 +674,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['modules_with_instance_methods.rb'], @loader.filenames)
+          assert_equal ['modules_with_instance_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -694,7 +695,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -720,7 +721,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -754,7 +755,8 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb'], @loader.filenames)
+          assert_equal ['modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb'],
+                       @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -775,7 +777,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -809,7 +811,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -831,7 +833,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['metaclass_methods.rb'], @loader.filenames)
+          assert_equal ['metaclass_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -852,7 +854,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -863,7 +865,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -874,7 +876,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -890,7 +892,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['class_methods.rb'], @loader.filenames)
+          assert_equal ['class_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -911,7 +913,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -922,7 +924,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -933,7 +935,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.method_definitions)
+          assert_equal [], @loader.method_definitions
         end
         
       end
@@ -949,7 +951,7 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['instance_methods.rb'], @loader.filenames)
+          assert_equal ['instance_methods.rb'], @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -970,7 +972,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -981,7 +983,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice
@@ -1015,7 +1017,8 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
-          assert_equal(['metaclass_methods_and_class_methods_and_instance_methods.rb'], @loader.filenames)
+          assert_equal ['metaclass_methods_and_class_methods_and_instance_methods.rb'],
+                       @loader.filenames
         end
         
         def test_should_call_file_read_when_sent_loadEXCLAMATION
@@ -1036,7 +1039,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_class_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.class_definitions)
+          assert_equal [], @loader.class_definitions
         end
         
         def test_should_call_file_read_once_when_sent_module_definitions_twice
@@ -1047,7 +1050,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_module_definitions
           File.stubs(:read).returns @source
-          assert_equal([], @loader.module_definitions)
+          assert_equal [], @loader.module_definitions
         end
         
         def test_should_call_file_read_once_when_sent_method_definitions_twice

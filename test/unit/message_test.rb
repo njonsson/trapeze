@@ -33,11 +33,11 @@ module Trapeze::MessageTest
     end
     
     def test_should_return_empty_array_when_sent_args
-      assert_equal([], @message.args)
+      assert_equal [], @message.args
     end
     
     def test_should_return_empty_array_when_sent_args_and_block
-      assert_equal([], @message.args_and_block)
+      assert_equal [], @message.args_and_block
     end
     
     def test_should_return_nil_when_sent_block
@@ -160,7 +160,7 @@ module Trapeze::MessageTest
     end
     
     def test_should_return_empty_array_when_sent_args
-      assert_equal([], @message.args)
+      assert_equal [], @message.args
     end
     
     def test_should_return_array_containing_expected_block_when_sent_args_and_block
@@ -189,11 +189,11 @@ module Trapeze::MessageTest
     end
     
     def test_should_return_empty_array_when_sent_args
-      assert_equal([], @message.args)
+      assert_equal [], @message.args
     end
     
     def test_should_return_empty_array_when_sent_args_and_block
-      assert_equal([], @message.args_and_block)
+      assert_equal [], @message.args_and_block
     end
     
     def test_should_return_nil_when_sent_block

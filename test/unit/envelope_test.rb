@@ -85,7 +85,7 @@ module Trapeze::EnvelopeTest
     end
     
     def test_should_return_empty_array_when_sent_each
-      assert_equal([], @envelope.each)
+      assert_equal [], @envelope.each
     end
     
     def test_should_not_yield_when_sent_each
@@ -169,7 +169,7 @@ module Trapeze::EnvelopeTest
     def test_should_yield_expected_message_once_when_sent_each
       @messages = []
       @envelope.each { |m| @messages << m }
-      assert_equal([@message], @messages)
+      assert_equal [@message], @messages
     end
     
     def test_should_return_false_when_sent_emptyQUESTION
