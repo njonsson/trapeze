@@ -97,4 +97,10 @@ class Trapeze::ClassOrModuleMethodProbeResult < Trapeze::MethodProbeResult
     super
   end
   
+  # Returns +true+ if _other_ is of the same class and has the same attributes.
+  def ==(other)
+    return false unless super(other)
+    class_or_module == other.class_or_module
+  end
+  
 end

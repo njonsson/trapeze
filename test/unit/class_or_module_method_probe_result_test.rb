@@ -1708,4 +1708,320 @@ module Trapeze::ClassOrModuleMethodProbeResultTest
     
   end
   
+  module EQUALEQUAL
+    
+    module WithReturnedObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByClassOrModule < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Class,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'bat' },
+                                                               :returned => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'baz',
+                                                               :block => lambda { 'bat' },
+                                                               :returned => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByValueOfBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'bat' },
+                                                               :returned => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByResult < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
+                                                               :method_name => 'foo',
+                                                               :args => 'bar',
+                                                               :block => lambda { 'baz' },
+                                                               :returned => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+    end
+    
+    module WithRaisedObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByClassOrModule < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Class,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'bat' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'baz',
+                                                             :block => lambda { 'bat' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByValueOfBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'bat' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByResultError < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => Exception,
+                                                             :error_message => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByResultErrorMessage < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :error => RuntimeError,
+                                                             :error_message => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+    end
+    
+    module WithThrownObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByClassOrModule < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Class,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'bat' },
+                                                             :thrown => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'baz',
+                                                             :block => lambda { 'bat' },
+                                                             :thrown => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByValueOfBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'pwop')
+          b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'bat' },
+                                                             :thrown => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByResult < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'bat')
+          b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
+                                                             :method_name => 'foo',
+                                                             :args => 'bar',
+                                                             :block => lambda { 'baz' },
+                                                             :thrown => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+    end
+    
+  end
+  
 end
