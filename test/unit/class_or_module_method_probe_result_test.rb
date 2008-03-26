@@ -1715,15 +1715,16 @@ module Trapeze::ClassOrModuleMethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
                                                                :method_name => 'foo',
                                                                :args => 'bar',
-                                                               :block => lambda { 'baz' },
+                                                               :block => baz,
                                                                :returned => 'bat')
           b = Trapeze::ClassOrModuleMethodProbeResult.returned(:class_or_module => Object,
                                                                :method_name => 'foo',
                                                                :args => 'bar',
-                                                               :block => lambda { 'baz' },
+                                                               :block => baz,
                                                                :returned => 'bat')
           assert_equal(true, (a == b))
         end
@@ -1809,16 +1810,17 @@ module Trapeze::ClassOrModuleMethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
                                                              :method_name => 'foo',
                                                              :args => 'bar',
-                                                             :block => lambda { 'baz' },
+                                                             :block => baz,
                                                              :error => RuntimeError,
                                                              :error_message => 'bat')
           b = Trapeze::ClassOrModuleMethodProbeResult.raised(:class_or_module => Object,
                                                              :method_name => 'foo',
                                                              :args => 'bar',
-                                                             :block => lambda { 'baz' },
+                                                             :block => baz,
                                                              :error => RuntimeError,
                                                              :error_message => 'bat')
           assert_equal(true, (a == b))
@@ -1933,15 +1935,16 @@ module Trapeze::ClassOrModuleMethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
                                                              :method_name => 'foo',
                                                              :args => 'bar',
-                                                             :block => lambda { 'baz' },
+                                                             :block => baz,
                                                              :thrown => 'bat')
           b = Trapeze::ClassOrModuleMethodProbeResult.thrown(:class_or_module => Object,
                                                              :method_name => 'foo',
                                                              :args => 'bar',
-                                                             :block => lambda { 'baz' },
+                                                             :block => baz,
                                                              :thrown => 'bat')
           assert_equal(true, (a == b))
         end

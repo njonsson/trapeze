@@ -901,13 +901,14 @@ module Trapeze::MethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::MethodProbeResult.returned(:method_name => 'foo',
                                                   :args => 'bar',
-                                                  :block => lambda { 'baz' },
+                                                  :block => baz,
                                                   :returned => 'bat')
           b = Trapeze::MethodProbeResult.returned(:method_name => 'foo',
                                                   :args => 'bar',
-                                                  :block => lambda { 'baz' },
+                                                  :block => baz,
                                                   :returned => 'bat')
           assert_equal(true, (a == b))
         end
@@ -917,13 +918,14 @@ module Trapeze::MethodProbeResultTest
       class DifferingByArgs < Test::Unit::TestCase
         
         def test_should_return_false
+          bat = lambda { 'bat' }
           a = Trapeze::MethodProbeResult.returned(:method_name => 'foo',
                                                   :args => 'bar',
-                                                  :block => lambda { 'bat' },
+                                                  :block => bat,
                                                   :returned => 'pwop')
           b = Trapeze::MethodProbeResult.returned(:method_name => 'foo',
                                                   :args => 'baz',
-                                                  :block => lambda { 'bat' },
+                                                  :block => bat,
                                                   :returned => 'pwop')
           assert_equal(false, (a == b))
         end
@@ -969,14 +971,15 @@ module Trapeze::MethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::MethodProbeResult.raised(:method_name => 'foo',
                                                 :args => 'bar',
-                                                :block => lambda { 'baz' },
+                                                :block => baz,
                                                 :error => RuntimeError,
                                                 :error_message => 'bat')
           b = Trapeze::MethodProbeResult.raised(:method_name => 'foo',
                                                 :args => 'bar',
-                                                :block => lambda { 'baz' },
+                                                :block => baz,
                                                 :error => RuntimeError,
                                                 :error_message => 'bat')
           assert_equal(true, (a == b))
@@ -987,14 +990,15 @@ module Trapeze::MethodProbeResultTest
       class DifferingByArgs < Test::Unit::TestCase
         
         def test_should_return_false
+          bat = lambda { 'bat' }
           a = Trapeze::MethodProbeResult.raised(:method_name => 'foo',
                                                 :args => 'bar',
-                                                :block => lambda { 'bat' },
+                                                :block => bat,
                                                 :error => RuntimeError,
                                                 :error_message => 'pwop')
           b = Trapeze::MethodProbeResult.raised(:method_name => 'foo',
                                                 :args => 'baz',
-                                                :block => lambda { 'bat' },
+                                                :block => bat,
                                                 :error => RuntimeError,
                                                 :error_message => 'pwop')
           assert_equal(false, (a == b))
@@ -1063,13 +1067,14 @@ module Trapeze::MethodProbeResultTest
       class Equivalent < Test::Unit::TestCase
         
         def test_should_return_true
+          baz = lambda { 'baz' }
           a = Trapeze::MethodProbeResult.thrown(:method_name => 'foo',
                                                 :args => 'bar',
-                                                :block => lambda { 'baz' },
+                                                :block => baz,
                                                 :thrown => 'bat')
           b = Trapeze::MethodProbeResult.thrown(:method_name => 'foo',
                                                 :args => 'bar',
-                                                :block => lambda { 'baz' },
+                                                :block => baz,
                                                 :thrown => 'bat')
           assert_equal(true, (a == b))
         end

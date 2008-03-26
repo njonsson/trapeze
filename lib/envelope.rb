@@ -37,7 +37,9 @@ class Trapeze::Envelope
   # each element is equal to the corresponding element in _envelope_.
   def ==(envelope)
     return false unless (envelope.class == self.class)
-    return @messages == envelope.instance_variable_get('@messages')
+    return false unless (@messages ==
+                         envelope.instance_variable_get('@messages'))
+    true
   end
   
   # Calls _block_ once for each element, passing that element as a parameter.

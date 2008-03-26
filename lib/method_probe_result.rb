@@ -114,14 +114,14 @@ class Trapeze::MethodProbeResult
     attributes.each { |attr, value| instance_variable_set "@#{attr}", value }
   end
   
-  # Returns +true+ if _other_ is of the same class and has the same attributes.
-  def ==(other)
-    return false unless (self.class  == other.class)
-    return false unless (method_name == other.method_name)
-    return false unless (args        == other.args)
-    return false unless (block.nil?  == other.block.nil?)
-    return false unless (block.call  == other.block.call)
-    result == other.result
+  # Returns +true+ if _method_probe_result_ has the same attributes.
+  def ==(method_probe_result)
+    return false unless (self.class  == method_probe_result.class)
+    return false unless (method_name == method_probe_result.method_name)
+    return false unless (args        == method_probe_result.args)
+    return false unless (block       == method_probe_result.block)
+    return false unless (result == method_probe_result.result)
+    true
   end
   
 end

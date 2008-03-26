@@ -30,11 +30,11 @@ class Trapeze::Message
   
   # Returns +true+ if _message_ has the same attributes.
   def ==(message)
-    return false unless (self.class == message.class)
-    return false unless (@method_name == message.method_name)
-    return false unless (@args == message.args)
-    return false unless (@block == message.block)
-    return false unless (@returned == message.returned)
+    return false unless (self.class  == message.class)
+    return false unless (method_name == message.method_name)
+    return false unless (args        == message.args)
+    return false unless (block       == message.block)
+    return false unless (returned    == message.returned)
     true
   end
   
