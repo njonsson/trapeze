@@ -15,8 +15,10 @@ private
       sandbox.constants.each do |c|
         constant = sandbox.module_eval(c)
         case constant.class.name
-          when 'Class': classes << constant
-          when 'Module': modules << constant
+          when 'Class'
+            classes << constant
+          when 'Module'
+            modules << constant
         end
       end
       [classes, modules]
