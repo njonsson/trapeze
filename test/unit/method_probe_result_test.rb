@@ -1,7 +1,7 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
 require File.expand_path("#{File.dirname __FILE__}/../../lib/method_probe_result")
 require 'test/unit'
-require File.expand_path("#{File.dirname __FILE__}/assertion_helpers_extension")
+require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 
 module Trapeze::MethodProbeResultTest
   

@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname __FILE__}/../../lib/executor")
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
-require File.expand_path("#{File.dirname __FILE__}/assertion_helpers_extension")
+require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 
 module Trapeze::ExecutorTest
   

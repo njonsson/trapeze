@@ -2,7 +2,7 @@ require File.expand_path("#{File.dirname __FILE__}/../test")
 require File.expand_path("#{File.dirname __FILE__}/../../lib/courier")
 require File.expand_path("#{File.dirname __FILE__}/../../lib/envelope")
 require 'test/unit'
-require File.expand_path("#{File.dirname __FILE__}/assertion_helpers_extension")
+require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 
 module Trapeze::CourierTest
   
