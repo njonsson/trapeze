@@ -5,10 +5,28 @@ require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 # The base class for library-specific generators in Trapeze::SuiteGenerators.
 class Trapeze::SuiteGenerators::GeneratorBase
   
+  class << self
+    
+    def allocate #:nodoc:
+      raise_unless_inherited
+      super
+    end
+    
+  private
+    
+    def raise_unless_inherited
+      if self == Trapeze::SuiteGenerators::GeneratorBase
+        raise RuntimeError, "#{self} is an abstract class"
+      end
+    end
+    
+  end
+  
   # The directory in which generated source files will be created.
   attr_reader :path
   
   def initialize(path)
+    self.class.send :raise_unless_inherited
     if ! File.directory?(path) && File.exist?(path)
       raise ArgumentError, 'path must be a directory'
     end
