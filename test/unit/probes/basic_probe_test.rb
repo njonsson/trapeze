@@ -18,7 +18,7 @@ module Trapeze::Probes::BasicProbeTest
       assert_equal @mock_loader, @probe.loader
     end
     
-    def test_should_return_self_when_sent_generateEXCLAMATION
+    def test_should_return_self_when_sent_probeEXCLAMATION
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []
       @mock_loader.stubs(:method_definitions).returns []
@@ -60,7 +60,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -120,7 +120,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -192,7 +192,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -276,7 +276,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -348,7 +348,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -412,7 +412,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -498,7 +498,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
@@ -576,7 +576,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
@@ -636,7 +636,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
@@ -700,7 +700,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
@@ -764,7 +764,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
@@ -846,7 +846,7 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @mock_loader, @probe.loader
       end
       
-      def test_should_return_self_when_sent_generateEXCLAMATION
+      def test_should_return_self_when_sent_probeEXCLAMATION
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
@@ -923,7 +923,7 @@ module Trapeze::Probes::BasicProbeTest
       assert_equal @mock_loader, @probe.loader
     end
     
-    def test_should_return_self_when_sent_generateEXCLAMATION
+    def test_should_return_self_when_sent_probeEXCLAMATION
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []
       @mock_loader.stubs(:method_definitions).returns @method_definitions
