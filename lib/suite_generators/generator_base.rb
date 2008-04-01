@@ -1,6 +1,7 @@
 # Defines Trapeze::SuiteGenerators::GeneratorBase.
 
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
+require File.expand_path("#{File.dirname __FILE__}/../truncate_extension")
 
 # The base class for library-specific generators in Trapeze::SuiteGenerators.
 class Trapeze::SuiteGenerators::GeneratorBase

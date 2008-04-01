@@ -3,7 +3,6 @@
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator_base")
 require File.expand_path("#{File.dirname __FILE__}/../name_extension")
-require File.expand_path("#{File.dirname __FILE__}/../truncate_extension")
 
 # Generates Ruby source files containing Test::Unit test cases.
 class Trapeze::SuiteGenerators::TestUnit <
