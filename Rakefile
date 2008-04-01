@@ -69,5 +69,19 @@ namespace :test do
         t.verbose = true
       end
     end
+    
+    Rake::TestTask.new(:truth) do |t|
+      t.test_files = 'test/system/**/output-truth/**/SUITE.rb'
+      t.verbose = true
+    end
+    
+    namespace :truth do
+      desc 'Create a code coverage report for the test-generation truth files in test/system/*'
+      Rcov::RcovTask.new(:coverage) do |t|
+        t.output_dir = 'coverage-system-generated'
+        t.test_files = 'test/system/**/output-truth/**/SUITE.rb'
+        t.verbose = true
+      end
+    end
   end
 end
