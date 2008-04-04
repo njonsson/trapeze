@@ -5,6 +5,7 @@ require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/../../assertion_helpers_extension")
 require 'rubygems'
 require 'mocha'
+require 'stringio'
 
 module Trapeze::SuiteGenerators::TestUnitTest
   
