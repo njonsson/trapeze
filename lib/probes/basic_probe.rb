@@ -41,8 +41,9 @@ class Trapeze::Probes::BasicProbe
     @loader = loader
   end
   
-  # Returns the results of probing class definitions in loader. Results are
-  # supplied in an array of hashes of the form: <tt>{:class => _class_,
+  # Returns the results of probing class definitions in _loader_, calling probe!
+  # if they have not already been obtained. Results are supplied in an array of
+  # hashes of the form: <tt>{:class => _class_,
   # :class_method_probings => _array_of_Message_objects_,
   # :instantiation => _Message_,
   # :instance_method_probings => _array_of_Message_objects_}</tt>.
@@ -50,22 +51,24 @@ class Trapeze::Probes::BasicProbe
     probe_or_get_results :class
   end
   
-  # Returns the results of probing method definitions in loader. Results are
-  # supplied in an array of Message objects.
+  # Returns the results of probing method definitions in _loader_, calling
+  # probe! if they have not already been obtained. Results are supplied in an
+  # array of Message objects.
   def method_probe_results
     probe_or_get_results :method
   end
   
-  # Returns the results of probing module definitions in loader. Results are
-  # supplied in an array of hashes of the form: <tt>{:module => _module_,
+  # Returns the results of probing module definitions in _loader_, calling
+  # probe! if they have not already been obtained. Results are supplied in an
+  # array of hashes of the form: <tt>{:module => _module_,
   # :module_method_probings => _array_of_Message_objects_,
   # :instance_method_probings => _array_of_Message_objects_}</tt>.
   def module_probe_results
     probe_or_get_results :module
   end
   
-  # Populates class_probe_results, module_probe_results and method_probe_results
-  # based on the contents of _loader_.
+  # Analyzes the contents of _loader_, populating class_probe_results,
+  # module_probe_results and method_probe_results.
   def probe!
     @results = {}
     probe_class_definitions!
