@@ -4,7 +4,7 @@
 module Trapeze::ToMethodExtension
   
   # Returns the Method object for a String that represents an instance method on
-  # _type_.
+  # _type_. Raises ArgumentError if _type_ is neither a Class nor a Module.
   def to_instance_method(type)
     klass = case type.class.name
               when 'Class'

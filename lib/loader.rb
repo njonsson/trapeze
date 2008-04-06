@@ -3,7 +3,7 @@
 require File.expand_path("#{File.dirname __FILE__}/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
-# Loads Ruby source files and retrieves Class, Module and Method definitions
+# Loads source code files and retrieves Class, Module and Method definitions
 # contained within them.
 class Trapeze::Loader
   
@@ -40,22 +40,22 @@ private
   
 public
   
-  # The paths of Ruby source files to load.
+  # The paths of source code files to load.
   attr_reader :filenames
   
-  # Instantiates a new Trapeze::Loader with the Ruby source files supplied in
+  # Instantiates a new Trapeze::Loader with the source code files supplied in
   # _filenames_.
   def initialize(*filenames)
     @filenames = filenames
   end
   
-  # Returns Class definitions present in the Ruby source files, calling load! if
-  # they have not already been retrieved.
+  # Returns Class definitions present in _filenames_, calling load! if they have
+  # not already been retrieved.
   def class_definitions
     load_or_get_definitions! :class
   end
   
-  # Loads the Ruby source files supplied in filenames and retrieves Class,
+  # Loads the source code files supplied in _filenames_ and retrieves Class,
   # Module and Method definitions from them.
   def load!
     sandbox = Module.new
@@ -64,14 +64,14 @@ public
     self
   end
   
-  # Returns Method definitions present in the Ruby source files, calling load!
-  # if they have not already been retrieved.
+  # Returns Method definitions present in _filenames_, calling load! if they
+  # have not already been retrieved.
   def method_definitions
     load_or_get_definitions! :method
   end
   
-  # Returns Module definitions present in the Ruby source files, calling load!
-  # if they have not already been retrieved.
+  # Returns Module definitions present in _filenames_, calling load! if they
+  # have not already been retrieved.
   def module_definitions
     load_or_get_definitions! :module
   end

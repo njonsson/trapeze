@@ -1,5 +1,5 @@
 # Defines Trapeze::SuiteGenerators.
 
-# Contains at least one implementation of a test or specification suite
-# generation algorithm that produces a regression suite for Ruby source.
+# Contains implementations of test- or specification-suite generation algorithms
+# that produce regression suites for source code.
 module Trapeze::SuiteGenerators; end

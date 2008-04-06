@@ -14,9 +14,9 @@ class Trapeze::Message
     # :block => _lambda_, :error => _exception_class_,
     # :error_message => _string_}</tt>.
     # 
-    # The <tt>:args</tt> attribute is optional (assumed to be <tt>[]</tt>). The
+    # The <tt>:args</tt> attribute is optional (defaults to <tt>[]</tt>). The
     # attributes <tt>:block</tt> and <tt>:error_message</tt> are also optional
-    # (assumed to be +nil+).
+    # (defaults to +nil+).
     def raised(attributes={})
       raise_if_unexpected attributes, :additional => [:error, :error_message]
       raise_unless_method_name attributes
@@ -34,7 +34,7 @@ class Trapeze::Message
     # :block => _lambda_, :returned => _object_}</tt>.
     # 
     # The attributes <tt>:block</tt> and <tt>:returned</tt> are optional
-    # (assumed to be +nil+).
+    # (defaults to +nil+).
     def returned(attributes={})
       raise_if_unexpected attributes, :additional => :returned
       raise_unless_method_name attributes
@@ -47,8 +47,8 @@ class Trapeze::Message
     # form: <tt>{:method_name => _string_, :args => _object_or_array_,
     # :block => _lambda_, :thrown => _object_}</tt>.
     # 
-    # The attributes <tt>:block</tt> and <tt>:thrown</tt> are optional (assumed
-    # to be +nil+).
+    # The attributes <tt>:block</tt> and <tt>:thrown</tt> are optional (defaults
+    # to +nil+).
     def thrown(attributes={})
       raise_if_unexpected attributes, :additional => :thrown
       raise_unless_method_name attributes
@@ -91,17 +91,17 @@ class Trapeze::Message
     
   end
   
-  # Returns an array of arguments passed to method_name.
+  # An array of arguments passed to _method_name_.
   attr_reader :args
   
-  # Returns the block passed to method_name.
+  # The block passed to _method_name_.
   attr_reader :block
   
-  # Returns the name of the method being called.
+  # The name of the method being called.
   attr_reader :method_name
   
-  # Returns a hash representing the result of calling method_name. The hash
-  # takes one of the following forms:
+  # A hash representing the result of calling _method_name_. The hash takes one
+  # of the following forms:
   # 
   # * <tt>{:returned => _object_}</tt>
   # * <tt>{:raised => {:error => _exception_class_, :message => _string_}</tt>

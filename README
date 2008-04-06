@@ -1,13 +1,44 @@
-Trapeze generates a suite of unit tests or specifications for an existing Ruby
-codebase. Trapeze does this by reflecting on the public interfaces of classes
-and modules (as well as global methods) defined in the codebase. Trapeze then
-calls each public method, stubbing the behavior of arguments, and recording all
-the stubbed behavior for use in generating mock objects. This recorded behavior
-is used to generate a test/specification suite that can be rendered as
-Test::Unit test cases or other TDD/BDD libraries.
+== Introduction
+
+Trapeze generates a suite of unit tests or specifications for existing Ruby
+source code.
+
+Trapeze does this through dynamic analysis, by reflecting on the
+public interfaces of classes and modules (as well as global methods) defined in
+the source. Trapeze then calls each public method, stubbing the behavior of
+arguments, and recording all the stubbed behavior for use in generating mock
+objects. This recorded behavior is used to generate a test/specification suite
+that can be rendered as Test::Unit test cases or other TDD/BDD libraries.
 
 There is a suite renderer for Test::Unit. RSpec and Jay Fields's Expectations
 will be supported soon.
 
-(Support for excluding source code files and method name patterns from scanning
-since the engine executes code in order to inspect it.)
+<b>Trapeze is a pre-alpha product.</b> There's a lot that doesn't work yet. Stay
+tuned.
+
+== How to install Trapeze
+
+(Coming soon)
+
+== How to use Trapeze
+
+1. Make sure that the Trapeze <i>bin</i> directory is in your path and that
+   <i>bin/trap</i> is executable. (A <i>trap.bat</i> script is provided to
+   support Windows platforms.)
+2. From the root of your Ruby project, type <tt>trap</tt>. This will search for
+   files matching the pattern <i>lib/**/*.rb</i> and generate a safety-net suite
+   in <i>test/trapeze</i>.
+3. To change the source code files analyzed by Trapeze, provide two command-line
+   arguments as follows: <tt>trap <i>source_file_pattern</i>
+   <i>output_dir</i></tt>.
+4. Run the generated suite by typing <tt>ruby test/trapeze/SUITE.rb</tt>.
+
+== Credits
+
+Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
+
+== To do
+
+* Add support for excluding source code files and method name patterns from
+  scanning, since the engine executes code in order to inspect it
+* Replace <tt>Dir.truncate</tt> with <tt>FileUtils.rm_rf</tt>

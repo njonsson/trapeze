@@ -10,9 +10,9 @@ module Trapeze::SortedInstanceMethodsExtension
   
   # Returns a sorted array containing the names of public instance methods in
   # the receiver. For a module, these are the public methods; for a class, they
-  # are the instance (not singleton) methods. With no argument, or with an
-  # argument that is +true+ the methods in the receiver and in its ancestors are
-  # returned, otherwise the instance methods in the receiver are returned.
+  # are the instance (not singleton) methods. With no argument, or when
+  # _include_super_ is +true+ the methods in the receiver and in its ancestors
+  # are returned, otherwise the instance methods in the receiver are returned.
   def instance_methods_sorted(include_super=true)
     instance_methods_not_sorted(include_super).sort
   end
@@ -27,7 +27,7 @@ end
 module Trapeze::SortedMethodsExtension
   
   # Returns a sorted array containing the names of methods publicly accessible
-  # in the receiver. With no argument, or with an argument that is +true+, the
+  # in the receiver. With no argument, or when _include_super_ is +true+, the
   # methods accessible to the receiver and to its type's ancestors are returned,
   # otherwise the methods accessible to the receiver are returned.
   def methods_sorted(include_super=true)

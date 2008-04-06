@@ -5,13 +5,13 @@ require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator
 require File.expand_path("#{File.dirname __FILE__}/../name_extension")
 require File.expand_path("#{File.dirname __FILE__}/../to_file_path_extension")
 
-# Generates Ruby source files containing Test::Unit test cases.
+# Generates Test::Unit test cases.
 class Trapeze::SuiteGenerators::TestUnit <
       Trapeze::SuiteGenerators::GeneratorBase
   
   # Instantiates a new Trapeze::SuiteGenerators::TestUnit from the specified
-  # _attributes_. Attributes +:path+ and +:probe+ are required, and +:path+ must
-  # not point to an existing file.
+  # _attributes_. Attributes <tt>:path</tt> and <tt>:probe</tt> are required,
+  # and <tt>:path</tt> must not point to an existing file.
   def initialize(attributes={})
     super attributes
   end

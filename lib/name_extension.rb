@@ -4,6 +4,7 @@
 # method without the class information contained in Method#to_s.
 module Trapeze::NameExtension
   
+  # Returns just the name of a Method without an associated class identifier.
   def name
     to_s.match(regexp_for_name).captures.first
   end

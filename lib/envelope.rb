@@ -3,38 +3,32 @@
 require File.expand_path("#{File.dirname __FILE__}/message")
 
 # A collection of Trapeze::Message objects. This class exists because it is
-# necessary to distinguish an array of Trapeze::Message objects (particularly an
-# empty array) from an empty Array.
+# necessary to distinguish an empty array object from an array (of
+# Trapeze::Message objects) that is empty.
 class Trapeze::Envelope
   
   include Enumerable
   
-  # Instantiates a new Trapeze::Envelope containing the Trapeze::Message objects
-  # supplied in _messages_.
+  # Instantiates a new Trapeze::Envelope containing the elements supplied in
+  # _messages_. Raises ArgumentError unless they are Trapeze::Message objects.
   def initialize(*messages)
-    messages.each { |m| raise_argument_error_unless_kind_of_message m }
+    messages.each { |m| raise_unless_kind_of_message m }
     @messages = messages
   end
   
-  # Returns the Trapeze::Message element at _index_.
+  # Returns the message element at _index_.
   def [](index)
     @messages[index]
   end
   
-#  def []=(index, message)
-#    raise_argument_error_unless_kind_of_message message
-#    @messages[index] = message
-#    self
-#  end
-  
-  # Pushes _message_ into the envelope.
+  # Pushes _message_ into the envelope. Raises ArgumentError unless it is a
+  # Trapeze::Message.
   def <<(message)
-    raise_argument_error_unless_kind_of_message message
+    raise_unless_kind_of_message message
     @messages << message
   end
   
-  # Returns +true+ if _envelope_ contains the same number of elements and if
-  # each element is equal to the corresponding element in _envelope_.
+  # Returns +true+ if _envelope_ contains the same messages.
   def ==(envelope)
     return false unless (envelope.class == self.class)
     return false unless (@messages ==
@@ -42,27 +36,28 @@ class Trapeze::Envelope
     true
   end
   
-  # Calls _block_ once for each element, passing that element as a parameter.
+  # Calls _block_ once for each message element, passing that element as a
+  # parameter.
   def each(&block)
     @messages.each(&block)
   end
   
-  # Returns +true+ if no elements. 
+  # Returns +true+ if no message elements. 
   def empty?
     @messages.empty?
   end
   
-  # Returns the first element, or +nil+ if no elements.
+  # Returns the first message element, or +nil+ if none.
   def first
     @messages.first
   end
   
-  # Returns the last element, or +nil+ if no elements.
+  # Returns the last message element, or +nil+ if none.
   def last
     @messages.last
   end
   
-  # Returns the number of elements. May be zero.
+  # Returns the number of message elements. May be zero.
   def length
     @messages.length
   end
@@ -74,7 +69,7 @@ class Trapeze::Envelope
   
 private
   
-  def raise_argument_error_unless_kind_of_message(obj)
+  def raise_unless_kind_of_message(obj)
     unless obj.kind_of?(Trapeze::Message)
       raise ArgumentError, 'expected Trapeze::Message object'
     end

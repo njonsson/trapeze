@@ -24,14 +24,14 @@ class Trapeze::SuiteGenerators::GeneratorBase
     
   end
   
-  # The directory in which generated source files will be created.
+  # The directory in which generated files will be created.
   attr_reader :path
   
   # The Trapeze::Probes object from which a suite will be generated.
   attr_reader :probe
   
-  # Not to be called directly because Trapeze::SuiteGenerators::GeneratorBase is
-  # an abstract class.
+  # (Not to be called directly because Trapeze::SuiteGenerators::GeneratorBase
+  # is an abstract class.)
   def initialize(attributes={})
     self.class.send :raise_unless_inherited
     raise_unless_path attributes
@@ -41,8 +41,8 @@ class Trapeze::SuiteGenerators::GeneratorBase
     @path, @probe = attributes[:path], attributes[:probe]
   end
   
-  # Deletes the subdirectories and files in path and generates Ruby source files
-  # containing a suite of test cases described by probe.
+  # Deletes the subdirectories and files in path and generates a suite of test
+  # cases or specifications described by _probe_.
   def generate!
     File.directory?(path) ? Dir.truncate(path) : Dir.mkdir(path)
     

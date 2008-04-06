@@ -64,8 +64,8 @@ class Trapeze::Probes::BasicProbe
     probe_or_get_results :module
   end
   
-  # Probes loader and populates class_probe_results, module_probe_results and
-  # method_probe_results.
+  # Populates class_probe_results, module_probe_results and method_probe_results
+  # based on the contents of _loader_.
   def probe!
     @results = {}
     probe_class_definitions!
@@ -78,7 +78,7 @@ private
   
   def probe_or_get_results(type)
     probe! unless @results
-    @results[:"#{type}_probe_results"]
+    @results["#{type}_probe_results".to_sym]
   end
   
   def probe_class_definitions!
