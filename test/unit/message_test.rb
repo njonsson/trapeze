@@ -1,207 +1,1142 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
 require File.expand_path("#{File.dirname __FILE__}/../../lib/message")
 require 'test/unit'
+require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 
 module Trapeze::MessageTest
   
-  class WithNoAttributes < Test::Unit::TestCase
+  class Allocate < Test::Unit::TestCase
     
-    def test_should_raise_argument_error
-      assert_raise(ArgumentError) { Trapeze::Message.new }
+    def test_should_raise_no_method_error
+      assert_raise_message(NoMethodError, /private method `allocate' called/) do
+        Trapeze::Message.allocate
+      end
     end
     
   end
   
-  class WithMethodNameAttribute < Test::Unit::TestCase
+  class New < Test::Unit::TestCase
     
-    def setup
-      @message = Trapeze::Message.new(:method_name => 'foo')
-    end
-    
-    def test_should_return_true_when_sent_EQUALEQUAL_with_equivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'foo')
-      assert_equal(true, (@message == other_message))
-    end
-    
-    def test_should_return_false_when_sent_EQUALEQUAL_with_nonequivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'bar')
-      assert_equal(false, (@message == other_message))
-    end
-    
-    def test_should_return_expected_value_when_sent_method_name
-      assert_equal 'foo', @message.method_name
-    end
-    
-    def test_should_return_empty_array_when_sent_args
-      assert_equal [], @message.args
-    end
-    
-    def test_should_return_empty_array_when_sent_args_and_block
-      assert_equal [], @message.args_and_block
-    end
-    
-    def test_should_return_nil_when_sent_block
-      assert_nil @message.block
-    end
-    
-    def test_should_return_nil_when_sent_returned
-      assert_nil @message.returned
+    def test_should_raise_no_method_error
+      assert_raise_message(NoMethodError, /private method `new' called/) do
+        Trapeze::Message.new
+      end
     end
     
   end
   
-  class WithMethodNameAndArgsAttributes < Test::Unit::TestCase
+  module Raised
     
-    def setup
-      @message = Trapeze::Message.new(:method_name => 'foo', :args => %w(bar baz))
+    class WithNoArgs < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.raised
+        end
+      end
+      
     end
     
-    def test_should_return_true_when_sent_EQUALEQUAL_with_equivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'foo',
-                                           :args => %w(bar baz))
-      assert_equal(true, (@message == other_message))
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::Message.raised :foo => 'bar'
+        end
+      end
+      
     end
     
-    def test_should_return_false_when_sent_EQUALEQUAL_with_nonequivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'baz',
-                                           :args => %w(bar foo))
-      assert_equal(false, (@message == other_message))
+    class WithNilMethodNameAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.raised :method_name => nil
+        end
+      end
+      
     end
     
-    def test_should_return_expected_value_when_sent_method_name
-      assert_equal 'foo', @message.method_name
+    class WithMethodNameAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':error attribute required') do
+          Trapeze::Message.raised :method_name => 'foo'
+        end
+      end
+      
     end
     
-    def test_should_return_array_of_expected_values_when_sent_args
-      assert_equal(%w(bar baz), @message.args)
+    class WithMethodNameAttributeAndArgsAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':error attribute required') do
+          Trapeze::Message.raised :method_name => 'foo', :args => 'bar'
+        end
+      end
+      
     end
     
-    def test_should_return_array_of_expected_values_when_sent_args_and_block
-      assert_equal(%w(bar baz), @message.args_and_block)
+    class WithMethodNameAttributeAndBlockAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':error attribute required') do
+          Trapeze::Message.raised :method_name => 'foo',
+                                  :block => lambda { Time.now }
+        end
+      end
+      
     end
     
-    def test_should_return_nil_when_sent_block
-      assert_nil @message.block
+    class WithMethodNameAttributeAndArgsAttributeAndBlockAttribute <
+          Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':error attribute required') do
+          Trapeze::Message.raised :method_name => 'foo',
+                                  :args => 'bar',
+                                  :block => lambda { Time.now }
+        end
+      end
+      
     end
     
-    def test_should_return_nil_when_sent_returned
-      assert_nil @message.returned
+    class WithMethodNameAttributeAndNilArgsAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => nil,
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_nil_when_sent_args
+        assert_equal [nil], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndEmptyArgsAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => [],
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArgsAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => 'bar',
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_expected_arg_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArrayArgsAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => ['bar'],
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndNilBlockAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :block => nil,
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndBlockAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :block => lambda { @time },
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArgsAttributeAndBlockAttributeAndErrorAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => 'bar',
+                                           :block => lambda { @time },
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArgsAttributeAndBlockAttributeAndErrorAttributeAndErrorMessageAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :args => 'bar',
+                                           :block => lambda { @time },
+                                           :error => RuntimeError,
+                                           :error_message => 'baz')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError, :message => 'baz'}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndNilErrorAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':error attribute required') do
+          Trapeze::Message.raised :method_name => 'foo', :error => nil
+        end
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndErrorAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :error => RuntimeError)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndErrorAttributeAndNilErrorMessageAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :error => RuntimeError,
+                                           :error_message => nil)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError}},
+                     @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndErrorAttributeAndErrorMessageAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.raised(:method_name => 'foo',
+                                           :error => RuntimeError,
+                                           :error_message => 'bar')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:raised => {:error => RuntimeError,
+                                  :message => 'bar'}},
+                     @message.reply)
+      end
+      
     end
     
   end
   
-  class WithMethodNameAndArgsAndBlockAttributes < Test::Unit::TestCase
+  module Returned
     
-    def setup
-      @message = Trapeze::Message.new(:method_name => 'foo',
-                                      :args => %w(bar baz),
-                                      :block => lambda { 'bat' })
+    class WithNoArgs < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.returned
+        end
+      end
+      
     end
     
-    def test_should_return_true_when_sent_EQUALEQUAL_with_equivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'foo',
-                                           :args => %w(bar baz),
-                                           :block => @message.block)
-      assert_equal(true, (@message == other_message))
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::Message.returned :foo => 'bar'
+        end
+      end
+      
     end
     
-    def test_should_return_false_when_sent_EQUALEQUAL_with_nonequivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'bat',
-                                           :args => %w(baz bar),
-                                           :block => lambda { 'foo' })
-      assert_equal(false, (@message == other_message))
+    class WithNilMethodNameAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.returned :method_name => nil
+        end
+      end
+      
     end
     
-    def test_should_return_expected_value_when_sent_method_name
-      assert_equal 'foo', @message.method_name
+    class WithMethodNameAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_array_of_expected_values_when_sent_args
-      assert_equal(%w(bar baz), @message.args)
+    class WithMethodNameAttributeAndNilArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :args => nil)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_nil_when_sent_args
+        assert_equal [nil], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_array_containing_expected_values_and_block_when_sent_args_and_block
-      assert_equal 3, @message.args_and_block.length
-      assert_equal(%w(bar baz), @message.args_and_block[0..1])
-      assert_equal 'bat', @message.args_and_block[2].call
+    class WithMethodNameAttributeAndEmptyArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo', :args => [])
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_block_evaluating_to_expected_value_when_sent_block
-      assert_equal 'bat', @message.block.call
+    class WithMethodNameAttributeAndArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :args => 'bar')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_expected_arg_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_nil_when_sent_returned
-      assert_nil @message.returned
+    class WithMethodNameAttributeAndArrayArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :args => ['bar'])
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndNilBlockAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :block => nil)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndBlockAttribute < Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :block => lambda { @time })
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArgsAttributeAndBlockAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.returned(:method_name => 'foo',
+                                             :args => 'bar',
+                                             :block => lambda { @time })
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:returned => nil}, @message.reply)
+      end
+      
     end
     
   end
   
-  class WithMethodNameAndBlockAttributes < Test::Unit::TestCase
+  module Thrown
     
-    def setup
-      @message = Trapeze::Message.new(:method_name => 'foo',
-                                      :block => lambda { 'bar' })
+    class WithNoArgs < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.thrown
+        end
+      end
+      
     end
     
-    def test_should_return_true_when_sent_EQUALEQUAL_with_equivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'foo',
-                                           :block => @message.block)
-      assert_equal(true, (@message == other_message))
+    class WithUnexpectedAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':foo attribute unexpected') do
+          Trapeze::Message.thrown :foo => 'bar'
+        end
+      end
+      
     end
     
-    def test_should_return_false_when_sent_EQUALEQUAL_with_nonequivalent_message
-      other_message = Trapeze::Message.new(:method_name => 'bar',
-                                           :block => lambda { 'foo' })
-      assert_equal(false, (@message == other_message))
+    class WithNilMethodNameAttribute < Test::Unit::TestCase
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError,
+                             ':method_name attribute required') do
+          Trapeze::Message.thrown :method_name => nil
+        end
+      end
+      
     end
     
-    def test_should_return_expected_value_when_sent_method_name
-      assert_equal 'foo', @message.method_name
+    class WithMethodNameAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_empty_array_when_sent_args
-      assert_equal [], @message.args
+    class WithMethodNameAttributeAndNilArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo', :args => nil)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_nil_when_sent_args
+        assert_equal [nil], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_array_containing_expected_block_when_sent_args_and_block
-      assert_equal 1, @message.args_and_block.length
-      assert_equal 'bar', @message.args_and_block[0].call
+    class WithMethodNameAttributeAndEmptyArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo', :args => [])
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_block_evaluating_to_expected_value_when_sent_block
-      assert_equal 'bar', @message.block.call
+    class WithMethodNameAttributeAndArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo',
+                                           :args => 'bar')
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_array_containing_expected_arg_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
     end
     
-    def test_should_return_nil_when_sent_returned
-      assert_nil @message.returned
+    class WithMethodNameAttributeAndArrayArgsAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo',
+                                           :args => ['bar'])
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndNilBlockAttribute < Test::Unit::TestCase
+      
+      def setup
+        @message = Trapeze::Message.thrown(:method_name => 'foo', :block => nil)
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_nil_when_sent_block
+        assert_nil @message.block
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndBlockAttribute < Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.thrown(:method_name => 'foo',
+                                           :block => lambda { @time })
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_empty_array_when_sent_args
+        assert_equal [], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
+    end
+    
+    class WithMethodNameAttributeAndArgsAttributeAndBlockAttribute <
+          Test::Unit::TestCase
+      
+      def setup
+        @time = Time.now
+        @message = Trapeze::Message.thrown(:method_name => 'foo',
+                                           :args => 'bar',
+                                           :block => lambda { @time })
+      end
+      
+      def test_should_return_expected_method_name_when_sent_method_name
+        assert_equal 'foo', @message.method_name
+      end
+      
+      def test_should_return_expected_array_when_sent_args
+        assert_equal ['bar'], @message.args
+      end
+      
+      def test_should_return_expected_block_when_sent_block
+        assert_equal @time, @message.block.call
+      end
+      
+      def test_should_return_expected_hash_when_sent_reply
+        assert_equal({:thrown => nil}, @message.reply)
+      end
+      
     end
     
   end
   
-  class WithMethodNameAndReturnedAttributes < Test::Unit::TestCase
+  module EQUALEQUAL
     
-    def setup
-      @message = Trapeze::Message.new(:method_name => 'foo', :returned => 'bar')
+    module WithReturnedObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          baz = lambda { 'baz' }
+          a = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => baz,
+                                        :returned => 'bat')
+          b = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => baz,
+                                        :returned => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          bat = lambda { 'bat' }
+          a = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => bat,
+                                        :returned => 'pwop')
+          b = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'baz',
+                                        :block => bat,
+                                        :returned => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => lambda { 'baz' },
+                                        :returned => 'bat')
+          b = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => lambda { 'baz' },
+                                        :returned => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByReply < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => lambda { 'baz' },
+                                        :returned => 'bat')
+          b = Trapeze::Message.returned(:method_name => 'foo',
+                                        :args => 'bar',
+                                        :block => lambda { 'baz' },
+                                        :returned => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
     end
     
-    def test_should_return_expected_value_when_sent_method_name
-      assert_equal 'foo', @message.method_name
+    module WithRaisedObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          baz = lambda { 'baz' }
+          a = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => baz,
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          b = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => baz,
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          bat = lambda { 'bat' }
+          a = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => bat,
+                                      :error => RuntimeError,
+                                      :error_message => 'pwop')
+          b = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'baz',
+                                      :block => bat,
+                                      :error => RuntimeError,
+                                      :error_message => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          b = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByReplyError < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          b = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => Exception,
+                                      :error_message => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByReplyErrorMessage < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => RuntimeError,
+                                      :error_message => 'bat')
+          b = Trapeze::Message.raised(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :error => RuntimeError,
+                                      :error_message => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
     end
     
-    def test_should_return_empty_array_when_sent_args
-      assert_equal [], @message.args
-    end
-    
-    def test_should_return_empty_array_when_sent_args_and_block
-      assert_equal [], @message.args_and_block
-    end
-    
-    def test_should_return_nil_when_sent_block
-      assert_nil @message.block
-    end
-    
-    def test_should_return_expected_value_when_sent_returned
-      assert_equal 'bar', @message.returned
+    module WithThrownObject
+      
+      class Equivalent < Test::Unit::TestCase
+        
+        def test_should_return_true
+          baz = lambda { 'baz' }
+          a = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => baz,
+                                      :thrown => 'bat')
+          b = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => baz,
+                                      :thrown => 'bat')
+          assert_equal(true, (a == b))
+        end
+        
+      end
+      
+      class DifferingByArgs < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'bat' },
+                                      :thrown => 'pwop')
+          b = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'baz',
+                                      :block => lambda { 'bat' },
+                                      :thrown => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByBlock < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :thrown => 'bat')
+          b = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :thrown => 'bat')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
+      class DifferingByReply < Test::Unit::TestCase
+        
+        def test_should_return_false
+          a = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :thrown => 'bat')
+          b = Trapeze::Message.thrown(:method_name => 'foo',
+                                      :args => 'bar',
+                                      :block => lambda { 'baz' },
+                                      :thrown => 'pwop')
+          assert_equal(false, (a == b))
+        end
+        
+      end
+      
     end
     
   end

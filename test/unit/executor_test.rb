@@ -38,29 +38,21 @@ module Trapeze::ExecutorTest
       @executor.execute!
     end
     
-    def test_should_call_test_unit_new_with_default_path_when_sent_executeEXCLAMATION
-      Trapeze::SuiteGenerators::TestUnit.expects(:new).with('test/trapeze').returns stub_everything
+    def test_should_call_test_unit_new_with_path_attribute_of_default_path_and_probe_attribute_of_basic_probe_when_sent_executeEXCLAMATION
+      Trapeze::Probes::BasicProbe.expects(:new).returns :stubbed_probe
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => 'test/trapeze',
+                                                            :probe => :stubbed_probe).returns stub_everything
       @executor.execute!
     end
     
-    def test_should_call_probe_results_when_sent_executeEXCLAMATION
-      mock_probe = stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns mock_probe
-      mock_probe.expects :results
-      @executor.execute!
-    end
-    
-    def test_should_call_generator_generate_with_probe_result_when_sent_executeEXCLAMATION
-      stubbed_probe = stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns stubbed_probe
-      stubbed_probe.stubs(:results).returns :stubbed_probe_results
+    def test_should_call_generator_generateEXCLAMATION_with_no_args_when_sent_executeEXCLAMATION
       mock_generator = mock
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns mock_generator
-      mock_generator.expects(:generate!).with :stubbed_probe_results
+      mock_generator.expects(:generate!).with()
       @executor.execute!
     end
     
-    def test_should_return_result_of_generator_generate_when_sent_executeEXCLAMATION
+    def test_should_return_result_of_generator_generateEXCLAMATION_when_sent_executeEXCLAMATION
       stubbed_generator = stub_everything
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns stubbed_generator
       stubbed_generator.stubs(:generate!).returns :generate_result
@@ -110,29 +102,21 @@ module Trapeze::ExecutorTest
       @executor.execute!
     end
     
-    def test_should_call_test_unit_new_with_second_arg_when_sent_executeEXCLAMATION
-      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:arg2).returns stub_everything
+    def test_should_call_test_unit_new_with_path_attribute_of_second_arg_and_probe_attribute_of_basic_probe_when_sent_executeEXCLAMATION
+      Trapeze::Probes::BasicProbe.expects(:new).returns :stubbed_probe
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => :arg2,
+                                                            :probe => :stubbed_probe).returns stub_everything
       @executor.execute!
     end
     
-    def test_should_call_probe_results_when_sent_executeEXCLAMATION
-      mock_probe = stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns mock_probe
-      mock_probe.expects :results
-      @executor.execute!
-    end
-    
-    def test_should_call_generator_generate_with_probe_result_when_sent_executeEXCLAMATION
-      stubbed_probe = stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns stubbed_probe
-      stubbed_probe.stubs(:results).returns :stubbed_probe_results
+    def test_should_call_generator_generateEXCLAMATION_with_no_args_when_sent_executeEXCLAMATION
       mock_generator = mock
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns mock_generator
-      mock_generator.expects(:generate!).with :stubbed_probe_results
+      mock_generator.expects(:generate!).with()
       @executor.execute!
     end
     
-    def test_should_return_result_of_generator_generate_when_sent_executeEXCLAMATION
+    def test_should_return_result_of_generator_generateEXCLAMATION_when_sent_executeEXCLAMATION
       stubbed_generator = stub_everything
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns stubbed_generator
       stubbed_generator.stubs(:generate!).returns :generate_result

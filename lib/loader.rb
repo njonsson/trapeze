@@ -1,5 +1,6 @@
 # Defines Trapeze::Loader.
 
+require File.expand_path("#{File.dirname __FILE__}/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
 # Loads Ruby source files and retrieves Class, Module and Method definitions

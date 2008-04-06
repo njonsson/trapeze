@@ -26,16 +26,16 @@ class Trapeze::Courier
         end
       end
       
-      returned = m.returned
+      returned = m.reply[:returned]
 #      begin
         returned = returned.__seal_envelope__
 #      rescue NoMethodError
 #      end
       
-      envelope << Trapeze::Message.new(:method_name => m.method_name,
-                                       :args => args,
-                                       :block => m.block,
-                                       :returned => returned)
+      envelope << Trapeze::Message.returned(:method_name => m.method_name,
+                                            :args => args,
+                                            :block => m.block,
+                                            :returned => returned)
       envelope
     end
   end
@@ -44,10 +44,10 @@ class Trapeze::Courier
   
   def method_missing(method, *args, &block) #:nodoc:
     returned = Trapeze::Courier.new
-    @__envelope__ << Trapeze::Message.new(:method_name => method.to_s,
-                                          :args => args,
-                                          :block => block,
-                                          :returned => returned)
+    @__envelope__ << Trapeze::Message.returned(:method_name => method.to_s,
+                                               :args => args,
+                                               :block => block,
+                                               :returned => returned)
     returned
   end
   

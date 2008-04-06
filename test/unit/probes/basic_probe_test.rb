@@ -11,6 +11,9 @@ module Trapeze::Probes::BasicProbeTest
     
     def setup
       @mock_loader = mock
+      @mock_loader.stubs(:class_definitions).returns []
+      @mock_loader.stubs(:module_definitions).returns []
+      @mock_loader.stubs(:method_definitions).returns []
       @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
     end
     
@@ -19,25 +22,43 @@ module Trapeze::Probes::BasicProbeTest
     end
     
     def test_should_return_self_when_sent_probeEXCLAMATION
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns []
       assert_equal @probe, @probe.probe!
     end
     
-    def test_should_return_empty_array_when_sent_results
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns []
-      assert_equal [], @probe.results
+    def test_should_return_empty_hash_when_sent_class_probe_results
+      assert_equal [], @probe.class_probe_results
     end
     
-    def test_should_call_loader_loadEXCLAMATION_once_when_sent_results_twice
+    def test_should_call_loader_loadEXCLAMATION_once_when_sent_class_probe_results_twice
       @mock_loader.expects(:class_definitions).returns []
       @mock_loader.expects(:module_definitions).returns []
       @mock_loader.expects(:method_definitions).returns []
-      @probe.results
-      @probe.results
+      @probe.class_probe_results
+      @probe.class_probe_results
+    end
+    
+    def test_should_return_empty_hash_when_sent_module_probe_results
+      assert_equal [], @probe.module_probe_results
+    end
+    
+    def test_should_call_loader_loadEXCLAMATION_once_when_sent_module_probe_results_twice
+      @mock_loader.expects(:class_definitions).returns []
+      @mock_loader.expects(:module_definitions).returns []
+      @mock_loader.expects(:method_definitions).returns []
+      @probe.module_probe_results
+      @probe.module_probe_results
+    end
+    
+    def test_should_return_empty_array_when_sent_method_probe_results
+      assert_equal [], @probe.method_probe_results
+    end
+    
+    def test_should_call_loader_loadEXCLAMATION_once_when_sent_method_probe_results_twice
+      @mock_loader.expects(:class_definitions).returns []
+      @mock_loader.expects(:module_definitions).returns []
+      @mock_loader.expects(:method_definitions).returns []
+      @probe.method_probe_results
+      @probe.method_probe_results
     end
     
   end
@@ -53,6 +74,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, BarClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -61,25 +85,43 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_empty_array_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        assert_equal [], @probe.results
+      def test_should_return_empty_array_when_sent_class_probe_results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -113,6 +155,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, BatClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -121,37 +166,53 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooClass,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:class_or_module => BatClass,
-                     :method_name => 'pwop',
-                     :returned => nil},
-                    {:class_or_module => BatClass,
-                     :method_name => 'ding',
-                     :returned => nil}]
-        assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :class_method_probings => [{:method_name => 'bar',
+                                                 :returned => nil},
+                                                {:method_name => 'baz',
+                                                 :returned => nil}]},
+                    {:class => BatClass,
+                     :class_method_probings => [{:method_name => 'ding',
+                                                 :returned => nil},
+                                                {:method_name => 'pwop',
+                                                 :returned => nil}]}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -185,6 +246,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, DingClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -193,41 +257,57 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooClass,
-                     :method_name => 'bar',
-                     :args => [Trapeze::Envelope.new],
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'bat',
-                     :args => [Trapeze::Envelope.new],
-                     :returned => nil},
-                    {:class_or_module => DingClass,
-                     :method_name => 'doot',
-                     :args => [Trapeze::Envelope.new],
-                     :returned => nil},
-                    {:class_or_module => DingClass,
-                     :method_name => 'dit',
-                     :args => [Trapeze::Envelope.new],
-                     :returned => nil}]
-         assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :class_method_probings => [{:method_name => 'bar',
+                                                 :args => [[]],
+                                                 :returned => nil},
+                                                {:method_name => 'bat',
+                                                 :args => [[]],
+                                                 :returned => nil}]},
+                    {:class => DingClass,
+                     :class_method_probings => [{:method_name => 'dit',
+                                                 :args => [[]],
+                                                 :returned => nil},
+                                                {:method_name => 'doot',
+                                                 :args => [[]],
+                                                 :returned => nil}]}]
+         assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -269,6 +349,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, DingClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -277,45 +360,61 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooClass,
-                     :method_name => 'bar',
-                     :args => [Trapeze::Envelope.new(Trapeze::Message.new(:method_name => 'to_s',
-                                                                          :returned => Trapeze::Envelope.new))],
-                     :returned => Trapeze::Envelope.new},
-                    {:class_or_module => FooClass,
-                     :method_name => 'bat',
-                     :args => [Trapeze::Envelope.new(Trapeze::Message.new(:method_name => 'to_s',
-                                                                          :returned => Trapeze::Envelope.new))],
-                     :returned => Trapeze::Envelope.new},
-                    {:class_or_module => DingClass,
-                     :method_name => 'doot',
-                     :args => [Trapeze::Envelope.new(Trapeze::Message.new(:method_name => 'to_s',
-                                                                          :returned => Trapeze::Envelope.new))],
-                     :returned => Trapeze::Envelope.new},
-                    {:class_or_module => DingClass,
-                     :method_name => 'dit',
-                     :args => [Trapeze::Envelope.new(Trapeze::Message.new(:method_name => 'to_s',
-                                                                          :returned => Trapeze::Envelope.new))],
-                     :returned => Trapeze::Envelope.new}]
-        assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :class_method_probings => [{:method_name => 'bar',
+                                                 :args => [[:method_name => 'to_s',
+                                                            :returned => Trapeze::Envelope.new]],
+                                                 :returned => Trapeze::Envelope.new},
+                                                {:method_name => 'bat',
+                                                 :args => [[:method_name => 'to_s',
+                                                            :returned => Trapeze::Envelope.new]],
+                                                 :returned => Trapeze::Envelope.new}]},
+                    {:class => DingClass,
+                     :class_method_probings => [{:method_name => 'dit',
+                                                 :args => [[:method_name => 'to_s',
+                                                            :returned => Trapeze::Envelope.new]],
+                                                 :returned => Trapeze::Envelope.new},
+                                                {:method_name => 'doot',
+                                                 :args => [[:method_name => 'to_s',
+                                                            :returned => Trapeze::Envelope.new]],
+                                                 :returned => Trapeze::Envelope.new}]}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -341,6 +440,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, BatClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -349,37 +451,53 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooClass,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:class_or_module => BatClass,
-                     :method_name => 'pwop',
-                     :returned => nil},
-                    {:class_or_module => BatClass,
-                     :method_name => 'ding',
-                     :returned => nil}]
-        assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :class_method_probings => [{:method_name => 'bar',
+                                                 :returned => nil},
+                                                {:method_name => 'baz',
+                                                 :returned => nil}]},
+                    {:class => BatClass,
+                     :class_method_probings => [{:method_name => 'ding',
+                                                 :returned => nil},
+                                                {:method_name => 'pwop',
+                                                 :returned => nil}]}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -405,6 +523,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, BatClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -413,35 +534,55 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:instantiation => {:class_or_module => FooClass,
-                                        :method_name => 'new',
-                                        :returned => nil},
-                     :probings => [{:method_name => 'bar', :returned => nil},
-                                   {:method_name => 'baz', :returned => nil}]},
-                    {:instantiation => {:class_or_module => BatClass,
-                                        :method_name => 'new',
-                                        :returned => nil},
-                     :probings => [{:method_name => 'pwop', :returned => nil},
-                                   {:method_name => 'ding', :returned => nil}]}]
-        assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :instantiation => {:method_name => 'new'},
+                     :instance_method_probings => [{:method_name => 'bar',
+                                                    :returned => nil},
+                                                   {:method_name => 'baz',
+                                                    :returned => nil}]},
+                    {:class => BatClass,
+                     :instantiation => {:method_name => 'new'},
+                     :instance_method_probings => [{:method_name => 'ding',
+                                                    :returned => nil},
+                                                   {:method_name => 'pwop',
+                                                    :returned => nil}]}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -491,6 +632,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @class_definitions = [FooClass, DingClass]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns @class_definitions
+        @mock_loader.stubs(:module_definitions).returns []
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -499,59 +643,71 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
-        @mock_loader.stubs(:class_definitions).returns @class_definitions
-        @mock_loader.stubs(:module_definitions).returns []
-        @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooClass,
-                     :method_name => 'fizz',
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'fuzz',
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooClass,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:instantiation => {:class_or_module => FooClass,
-                                        :method_name => 'new',
-                                        :returned => nil},
-                     :probings => [{:method_name => 'bat', :returned => nil},
-                                   {:method_name => 'pwop', :returned => nil}]},
-                    {:class_or_module => DingClass,
-                     :method_name => 'biz',
-                     :returned => nil},
-                    {:class_or_module => DingClass,
-                     :method_name => 'buzz',
-                     :returned => nil},
-                    {:class_or_module => DingClass,
-                     :method_name => 'doot',
-                     :returned => nil},
-                    {:class_or_module => DingClass,
-                     :method_name => 'deet',
-                     :returned => nil},
-                    {:instantiation => {:class_or_module => DingClass,
-                                        :method_name => 'new',
-                                        :returned => nil},
-                     :probings => [{:method_name => 'dit', :returned => nil},
-                                   {:method_name => 'dot', :returned => nil}]}]
-        assert_probe_results expected, @probe.results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass,
+                     :class_method_probings => [{:method_name => 'bar',
+                                                 :returned => nil},
+                                                {:method_name => 'baz',
+                                                 :returned => nil},
+                                                {:method_name => 'fizz',
+                                                 :returned => nil},
+                                                {:method_name => 'fuzz',
+                                                 :returned => nil}],
+                     :instantiation => {:method_name => 'new'},
+                     :instance_method_probings => [{:method_name => 'bat',
+                                                    :returned => nil},
+                                                   {:method_name => 'pwop',
+                                                    :returned => nil}]},
+                    {:class => DingClass,
+                     :class_method_probings => [{:method_name => 'biz',
+                                                 :returned => nil},
+                                                {:method_name => 'buzz',
+                                                 :returned => nil},
+                                                {:method_name => 'deet',
+                                                 :returned => nil},
+                                                {:method_name => 'doot',
+                                                 :returned => nil}],
+                     :instantiation => {:method_name => 'new'},
+                     :instance_method_probings => [{:method_name => 'dit',
+                                                    :returned => nil},
+                                                   {:method_name => 'dot',
+                                                    :returned => nil}]}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns @class_definitions
         @mock_loader.expects(:module_definitions).returns []
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns @class_definitions
+        @mock_loader.expects(:module_definitions).returns []
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -583,19 +739,49 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_empty_array_when_sent_results
+      def test_should_return_empty_array_when_sent_class_probe_results
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        assert_equal [], @probe.results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns []
         @mock_loader.expects(:module_definitions).returns @module_definitions
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_module_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -643,31 +829,59 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
+      def test_should_return_empty_array_when_sent_class_probe_results
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooModule,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooModule,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:class_or_module => BatModule,
-                     :method_name => 'pwop',
-                     :returned => nil},
-                    {:class_or_module => BatModule,
-                     :method_name => 'ding',
-                     :returned => nil}]
-        assert_probe_results expected, @probe.results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns []
         @mock_loader.expects(:module_definitions).returns @module_definitions
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_expected_results_when_sent_module_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        expected = [{:module => FooModule,
+                     :module_method_probings => [{:method_name => 'bar',
+                                                  :returned => nil},
+                                                 {:method_name => 'baz',
+                                                  :returned => nil}]},
+                    {:module => BatModule,
+                     :module_method_probings => [{:method_name => 'ding',
+                                                  :returned => nil},
+                                                 {:method_name => 'pwop',
+                                                  :returned => nil}]}]
+        assert_probe_results expected, @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -707,31 +921,59 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
+      def test_should_return_empty_array_when_sent_class_probe_results
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooModule,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooModule,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:class_or_module => BatModule,
-                     :method_name => 'pwop',
-                     :returned => nil},
-                    {:class_or_module => BatModule,
-                     :method_name => 'ding',
-                     :returned => nil}]
-        assert_probe_results expected, @probe.results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns []
         @mock_loader.expects(:module_definitions).returns @module_definitions
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_expected_results_when_sent_module_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        expected = [{:module => FooModule,
+                     :module_method_probings => [{:method_name => 'bar',
+                                                  :returned => nil},
+                                                 {:method_name => 'baz',
+                                                  :returned => nil}]},
+                    {:module => BatModule,
+                     :module_method_probings => [{:method_name => 'ding',
+                                                  :returned => nil},
+                                                 {:method_name => 'pwop',
+                                                  :returned => nil}]}]
+        assert_probe_results expected, @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_module_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_method_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -771,25 +1013,59 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
+      def test_should_return_empty_array_when_sent_class_probe_results
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:instantiation => FooModule,
-                     :probings => [{:method_name => 'bar', :returned => nil},
-                                   {:method_name => 'baz', :returned => nil}]},
-                    {:instantiation => BatModule,
-                     :probings => [{:method_name => 'pwop', :returned => nil},
-                                   {:method_name => 'ding', :returned => nil}]}]
-        assert_probe_results expected, @probe.results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns []
         @mock_loader.expects(:module_definitions).returns @module_definitions
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_expected_results_when_sent_module_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        expected = [{:module => FooModule,
+                     :instance_method_probings => [{:method_name => 'bar',
+                                                    :returned => nil},
+                                                   {:method_name => 'baz',
+                                                    :returned => nil}]},
+                    {:module => BatModule,
+                     :instance_method_probings => [{:method_name => 'ding',
+                                                    :returned => nil},
+                                                   {:method_name => 'pwop',
+                                                    :returned => nil}]}]
+        assert_probe_results expected, @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -853,49 +1129,75 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_expected_results_when_sent_results
+      def test_should_return_empty_array_when_sent_class_probe_results
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        expected = [{:class_or_module => FooModule,
-                     :method_name => 'fizz',
-                     :returned => nil},
-                    {:class_or_module => FooModule,
-                     :method_name => 'fuzz',
-                     :returned => nil},
-                    {:class_or_module => FooModule,
-                     :method_name => 'bar',
-                     :returned => nil},
-                    {:class_or_module => FooModule,
-                     :method_name => 'baz',
-                     :returned => nil},
-                    {:instantiation => FooModule,
-                     :probings => [{:method_name => 'bat', :returned => nil},
-                                   {:method_name => 'pwop', :returned => nil}]},
-                    {:class_or_module => DingModule,
-                     :method_name => 'biz',
-                     :returned => nil},
-                    {:class_or_module => DingModule,
-                     :method_name => 'buzz',
-                     :returned => nil},
-                    {:class_or_module => DingModule,
-                     :method_name => 'doot',
-                     :returned => nil},
-                    {:class_or_module => DingModule,
-                     :method_name => 'deet',
-                     :returned => nil},
-                    {:instantiation => DingModule,
-                     :probings => [{:method_name => 'dit', :returned => nil},
-                                   {:method_name => 'dot', :returned => nil}]}]
-        assert_probe_results expected, @probe.results
+        assert_equal [], @probe.class_probe_results
       end
       
-      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
         @mock_loader.expects(:class_definitions).returns []
         @mock_loader.expects(:module_definitions).returns @module_definitions
         @mock_loader.expects(:method_definitions).returns []
-        @probe.results
-        @probe.results
+        @probe.class_probe_results
+        @probe.class_probe_results
+      end
+      
+      def test_should_return_expected_results_when_sent_module_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        expected = [{:module => FooModule,
+                     :module_method_probings => [{:method_name => 'bar',
+                                                  :returned => nil},
+                                                 {:method_name => 'baz',
+                                                  :returned => nil},
+                                                 {:method_name => 'fizz',
+                                                  :returned => nil},
+                                                 {:method_name => 'fuzz',
+                                                  :returned => nil}],
+                     :instance_method_probings => [{:method_name => 'bat',
+                                                    :returned => nil},
+                                                   {:method_name => 'pwop',
+                                                    :returned => nil}]},
+                    {:module => DingModule,
+                     :module_method_probings => [{:method_name => 'biz',
+                                                  :returned => nil},
+                                                 {:method_name => 'buzz',
+                                                  :returned => nil},
+                                                 {:method_name => 'deet',
+                                                  :returned => nil},
+                                                 {:method_name => 'doot',
+                                                  :returned => nil}],
+                     :instance_method_probings => [{:method_name => 'dit',
+                                                    :returned => nil},
+                                                   {:method_name => 'dot',
+                                                    :returned => nil}]}]
+        assert_probe_results expected, @probe.module_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.module_probe_results
+        @probe.module_probe_results
+      end
+      
+      def test_should_return_empty_array_when_sent_method_probe_results
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
+        assert_equal [], @probe.method_probe_results
+      end
+      
+      def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
+        @mock_loader.expects(:class_definitions).returns []
+        @mock_loader.expects(:module_definitions).returns @module_definitions
+        @mock_loader.expects(:method_definitions).returns []
+        @probe.method_probe_results
+        @probe.method_probe_results
       end
       
     end
@@ -930,21 +1232,51 @@ module Trapeze::Probes::BasicProbeTest
       assert_equal @probe, @probe.probe!
     end
     
-    def test_should_return_expected_results_when_sent_results
+    def test_should_return_empty_array_when_sent_class_probe_results
+      @mock_loader.stubs(:class_definitions).returns []
+      @mock_loader.stubs(:module_definitions).returns []
+      @mock_loader.stubs(:method_definitions).returns @method_definitions
+      assert_equal [], @probe.class_probe_results
+    end
+    
+    def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
+      @mock_loader.expects(:class_definitions).returns []
+      @mock_loader.expects(:module_definitions).returns []
+      @mock_loader.expects(:method_definitions).returns @method_definitions
+      @probe.class_probe_results
+      @probe.class_probe_results
+    end
+    
+    def test_should_return_empty_array_when_sent_module_probe_results
+      @mock_loader.stubs(:class_definitions).returns []
+      @mock_loader.stubs(:module_definitions).returns []
+      @mock_loader.stubs(:method_definitions).returns @method_definitions
+      assert_equal [], @probe.module_probe_results
+    end
+    
+    def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
+      @mock_loader.expects(:class_definitions).returns []
+      @mock_loader.expects(:module_definitions).returns []
+      @mock_loader.expects(:method_definitions).returns @method_definitions
+      @probe.module_probe_results
+      @probe.module_probe_results
+    end
+    
+    def test_should_return_expected_results_when_sent_method_probe_results
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []
       @mock_loader.stubs(:method_definitions).returns @method_definitions
       expected = [{:method_name => 'bar', :returned => nil},
                   {:method_name => 'baz', :returned => nil}]
-      assert_probe_results expected, @probe.results
+      assert_envelope expected, @probe.method_probe_results
     end
     
-    def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_results_twice
+    def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_method_probe_results_twice
       @mock_loader.expects(:class_definitions).returns []
       @mock_loader.expects(:module_definitions).returns []
       @mock_loader.expects(:method_definitions).returns @method_definitions
-      @probe.results
-      @probe.results
+      @probe.method_probe_results
+      @probe.method_probe_results
     end
     
   end

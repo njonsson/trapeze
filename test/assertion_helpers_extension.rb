@@ -2,9 +2,8 @@
 
 require File.expand_path("#{File.dirname __FILE__}/test")
 require File.expand_path("#{File.dirname __FILE__}/../lib/name_extension")
+require File.expand_path("#{File.dirname __FILE__}/../lib/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/string_comparison_extension")
-require File.expand_path("#{File.dirname __FILE__}/../lib/class_or_module_method_probe_result")
-require File.expand_path("#{File.dirname __FILE__}/../lib/method_probe_result")
 require 'test/unit'
 
 # Adds additional assertions to Test::Unit::TestCase.
@@ -59,8 +58,8 @@ module Trapeze::AssertionHelpersExtension
     
   end
   
-  def assert_classes(expected_descriptions, actual_definitions, message=nil)
-    assert_types expected_descriptions, actual_definitions, :class, message
+  def assert_classes(expected_descriptions, actuals, message=nil)
+    assert_types expected_descriptions, actuals, :class, message
   end
   
   def assert_dirs_identical(truth_dir, actual_dir)
@@ -79,56 +78,68 @@ module Trapeze::AssertionHelpersExtension
     end
   end
   
-  def assert_envelope(expected, actual, message=nil)
-    actual = envelope_to_hashes(actual)
-    (expected + actual).each do |m|
+  def assert_envelope(expected_description, actual, message=nil)
+    actual_description = messages_to_descriptions(actual)
+    (expected_description + actual_description).each do |m|
       if (block = m[:block])
         m[:block] = block.call
       end
     end
-    with_clean_backtrace { assert_equal expected, actual, message }
-  end
-  
-  def assert_method(expected_description, actual_definition, message=nil)
-    actual_description = method_description(actual_definition)
     with_clean_backtrace do
       assert_equal expected_description, actual_description, message
     end
   end
   
-  def assert_methods(expected_descriptions, actual_definitions, message=nil)
-    actual_descriptions = actual_definitions.collect do |m|
-      method_description m
-    end
+  def assert_method(expected_description, actual, message=nil)
+    actual_description = method_description(actual)
     with_clean_backtrace do
-      assert_equal expected_descriptions.sort(&method_definitions_sorter),
-                   actual_descriptions.sort(&method_definitions_sorter),
+      assert_equal expected_description, actual_description, message
+    end
+  end
+  
+  def assert_methods(expected_descriptions, actuals, message=nil)
+    actual_descriptions = actuals.collect { |m| method_description m }
+    with_clean_backtrace do
+      assert_equal expected_descriptions, #.sort(&method_descriptions_sorter),
+                   actual_descriptions, #.sort(&method_descriptions_sorter),
                    message
     end
   end
   
-  def assert_modules(expected_descriptions, actual_definitions, message=nil)
-    assert_types expected_descriptions, actual_definitions, :module, message
+  def assert_modules(expected_descriptions, actuals, message=nil)
+    assert_types expected_descriptions, actuals, :module, message
   end
   
-  def assert_probe_results(expected_result_descriptions,
-                           actual_results,
-                           message=nil)
-    expected_result_descriptions.each do |r|
-      if r.include?(:probings)
-        r[:probings].sort! &method_probe_result_descriptions_sorter
+  def assert_probe_results(expected, actual, message=nil)
+    actual.each do |r|
+      if r[:class_method_probings]
+        if r[:class_method_probings].empty?
+          r.delete :class_method_probings
+        else
+          r[:class_method_probings].collect! { |m| message_to_description m }
+        end
       end
-    end.sort!(&method_probe_result_descriptions_sorter)
-    
-    actual_result_descriptions = actual_results.collect do |r|
-      probe_result_to_hash r
-    end.sort(&method_probe_result_descriptions_sorter)
-    
-    with_clean_backtrace do
-      assert_equal expected_result_descriptions,
-                   actual_result_descriptions,
-                   message
+      if r[:module_method_probings]
+        if r[:module_method_probings].empty?
+          r.delete :module_method_probings
+        else
+          r[:module_method_probings].collect! { |m| message_to_description m }
+        end
+      end
+      if r[:instantiation]
+        instantiation = message_to_description(r[:instantiation])
+        instantiation.delete(:returned) if instantiation.include?(:returned)
+        r[:instantiation] = instantiation
+      end
+      if r[:instance_method_probings]
+        if r[:instance_method_probings].empty?
+          r.delete :instance_method_probings
+        else
+          r[:instance_method_probings].collect! { |m| message_to_description m }
+        end
+      end
     end
+    with_clean_backtrace { assert_equal expected, actual, message }
   end
   
   def assert_raise_message(expected_exception, message)
@@ -158,37 +169,26 @@ module Trapeze::AssertionHelpersExtension
   
 private
   
-  def assert_types(expected_descriptions,
-                   actual_definitions,
-                   class_or_module,
-                   message=nil)
+  def assert_types(expected_descriptions, actuals, class_or_module, message=nil)
     expected_descriptions = expected_descriptions.inject({}) do |result,
                                                                  key_and_value|
       key, value = key_and_value
       value[:type] = class_or_module
-      if value.include?(:class_methods)
-        value[:class_methods].sort! &method_definitions_sorter
-      end
-      if value.include?(:instance_methods)
-        value[:instance_methods].sort! &method_definitions_sorter
-      end
       result[key] = value
       result
     end
-    actual_descriptions = actual_definitions.inject({}) do |result, t|
+    actual_descriptions = actuals.inject({}) do |result, t|
       type_name = t.name.gsub(/^.+?::/, '')
       type_definition = {:type => class_or_module}
       unless (class_methods = t.methods(false)).empty?
         type_definition[:class_methods] = class_methods.collect do |m|
           method_description m.to_method(t)
         end
-        type_definition[:class_methods].sort! &method_definitions_sorter
       end
       unless (instance_methods = t.instance_methods(false)).empty?
         type_definition[:instance_methods] = instance_methods.collect do |m|
           method_description m.to_instance_method(t)
         end
-        type_definition[:instance_methods].sort! &method_definitions_sorter
       end
       result[type_name] = type_definition
       result
@@ -198,56 +198,20 @@ private
     end
   end
   
-  def envelope_to_hashes(envelope)
-    envelope.collect do |m|
-      args = m.args.collect { |a| envelope_to_hashes(a) rescue a }
-      hash = {:method_name => m.method_name,
-              :args => args,
-              :returned => m.returned}
-      hash.merge!(:block => m.block) if m.block
-      hash
-    end
+  def message_to_description(message)
+    hash = message.reply.merge(:method_name => message.method_name)
+    args = message.args.collect { |a| messages_to_descriptions(a) rescue a }
+    hash.merge!(:args => args) unless args.empty?
+    hash.merge!(:block => message.block) if message.block
+    hash
   end
   
-  def method_definitions_sorter
-    lambda { |a, b| a.first <=> b.first }
+  def messages_to_descriptions(messages)
+    messages.collect { |m| message_to_description m }
   end
   
   def method_description(method)
     [method.name, {:arity => method.arity}]
-  end
-  
-  def probe_result_to_hash(probe_result)
-    hash = {}
-    if probe_result.respond_to?(:probings)
-      hash[:probings] = probe_result.probings.collect do |r|
-        probe_result_to_hash r
-      end.sort(&method_probe_result_descriptions_sorter)
-      if probe_result.respond_to?(:instantiation) &&
-         (instantiation = probe_result.instantiation)
-        if instantiation.kind_of?(Trapeze::ClassOrModuleMethodProbeResult)
-          hash[:instantiation] = probe_result_to_hash(instantiation)
-        else
-          hash[:instantiation] = instantiation
-        end
-      end
-      hash
-    else
-      hash[:method_name] = probe_result.method_name
-      if probe_result.respond_to?(:class_or_module)
-        hash[:class_or_module] = probe_result.class_or_module
-      end
-      hash[:args] = probe_result.args unless probe_result.args.empty?
-      hash[:block] = probe_result.block if probe_result.block
-      hash.merge! probe_result.result
-    end
-  end
-  
-  def method_probe_result_descriptions_sorter
-    lambda do |a, b|
-      "#{a[:class_or_module]}#{a[:method_name]}" <=>
-      "#{b[:class_or_module]}#{b[:method_name]}"
-    end
   end
   
   def with_clean_backtrace

@@ -11,156 +11,151 @@ module Trapeze::SuiteGenerators::TestUnitTest
   
   module New
     
-    class WithNonexistentDirectory < Test::Unit::TestCase
+    class WithNoAttributes < Test::Unit::TestCase
       
-      def setup
-        File.stubs(:directory?).returns false
-        File.stubs(:exist?).returns false
-      end
-      
-      def test_should_call_file_directoryQUESTION_with_expected_path
-        File.expects(:directory?).with 'foo'
-        Trapeze::SuiteGenerators::TestUnit.new 'foo'
-      end
-      
-      def test_should_call_file_existQUESTION_with_expected_path
-        File.expects(:exist?).with 'foo'
-        Trapeze::SuiteGenerators::TestUnit.new 'foo'
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':path attribute required') do
+          Trapeze::SuiteGenerators::TestUnit.new
+        end
       end
       
     end
     
-    class WithFileInsteadOfDirectory < Test::Unit::TestCase
+    class WithPathAttributeAsFile < Test::Unit::TestCase
       
       def setup
-        File.stubs(:directory?).returns false
-        File.stubs(:exist?).returns true
+        File.stubs(:file?).returns true
       end
       
-      def test_should_call_file_directoryQUESTION_with_expected_path
-        File.expects(:directory?).with('foo').returns false
+      def test_should_call_file_fileQUESTION_with_path_attribute
+        File.expects(:file?).with('foo').returns true
         begin
-          Trapeze::SuiteGenerators::TestUnit.new 'foo'
-        rescue ArgumentError
-        end
-      end
-      
-      def test_should_call_file_existQUESTION_with_expected_path
-        File.expects(:exist?).with('foo').returns true
-        begin
-          Trapeze::SuiteGenerators::TestUnit.new 'foo'
+          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
         rescue ArgumentError
         end
       end
       
       def test_should_raise_argument_error
-        File.stubs(:exist?).returns true
-        assert_raise_message(ArgumentError, 'path must be a directory') do
-          Trapeze::SuiteGenerators::TestUnit.new 'foo'
+        assert_raise_message(ArgumentError,
+                             ':path attribute must not be a file') do
+          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
         end
       end
       
     end
     
-    class WithExistingDirectory < Test::Unit::TestCase
+    class WithPathAttributeNotAsFile < Test::Unit::TestCase
       
       def setup
-        File.stubs(:directory?).returns true
-        File.stubs(:exist?).returns false
+        File.stubs(:file?).returns false
       end
       
-      def test_should_call_file_directoryQUESTION_with_expected_path
-        File.expects(:directory?).with('foo').returns true
-        Trapeze::SuiteGenerators::TestUnit.new 'foo'
+      def test_should_call_file_fileQUESTION_with_path_attribute
+        File.expects(:file?).with('foo').returns false
+        begin
+          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
+        rescue ArgumentError
+        end
+      end
+      
+      def test_should_raise_argument_error
+        assert_raise_message(ArgumentError, ':probe attribute required') do
+          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
+        end
+      end
+      
+    end
+    
+    class WithPathAttributeNotAsFileAndProbeAttributeHavingNoResults <
+          Test::Unit::TestCase
+      
+      def setup
+        File.stubs(:file?).returns false
+        @mock_probe = mock
+        @mock_probe.stubs(:class_probe_results).returns []
+        @mock_probe.stubs(:module_probe_results).returns []
+        @mock_probe.stubs(:method_probe_results).returns []
+        @generator = Trapeze::SuiteGenerators::TestUnit.new(:path => 'foo',
+                                                            :probe => @mock_probe)
+        File.stubs(:directory?).returns false
+        Dir.stubs :truncate
+        Dir.stubs :mkdir
+        File.stubs(:open).yields stub_everything
+      end
+      
+      def test_should_call_file_fileQUESTION_with_path_attribute
+        File.expects(:file?).with('foo').returns false
+        assert_nothing_raised do
+          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo', :probe => 'bar'
+        end
       end
       
       def test_should_return_expected_path_when_sent_path
-        generator = Trapeze::SuiteGenerators::TestUnit.new('foo')
-        assert_equal 'foo', generator.path
+        assert_equal 'foo', @generator.path
       end
       
-    end
-    
-  end
-  
-  module GenerateEXCLAMATION
-    
-    class WithNoCases < Test::Unit::TestCase
-      
-      def setup
-        File.stubs(:directory?).returns true
-        Dir.stubs :truncate
-        File.stubs :open
-        @generator = Trapeze::SuiteGenerators::TestUnit.new('foo')
-      end
-      
-      def test_should_return_self
-        assert_equal @generator, @generator.generate!([])
-      end
-      
-      def test_should_call_dir_truncate_with_path
-        Dir.expects(:truncate).with 'foo'
-        @generator.generate! []
-      end
-      
-      def test_should_call_file_open_with_path_to_filename_and_expected_modestring
-        File.expects(:open).with 'foo/SUITE.rb', 'w'
-        @generator.generate! []
-      end
-      
-    end
-    
-    class WithOneCaseProbingMethod < Test::Unit::TestCase
-      
-      module FooModule
-        
-        def bar; end
-        
-      end
-      
-      def setup
-        File.stubs(:directory?).returns true
-        Dir.stubs :truncate
-        File.stubs :open
-        @generator = Trapeze::SuiteGenerators::TestUnit.new('foo')
-        @cases = [{:method => 'bar'.to_instance_method(FooModule),
-                   :args => [],
-                   :returned => nil}]
+      def test_should_return_expected_probe_when_sent_probe
+        assert_equal @mock_probe, @generator.probe
       end
       
       def test_should_return_self_when_sent_generateEXCLAMATION
-        assert_equal @generator, @generator.generate!(@cases)
+        assert_equal @generator, @generator.generate!
       end
       
-      def test_should_call_dir_truncate_with_path
+      def test_should_call_probe_class_probe_results_when_sent_generateEXCLAMATION
+        @mock_probe.expects(:class_probe_results).with().returns []
+        @generator.generate!
+      end
+      
+      def test_should_call_probe_module_probe_results_when_sent_generateEXCLAMATION
+        @mock_probe.expects(:module_probe_results).with().returns []
+        @generator.generate!
+      end
+      
+      def test_should_call_probe_method_probe_results_when_sent_generateEXCLAMATION
+        @mock_probe.expects(:method_probe_results).with().returns []
+        @generator.generate!
+      end
+      
+      def test_should_call_file_directoryQUESTION_with_path_when_sent_generateEXCLAMATION
+        File.expects(:directory?).with('foo').returns false
+        @generator.generate!
+      end
+      
+      def test_should_call_dir_truncate_with_path_when_sent_generateEXCLAMATION_with_path_as_directory
+        File.stubs(:directory?).returns true
         Dir.expects(:truncate).with 'foo'
-        @generator.generate! @cases
+        @generator.generate!
       end
       
-      def test_should_call_file_open_with_path_to_filename_and_expected_modestring
-        File.expects(:open).with 'foo/SUITE.rb', 'w'
-        @generator.generate! []
+      def test_should_call_dir_mkdir_with_path_when_sent_generateEXCLAMATION_with_path_not_as_directory
+        File.stubs(:directory?).returns false
+        Dir.expects(:mkdir).with 'foo'
+        @generator.generate!
       end
       
-      def test_should_create_or_append_to_expected_file_with_expected_content
-        expected_source = <<-end_expected_source
+      def test_should_call_file_open_with_suite_filename_and_expected_modestring_when_sent_generateEXCLAMATION
+        File.stubs(:directory?).returns true
+        File.expects(:open).with('foo/SUITE.rb', 'w').yields stub_everything
+        @generator.generate!
+      end
+      
+      def test_should_print_expected_content_to_suite_file_when_sent_generateEXCLAMATION
+        mock_io = mock('IO')
+        mock_io.expects(:print).with <<-end_print
 # This file was automatically generated by Trapeze, the safety-net generator for
 # Ruby. Visit http://trapeze.rubyforge.org/ for more information.
 
-require 'test/unit'
-
-class Test_ < Test::Unit::TestCase
-  
-  def test_foo_returns_nil
-    assert_nil foo
-  end
-  
+Dir.glob(File.expand_path("\#{File.dirname __FILE__}/../input/**/*.rb")) do |source_file|
+  require File.expand_path(source_file)
 end
-        end_expected_source
-        actual_source_io = StringIO.new
-        File.stubs(:open).with('foo/_test.rb', 'a+').yields actual_source_io
-        @generator.generate! @cases
-        assert_equal expected_source, actual_source_io.string
+
+Dir.glob(File.expand_path("\#{File.dirname __FILE__}/**/*_test.rb")) do |test_file|
+  require File.expand_path(test_file)
+end
+        end_print
+        File.stubs(:open).yields mock_io
+        @generator.generate!
       end
       
     end

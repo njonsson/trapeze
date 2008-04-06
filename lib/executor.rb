@@ -21,8 +21,9 @@ class Trapeze::Executor
     loader = Trapeze::Loader.new(*input_filenames)
     probe = Trapeze::Probes::BasicProbe.new(loader)
     output_directory = args[1] || 'test/trapeze'
-    generator = Trapeze::SuiteGenerators::TestUnit.new(output_directory)
-    generator.generate! probe.results
+    generator = Trapeze::SuiteGenerators::TestUnit.new(:path => output_directory,
+                                                       :probe => probe)
+    generator.generate!
   end
   
 end

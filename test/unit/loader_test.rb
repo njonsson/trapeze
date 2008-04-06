@@ -194,8 +194,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
                                                         ['baz', {:arity => 0}]]},
-                      'BatClass' => {:class_methods => [['pwop', {:arity => 0}],
-                                                        ['ding', {:arity => 0}]]}}
+                      'BatClass' => {:class_methods => [['ding', {:arity => 0}],
+                                                        ['pwop', {:arity => 0}]]}}
           assert_classes expected, @loader.class_definitions
         end
         
@@ -263,8 +263,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
                                                         ['baz', {:arity => 0}]]},
-                      'BatClass' => {:class_methods => [['pwop', {:arity => 0}],
-                                                        ['ding', {:arity => 0}]]}}
+                      'BatClass' => {:class_methods => [['ding', {:arity => 0}],
+                                                        ['pwop', {:arity => 0}]]}}
           assert_classes expected, @loader.class_definitions
         end
         
@@ -332,8 +332,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooClass' => {:instance_methods => [['bar', {:arity => 0}],
                                                            ['baz', {:arity => 0}]]},
-                      'BatClass' => {:instance_methods => [['pwop', {:arity => 0}],
-                                                           ['ding', {:arity => 0}]]}}
+                      'BatClass' => {:instance_methods => [['ding', {:arity => 0}],
+                                                           ['pwop', {:arity => 0}]]}}
           assert_classes expected, @loader.class_definitions
         end
         
@@ -420,8 +420,8 @@ module Trapeze::LoaderTest
                                                            ['pwop', {:arity => 0}]]},
                       'DingClass' => {:class_methods => [['biz', {:arity => 0}],
                                                          ['buzz', {:arity => 0}],
-                                                         ['doot', {:arity => 0}],
-                                                         ['deet', {:arity => 0}]],
+                                                         ['deet', {:arity => 0}],
+                                                         ['doot', {:arity => 0}]],
                                       :instance_methods => [['dit', {:arity => 0}],
                                                             ['dot', {:arity => 0}]]}}
           assert_classes expected, @loader.class_definitions
@@ -570,8 +570,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
                                                          ['baz', {:arity => 0}]]},
-                      'BatModule' => {:class_methods => [['pwop', {:arity => 0}],
-                                                         ['ding', {:arity => 0}]]}}
+                      'BatModule' => {:class_methods => [['ding', {:arity => 0}],
+                                                         ['pwop', {:arity => 0}]]}}
           assert_modules expected, @loader.module_definitions
         end
         
@@ -639,8 +639,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
                                                          ['baz', {:arity => 0}]]},
-                      'BatModule' => {:class_methods => [['pwop', {:arity => 0}],
-                                                         ['ding', {:arity => 0}]]}}
+                      'BatModule' => {:class_methods => [['ding', {:arity => 0}],
+                                                         ['pwop', {:arity => 0}]]}}
           assert_modules expected, @loader.module_definitions
         end
         
@@ -708,8 +708,8 @@ module Trapeze::LoaderTest
           File.stubs(:read).returns @source
           expected = {'FooModule' => {:instance_methods => [['bar', {:arity => 0}],
                                                             ['baz', {:arity => 0}]]},
-                      'BatModule' => {:instance_methods => [['pwop', {:arity => 0}],
-                                                            ['ding', {:arity => 0}]]}}
+                      'BatModule' => {:instance_methods => [['ding', {:arity => 0}],
+                                                            ['pwop', {:arity => 0}]]}}
           assert_modules expected, @loader.module_definitions
         end
         
@@ -796,8 +796,8 @@ module Trapeze::LoaderTest
                                                             ['pwop', {:arity => 0}]]},
                       'DingModule' => {:class_methods => [['biz', {:arity => 0}],
                                                           ['buzz', {:arity => 0}],
-                                                          ['doot', {:arity => 0}],
-                                                          ['deet', {:arity => 0}]],
+                                                          ['deet', {:arity => 0}],
+                                                          ['doot', {:arity => 0}]],
                                        :instance_methods => [['dit', {:arity => 0}],
                                                              ['dot', {:arity => 0}]]}}
           assert_modules expected, @loader.module_definitions
@@ -994,7 +994,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
           File.stubs(:read).returns @source
-          expected = [['foo', {:arity => 0}], ['bar', {:arity => 0}]]
+          expected = [['bar', {:arity => 0}], ['foo', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
         end
         
@@ -1061,7 +1061,7 @@ module Trapeze::LoaderTest
         
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
           File.stubs(:read).returns @source
-          expected = [['pwop', {:arity => 0}], ['ding', {:arity => 0}]]
+          expected = [['ding', {:arity => 0}], ['pwop', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
         end
         

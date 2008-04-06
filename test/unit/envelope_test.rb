@@ -17,20 +17,20 @@ module Trapeze::EnvelopeTest
     
     def test_should_raise_argument_error_when_sent_new_with_message_and_symbol
       assert_raise(ArgumentError) do
-        Trapeze::Envelope.new Trapeze::Message.new(:method_name => 'foo'), :bar
+        Trapeze::Envelope.new Trapeze::Message.returned(:method_name => 'foo'), :bar
       end
     end
     
     def test_should_not_raise_when_sent_new_with_one_message
       assert_nothing_raised do
-        Trapeze::Envelope.new Trapeze::Message.new(:method_name => 'foo')
+        Trapeze::Envelope.new Trapeze::Message.returned(:method_name => 'foo')
       end
     end
     
     def test_should_not_raise_when_sent_new_with_two_messages
       assert_nothing_raised do
-        Trapeze::Envelope.new Trapeze::Message.new(:method_name => 'foo')
-        Trapeze::Envelope.new Trapeze::Message.new(:method_name => 'bar')
+        Trapeze::Envelope.new Trapeze::Message.returned(:method_name => 'foo')
+        Trapeze::Envelope.new Trapeze::Message.returned(:method_name => 'bar')
       end
     end
     
@@ -56,13 +56,13 @@ module Trapeze::EnvelopeTest
 #    
 #    def test_should_increment_size_when_sent_LEFTBRACKETRIGHTBRACKETEQUAL_with_zero_and_message
 #      size_before = @envelope.size
-#      @envelope[0] = Trapeze::Message.new(:method_name => 'foo')
+#      @envelope[0] = Trapeze::Message.returned(:method_name => 'foo')
 #      assert_equal size_before + 1, @envelope.size
 #    end
 #    
 #    def test_should_increment_size_when_sent_LEFTBRACKETRIGHTBRACKETEQUAL_with_zero_and_message
 #      size_before = @envelope.size
-#      @envelope[0] = Trapeze::Message.new(:method_name => 'foo')
+#      @envelope[0] = Trapeze::Message.returned(:method_name => 'foo')
 #      assert_equal size_before + 1, @envelope.size
 #    end
     
@@ -72,7 +72,7 @@ module Trapeze::EnvelopeTest
     
     def test_should_increment_size_when_sent_LESSTHANLESSTHAN_with_message
       size_before = @envelope.size
-      @envelope << Trapeze::Message.new(:method_name => 'foo')
+      @envelope << Trapeze::Message.returned(:method_name => 'foo')
       assert_equal size_before + 1, @envelope.size
     end
     
@@ -117,7 +117,7 @@ module Trapeze::EnvelopeTest
   class WithOneMessage < Test::Unit::TestCase
     
     def setup
-      @message = Trapeze::Message.new(:method_name => 'foo')
+      @message = Trapeze::Message.returned(:method_name => 'foo')
       @envelope = Trapeze::Envelope.new(@message)
     end
     
@@ -135,7 +135,7 @@ module Trapeze::EnvelopeTest
 #    
 #    def test_should_not_increment_size_when_sent_LEFTBRACKETRIGHTBRACKETEQUAL_with_zero_and_message
 #      size_before = @envelope.size
-#      @envelope[0] = Trapeze::Message.new(:method_name => 'foo')
+#      @envelope[0] = Trapeze::Message.returned(:method_name => 'foo')
 #      assert_equal size_before, @envelope.size
 #    end
     
@@ -145,7 +145,7 @@ module Trapeze::EnvelopeTest
     
     def test_should_increment_size_when_sent_LESSTHANLESSTHAN_with_message
       size_before = @envelope.size
-      @envelope << Trapeze::Message.new(:method_name => 'foo')
+      @envelope << Trapeze::Message.returned(:method_name => 'foo')
       assert_equal size_before + 1, @envelope.size
     end
     
@@ -155,7 +155,7 @@ module Trapeze::EnvelopeTest
     
     def test_should_return_true_when_sent_EQUALEQUAL_with_equivalent_envelope
       assert_equal(true,
-                   (@envelope == Trapeze::Envelope.new(Trapeze::Message.new(:method_name => 'foo'))))
+                   (@envelope == Trapeze::Envelope.new(Trapeze::Message.returned(:method_name => 'foo'))))
     end
     
     def test_should_require_a_block_when_sent_each
