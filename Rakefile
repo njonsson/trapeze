@@ -56,31 +56,17 @@ namespace :test do
       t.verbose = true
     end
     
-    Rake::TestTask.new(:generated) do |t|
-      t.test_files = 'test/system/**/output/**/SUITE.rb'
-      t.verbose = true
-    end
-    
-    namespace :generated do
-      desc 'Create a code coverage report for the generated tests in test/system/*'
-      Rcov::RcovTask.new(:coverage) do |t|
-        t.output_dir = 'coverage-system-generated'
-        t.test_files = 'test/system/**/output/**/SUITE.rb'
-        t.verbose = true
+    desc 'Run generated system tests'
+    task :generated do
+      Dir.glob("#{File.dirname __FILE__}/test/system/**/output/**/SUITE.rb") do |f|
+        system %Q(ruby #{File.expand_path f})
       end
     end
     
-    Rake::TestTask.new(:truth) do |t|
-      t.test_files = 'test/system/**/output_truth/**/SUITE.rb'
-      t.verbose = true
-    end
-    
-    namespace :truth do
-      desc 'Create a code coverage report for the test-generation truth files in test/system/*'
-      Rcov::RcovTask.new(:coverage) do |t|
-        t.output_dir = 'coverage-system-generated'
-        t.test_files = 'test/system/**/output_truth/**/SUITE.rb'
-        t.verbose = true
+    desc 'Run truth-file system tests'
+    task :truth do
+      Dir.glob("#{File.dirname __FILE__}/test/system/**/output_truth/**/SUITE.rb") do |f|
+        system %Q(ruby #{File.expand_path f})
       end
     end
   end
