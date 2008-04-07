@@ -65,16 +65,20 @@ module Trapeze::AssertionHelpersExtension
   def assert_dirs_identical(truth_dir, actual_dir)
     diff = DirDiff.new(:dir_left => truth_dir, :dir_right => actual_dir)
     if diff.files_unique_to_left.empty? && diff.files_unique_to_right.empty?
-      assert_equal [],
-                   diff.files_differing,
-                   "#{diff.files_differing.length} file(s) have unexpected content"
+      with_clean_backtrace do
+        assert_equal [],
+                     diff.files_differing,
+                     "#{diff.files_differing.length} file(s) have unexpected content"
+      end
     else
-      assert_equal [],
-                   diff.files_unique_to_left,
-                   "#{diff.files_unique_to_left.length} file(s) expected to exist but do not"
-      assert_equal [],
-                   diff.files_unique_to_right,
-                   "#{diff.files_unique_to_right.length} file(s) not expected to exist but do exist"
+      with_clean_backtrace do
+        assert_equal [],
+                     diff.files_unique_to_left,
+                     "#{diff.files_unique_to_left.length} file(s) expected to exist but do not"
+        assert_equal [],
+                     diff.files_unique_to_right,
+                     "#{diff.files_unique_to_right.length} file(s) not expected to exist but do exist"
+      end
     end
   end
   
