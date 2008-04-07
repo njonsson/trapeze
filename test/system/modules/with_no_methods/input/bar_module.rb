@@ -1,1 +1,0 @@
-module BarModule; end
