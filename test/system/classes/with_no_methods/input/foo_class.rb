@@ -1,0 +1,1 @@
+class FooClass; end
