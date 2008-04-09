@@ -23,37 +23,53 @@ module Trapeze::AssertionHelpersExtension
     end
     
     %w(left right).each do |side|
+      define_method "files_#{side}" do
+        get_result :"files_#{side}"
+      end
       define_method "files_unique_to_#{side}" do
-        process! unless instance_variable_get('@results')
-        instance_variable_get('@results')[:"files_unique_to_#{side}"]
+        get_result :"files_unique_to_#{side}"
       end
     end
     
     def process!
-      @results = {}
-      @results[:files_unique_to_left]  = []
-      @results[:files_unique_to_right] = []
-      @results[:files_differing]       = []
+      @results = {:files_left            => [],
+                  :files_right           => [],
+                  :files_unique_to_left  => [],
+                  :files_unique_to_right => [],
+                  :files_differing       => []}
       
-      files_left  = Dir.glob("#{dir_left}/**/*")
-      files_right = Dir.glob("#{dir_right}/**/*")
-      prefix = Regexp.new("^#{Regexp.escape "#{dir_left}/"}")
-      files_left_relative = files_left.collect { |f| f.gsub prefix, '' }
-      prefix = Regexp.new("^#{Regexp.escape "#{dir_right}/"}")
-      files_right_relative = files_right.collect { |f| f.gsub prefix, '' }
+      files_left_hash  = dir_to_file_paths_hash(dir_left)
+      files_right_hash = dir_to_file_paths_hash(dir_right)
       
-      [files_left.length, files_right.length].max.times do |i|
-        if (index = files_right_relative.index(files_left_relative[i]))
-          unless File.read(files_left[i]) == File.read(files_right[index])
-            @results[:files_differing] << files_left_relative[i]
-          end
-        else
-          @results[:files_unique_to_left] << files_left_relative[i]
-        end
-        unless files_left_relative.include?(files_right_relative[i])
-          @results[:files_unique_to_right] << files_right_relative[i]
-        end
+      files_common, files_unique_to_left = files_left_hash.keys.partition do |relative|
+        files_right_hash.include? relative
       end
+      files_differing = files_common.reject do |relative|
+        File.read(files_left_hash[relative]) ==
+        File.read(files_right_hash[relative])
+      end
+      
+      @results[:files_left]            = files_left_hash.keys
+      @results[:files_right]           = files_right_hash.keys
+      @results[:files_unique_to_left]  = files_unique_to_left
+      @results[:files_unique_to_right] = files_right_hash.keys - files_common
+      @results[:files_differing]       = files_differing
+    end
+    
+  private
+    
+    def dir_to_file_paths_hash(dir)
+      file_paths = Dir.glob("#{dir}/**/*")
+      prefix = Regexp.new("^#{Regexp.escape "#{dir}/"}")
+      file_paths.inject({}) do |result, file_path|
+        relative_file_path = file_path.gsub(prefix, '')
+        result.merge relative_file_path => file_path
+      end
+    end
+    
+    def get_result(result)
+      process! unless instance_variable_get('@results')
+      instance_variable_get('@results')[result]
     end
     
   end
@@ -64,6 +80,10 @@ module Trapeze::AssertionHelpersExtension
   
   def assert_dirs_identical(truth_dir, actual_dir)
     diff = DirDiff.new(:dir_left => truth_dir, :dir_right => actual_dir)
+    if diff.files_left.empty? && diff.files_right.empty?
+      raise 'both of the directories are empty!'
+    end
+    
     if diff.files_unique_to_left.empty? && diff.files_unique_to_right.empty?
       with_clean_backtrace do
         assert_equal [],
