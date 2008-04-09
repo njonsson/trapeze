@@ -88,8 +88,9 @@ module Trapeze::Probes::BasicProbeTest
         assert_equal @probe, @probe.probe!
       end
       
-      def test_should_return_empty_array_when_sent_class_probe_results
-        assert_equal [], @probe.class_probe_results
+      def test_should_return_expected_results_when_sent_class_probe_results
+        expected = [{:class => FooClass}, {:class => BarClass}]
+        assert_probe_results expected, @probe.class_probe_results
       end
       
       def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_class_probe_results_twice
@@ -725,6 +726,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @module_definitions = [FooModule, BarModule]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -733,16 +737,10 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
       def test_should_return_empty_array_when_sent_class_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.class_probe_results
       end
       
@@ -755,10 +753,8 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_module_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
-        assert_equal [], @probe.module_probe_results
+        expected = [{:module => FooModule}, {:module => BarModule}]
+        assert_probe_results expected, @probe.module_probe_results
       end
       
       def test_should_call_loader_class_definitions_and_module_definitions_and_method_definitions_once_each_when_sent_module_probe_results_twice
@@ -770,9 +766,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_method_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.method_probe_results
       end
       
@@ -815,6 +808,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @module_definitions = [FooModule, BatModule]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -823,16 +819,10 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
       def test_should_return_empty_array_when_sent_class_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.class_probe_results
       end
       
@@ -845,9 +835,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_expected_results_when_sent_module_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         expected = [{:module => FooModule,
                      :module_method_probings => [{:method_name => 'bar',
                                                   :returned => nil},
@@ -870,9 +857,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_method_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.method_probe_results
       end
       
@@ -907,6 +891,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @module_definitions = [FooModule, BatModule]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -915,16 +902,10 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
       def test_should_return_empty_array_when_sent_class_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.class_probe_results
       end
       
@@ -937,9 +918,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_expected_results_when_sent_module_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         expected = [{:module => FooModule,
                      :module_method_probings => [{:method_name => 'bar',
                                                   :returned => nil},
@@ -962,9 +940,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_method_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.method_probe_results
       end
       
@@ -999,6 +974,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @module_definitions = [FooModule, BatModule]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -1007,16 +985,10 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
       def test_should_return_empty_array_when_sent_class_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.class_probe_results
       end
       
@@ -1029,9 +1001,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_expected_results_when_sent_module_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         expected = [{:module => FooModule,
                      :instance_method_probings => [{:method_name => 'bar',
                                                     :returned => nil},
@@ -1054,9 +1023,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_method_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.method_probe_results
       end
       
@@ -1115,6 +1081,9 @@ module Trapeze::Probes::BasicProbeTest
       def setup
         @module_definitions = [FooModule, DingModule]
         @mock_loader = mock
+        @mock_loader.stubs(:class_definitions).returns []
+        @mock_loader.stubs(:module_definitions).returns @module_definitions
+        @mock_loader.stubs(:method_definitions).returns []
         @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
       end
       
@@ -1123,16 +1092,10 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_self_when_sent_probeEXCLAMATION
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal @probe, @probe.probe!
       end
       
       def test_should_return_empty_array_when_sent_class_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.class_probe_results
       end
       
@@ -1145,9 +1108,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_expected_results_when_sent_module_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         expected = [{:module => FooModule,
                      :module_method_probings => [{:method_name => 'bar',
                                                   :returned => nil},
@@ -1186,9 +1146,6 @@ module Trapeze::Probes::BasicProbeTest
       end
       
       def test_should_return_empty_array_when_sent_method_probe_results
-        @mock_loader.stubs(:class_definitions).returns []
-        @mock_loader.stubs(:module_definitions).returns @module_definitions
-        @mock_loader.stubs(:method_definitions).returns []
         assert_equal [], @probe.method_probe_results
       end
       
@@ -1218,6 +1175,9 @@ module Trapeze::Probes::BasicProbeTest
       @method_definitions = ['bar'.to_instance_method(MethodsModule),
                              'baz'.to_instance_method(MethodsModule)]
       @mock_loader = mock
+      @mock_loader.stubs(:class_definitions).returns []
+      @mock_loader.stubs(:module_definitions).returns []
+      @mock_loader.stubs(:method_definitions).returns @method_definitions
       @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
     end
     
@@ -1226,16 +1186,10 @@ module Trapeze::Probes::BasicProbeTest
     end
     
     def test_should_return_self_when_sent_probeEXCLAMATION
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns @method_definitions
       assert_equal @probe, @probe.probe!
     end
     
     def test_should_return_empty_array_when_sent_class_probe_results
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns @method_definitions
       assert_equal [], @probe.class_probe_results
     end
     
@@ -1248,9 +1202,6 @@ module Trapeze::Probes::BasicProbeTest
     end
     
     def test_should_return_empty_array_when_sent_module_probe_results
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns @method_definitions
       assert_equal [], @probe.module_probe_results
     end
     
@@ -1263,9 +1214,6 @@ module Trapeze::Probes::BasicProbeTest
     end
     
     def test_should_return_expected_results_when_sent_method_probe_results
-      @mock_loader.stubs(:class_definitions).returns []
-      @mock_loader.stubs(:module_definitions).returns []
-      @mock_loader.stubs(:method_definitions).returns @method_definitions
       expected = [{:method_name => 'bar', :returned => nil},
                   {:method_name => 'baz', :returned => nil}]
       assert_envelope expected, @probe.method_probe_results
