@@ -88,11 +88,8 @@ private
     class_probe_results = (@results[:class_probe_results] = [])
     @loader.class_definitions.each do |c|
       class_probe_results << {:class => c}
-      class_method_probings = probe_class_methods_for_class!(c)
-      instance_method_probings = probe_instance_methods_for_class!(c)
-      unless class_method_probings || instance_method_probings
-        class_probe_results.pop
-      end
+      probe_class_methods_for_class! c
+      probe_instance_methods_for_class! c
     end
     self
   end
@@ -161,11 +158,8 @@ private
     module_probe_results = (@results[:module_probe_results] = [])
     @loader.module_definitions.each do |m|
       module_probe_results << {:module => m}
-      module_method_probings = probe_module_methods_for_module!(m)
-      instance_method_probings = probe_instance_methods_for_module!(m)
-      unless module_method_probings || instance_method_probings
-        module_probe_results.pop
-      end
+      probe_module_methods_for_module! m
+      probe_instance_methods_for_module! m
     end
     self
   end

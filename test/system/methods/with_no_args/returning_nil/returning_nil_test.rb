@@ -13,9 +13,9 @@ module Trapeze::SystemTest
       class ReturningNil < Test::Unit::TestCase
         
         def test_should_generate_expected_output
-          input_path        = "#{File.dirname __FILE__}/input/**/*.rb"
-          output_path       = "#{File.dirname __FILE__}/output"
-          output_truth_path = "#{File.dirname __FILE__}/output_truth"
+          input_path        = File.expand_path("#{File.dirname __FILE__}/input/**/*.rb")
+          output_path       = File.expand_path("#{File.dirname __FILE__}/output")
+          output_truth_path = File.expand_path("#{File.dirname __FILE__}/output_truth")
           Dir.truncate output_path if File.directory?(output_path)
           executor = Trapeze::Executor.new(input_path, output_path)
           executor.execute!
