@@ -11,7 +11,7 @@ objects. This recorded behavior is used to generate a test/specification suite
 that can be rendered as Test::Unit test cases or other TDD/BDD libraries.
 
 There is a suite renderer for Test::Unit. RSpec and Jay Fields's Expectations
-will be supported soon.
+may be supported at some point.
 
 <b>Trapeze is a pre-alpha product.</b> There's a lot that doesn't work yet. Stay
 tuned.
