@@ -1,11 +1,17 @@
 # Defines Trapeze::InflectionsExtension.
 
 # Adds methods to String for converting among various inflected forms of
-# lexical and physical names.
+# lexical and physical identifiers.
 module Trapeze::InflectionsExtension
   
-  # Returns a canonical file path, with <i>::</i> converted to <i>/</i>, other
-  # nonalphanumerics converted to underscores, and everything in lowercase.
+  # Returns a canonical file path, with <i>:</i> converted to <i>/</i>, other
+  # nonalphanumeric characters converted to underscores and everything in
+  # lowercase.
+  # 
+  # Examples:
+  # 
+  #   'FooBar'.pathify          # => 'foo_bar'
+  #   'FooBar::BazBat'.pathify  # => 'foo_bar/baz_bat'
   def pathify
     self.gsub(/:+/,                  '/').
          gsub(/([a-z\d])([A-Z])/,    '\1_\2').
@@ -18,8 +24,13 @@ module Trapeze::InflectionsExtension
   end
   
   # Returns a canonical, namespaced type name, with filesystem directory
-  # delimiters converted to <i>::</i> and nonalphanumerics deleted and rendered
-  # as camel-case word breaks.
+  # delimiters converted to <i>::</i> and nonalphanumeric characters deleted and
+  # rendered as camel-case word breaks.
+  # 
+  # Examples:
+  # 
+  #   'foo_bar'.typify          # => 'FooBar'
+  #   'foo_bar/baz_bat'.typify  # => 'FooBar::BazBat'
   def typify
     self.gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
          gsub(/[\\\/:]+/,                     '::').
@@ -31,8 +42,13 @@ module Trapeze::InflectionsExtension
          gsub(/^[a-z]/) { |char| char.upcase }
   end
   
-  # Returns a canonical variable or method name, with word breaks rendered as
-  # underscores.
+  # Returns a canonical variable or method name, with nonalphanumeric characters
+  # converted as underscores and everything in lowercase.
+  # 
+  # Examples:
+  # 
+  #   'FooBar'.pathify          # => 'foo_bar'
+  #   'FooBar::BazBat'.pathify  # => 'foo_bar_baz_bat'
   def variablize
     pathify.gsub('/', '_').gsub /^(\d)/, '_\1'
   end
