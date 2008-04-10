@@ -8,7 +8,7 @@ module Trapeze::SystemTest
   
   module Methods
     
-    module WithNoArgs
+    module TakingNoArgs
       
       class ReturningNil < Test::Unit::TestCase
         

@@ -10,7 +10,7 @@ module Trapeze::SystemTest
     
     module WithInstanceMethods
       
-      module WithNoArgs
+      module TakingNoArgs
         
         class ReturningNil < Test::Unit::TestCase
           
