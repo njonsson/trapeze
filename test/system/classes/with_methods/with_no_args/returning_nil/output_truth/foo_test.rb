@@ -6,7 +6,7 @@ require 'test/unit'
 class FooTest < Test::Unit::TestCase
   
   def setup
-    @obj = Foo.new
+    @foo = Foo.new
   end
   
   def test_is_class
@@ -14,11 +14,11 @@ class FooTest < Test::Unit::TestCase
   end
   
   def test_bar_returns_nil
-    assert_equal nil, @obj.bar
+    assert_equal nil, @foo.bar
   end
   
   def test_baz_returns_nil
-    assert_equal nil, @obj.baz
+    assert_equal nil, @foo.baz
   end
   
 end

@@ -6,7 +6,7 @@ require 'test/unit'
 class BatTest < Test::Unit::TestCase
   
   def setup
-    @obj = Bat.new
+    @bat = Bat.new
   end
   
   def test_is_class
@@ -14,11 +14,11 @@ class BatTest < Test::Unit::TestCase
   end
   
   def test_ding_returns_nil
-    assert_equal nil, @obj.ding
+    assert_equal nil, @bat.ding
   end
   
   def test_pwop_returns_nil
-    assert_equal nil, @obj.pwop
+    assert_equal nil, @bat.pwop
   end
   
 end

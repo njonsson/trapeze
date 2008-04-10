@@ -21,23 +21,25 @@ private
   def generate_class_file!
     probe.class_probe_results.each do |r|
       klass = r[:class]
-      file_path = "#{path}/#{type_name_for_type(klass).pathify}_test.rb"
+      class_name = type_name_for_type(klass)
+      file_path = "#{path}/#{class_name.pathify}_test.rb"
       test_class_name = "#{klass.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
+        instance_var_name = "@#{class_name.variablize}"
         if (instantiation = r[:instantiation])
           generate_test!(:file => f, :method_name => 'setup') do |f|
-            f.puts "    @obj = #{type_name_for_type klass}.#{instantiation.method_name}"
+            f.puts "    #{instance_var_name} = #{class_name}.#{instantiation.method_name}"
           end
         end
         generate_test!(:file => f, :method_name => 'test_is_class') do |f|
-          f.puts "    assert_instance_of Class, #{type_name_for_type klass}"
+          f.puts "    assert_instance_of Class, #{class_name}"
         end
         r[:instance_method_probings].each do |m|
           method_name, returned = m.method_name, m.reply[:returned]
           test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
-            f.puts "    assert_equal #{returned.inspect}, @obj.#{method_name}"
+            f.puts "    assert_equal #{returned.inspect}, #{instance_var_name}.#{method_name}"
           end
         end
       end
@@ -63,12 +65,13 @@ private
   def generate_module_file!
     probe.module_probe_results.each do |r|
       mod = r[:module]
-      file_path = "#{path}/#{type_name_for_type(mod).pathify}_test.rb"
+      module_name = type_name_for_type(mod)
+      file_path = "#{path}/#{module_name.pathify}_test.rb"
       test_class_name = "#{mod.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
         generate_test!(:file => f, :method_name => "test_is_module") do |f|
-          f.puts "    assert_instance_of Module, #{type_name_for_type mod}"
+          f.puts "    assert_instance_of Module, #{module_name}"
         end
       end
     end
