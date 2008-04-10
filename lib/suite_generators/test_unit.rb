@@ -2,6 +2,7 @@
 
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator_base")
+require File.expand_path("#{File.dirname __FILE__}/../inflections_extension")
 require File.expand_path("#{File.dirname __FILE__}/../name_extension")
 
 # Generates Test::Unit test cases.
@@ -17,18 +18,10 @@ class Trapeze::SuiteGenerators::TestUnit <
   
 private
   
-  def file_path_for_type(type)
-    path = type_name_for_type(type)
-    path = path.gsub('::',                  '/').
-                gsub(/([a-z0-9])([A-Z])/,   '\1_\2').
-                gsub(/([A-Z])([A-Z][a-z])/, '\1_\2')
-    "#{path.downcase}.rb"
-  end
-  
   def generate_class_file!
     probe.class_probe_results.each do |r|
       klass = r[:class]
-      file_path = "#{path}/#{file_path_for_type(klass).gsub /\.rb$/, '_test.rb'}"
+      file_path = "#{path}/#{type_name_for_type(klass).pathify}_test.rb"
       test_class_name = "#{klass.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
@@ -70,7 +63,7 @@ private
   def generate_module_file!
     probe.module_probe_results.each do |r|
       mod = r[:module]
-      file_path = "#{path}/#{file_path_for_type(mod).gsub /\.rb$/, '_test.rb'}"
+      file_path = "#{path}/#{type_name_for_type(mod).pathify}_test.rb"
       test_class_name = "#{mod.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
@@ -127,7 +120,7 @@ class #{options[:class_name]} < Test::Unit::TestCase
   end
   
   def type_name_for_type(type)
-    type.name.split('::')[1..-1].join '::'
+    type.name.gsub /^.+?::/, ''
   end
   
 end
