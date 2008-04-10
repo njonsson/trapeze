@@ -4,7 +4,7 @@
 # lexical and physical names.
 module Trapeze::InflectionsExtension
   
-  # Returns a canonical file path, with _::_ converted to _/_, other
+  # Returns a canonical file path, with <i>::</i> converted to <i>/</i>, other
   # nonalphanumerics converted to underscores, and everything in lowercase.
   def pathify
     self.gsub(/:+/,                  '/').
@@ -18,8 +18,8 @@ module Trapeze::InflectionsExtension
   end
   
   # Returns a canonical, namespaced type name, with filesystem directory
-  # delimiters converted to _::_ and nonalphanumerics deleted and rendered as
-  # camel-case word breaks.
+  # delimiters converted to <i>::</i> and nonalphanumerics deleted and rendered
+  # as camel-case word breaks.
   def typify
     self.gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
          gsub(/[\\\/:]+/,                     '::').
