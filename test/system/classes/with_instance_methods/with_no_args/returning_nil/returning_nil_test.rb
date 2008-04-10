@@ -8,7 +8,7 @@ module Trapeze::SystemTest
   
   module Classes
     
-    module Methods
+    module WithInstanceMethods
       
       module WithNoArgs
         
