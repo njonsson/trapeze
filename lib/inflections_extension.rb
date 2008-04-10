@@ -27,7 +27,8 @@ module Trapeze::InflectionsExtension
          gsub(/[^a-z\d:]+/i,                  '_').
          gsub(/^_+/,                          '').
          gsub(/_+$/,                          '').
-         gsub(/^./) { |char| char.upcase }
+         gsub(/^(\d)/,                        '_\1').
+         gsub(/^[a-z]/) { |char| char.upcase }
   end
   
   # Returns a canonical variable or method name, with word breaks rendered as
