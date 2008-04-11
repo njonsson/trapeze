@@ -70,8 +70,22 @@ private
       test_class_name = "#{mod.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
+        instance_var_name = "@#{module_name.variablize}"
+        unless r[:instance_method_probings].empty?
+          generate_test!(:file => f, :method_name => 'setup') do |f|
+            f.puts "    #{instance_var_name} = Object.new"
+            f.puts "    #{instance_var_name}.extend #{module_name}"
+          end
+        end
         generate_test!(:file => f, :method_name => "test_is_module") do |f|
           f.puts "    assert_instance_of Module, #{module_name}"
+        end
+        r[:instance_method_probings].each do |m|
+          method_name, returned = m.method_name, m.reply[:returned]
+          test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
+          generate_test!(:file => f, :method_name => test_method_name) do |f|
+            f.puts "    assert_equal #{returned.inspect}, #{instance_var_name}.#{method_name}"
+          end
         end
       end
     end
