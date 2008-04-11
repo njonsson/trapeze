@@ -14,11 +14,11 @@ class FooTest < Test::Unit::TestCase
   end
   
   def test_bar_returns_nil
-    assert_equal nil, @foo.bar
+    assert_nil @foo.bar
   end
   
   def test_baz_returns_nil
-    assert_equal nil, @foo.baz
+    assert_nil @foo.baz
   end
   
 end

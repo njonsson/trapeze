@@ -18,6 +18,17 @@ class Trapeze::SuiteGenerators::TestUnit <
   
 private
   
+  def equality_assertion(expected_value, actual_expr)
+    case expected_value
+      when NilClass
+        "assert_nil #{actual_expr}"
+      when Regexp
+        "assert_match #{expected_value.inspect}, #{actual_expr}"
+      else
+        "assert_equal #{actual_expr}"
+    end
+  end
+  
   def generate_class_file!
     probe.class_probe_results.each do |r|
       klass = r[:class]
@@ -39,7 +50,9 @@ private
           method_name, returned = m.method_name, m.reply[:returned]
           test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
-            f.puts "    assert_equal #{returned.inspect}, #{instance_var_name}.#{method_name}"
+            assertion = equality_assertion(returned,
+                                           "#{instance_var_name}.#{method_name}")
+            f.puts "    #{assertion}"
           end
         end
       end
@@ -55,7 +68,8 @@ private
       probe.method_probe_results.each do |r|
         generate_test!(:file => f,
                        :method_name => "test_#{r.method_name}_returns_nil") do |f|
-          f.puts "    assert_nil #{r.method_name}"
+          assertion = equality_assertion(r.reply[:returned], r.method_name)
+          f.puts "    #{assertion}"
         end
       end
     end
@@ -84,7 +98,9 @@ private
           method_name, returned = m.method_name, m.reply[:returned]
           test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
-            f.puts "    assert_equal #{returned.inspect}, #{instance_var_name}.#{method_name}"
+            assertion = equality_assertion(returned,
+                                           "#{instance_var_name}.#{method_name}")
+            f.puts "    #{assertion}"
           end
         end
       end

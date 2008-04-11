@@ -15,11 +15,11 @@ class BatTest < Test::Unit::TestCase
   end
   
   def test_ding_returns_nil
-    assert_equal nil, @bat.ding
+    assert_nil @bat.ding
   end
   
   def test_pwop_returns_nil
-    assert_equal nil, @bat.pwop
+    assert_nil @bat.pwop
   end
   
 end
