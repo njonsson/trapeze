@@ -27,7 +27,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
   # The directory in which generated files will be created.
   attr_reader :path
   
-  # The Trapeze::Probes object from which a suite will be generated.
+  # The Trapeze::Probe object from which a suite will be generated.
   attr_reader :probe
   
   # (Not to be called directly because Trapeze::SuiteGenerators::GeneratorBase

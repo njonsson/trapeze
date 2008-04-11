@@ -13,7 +13,7 @@ module Trapeze::ExecutorTest
       @executor = Trapeze::Executor.new
       Dir.stubs(:glob).returns stub_everything
       Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns stub_everything
+      Trapeze::Probe.stubs(:new).returns stub_everything
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns stub_everything
     end
     
@@ -32,14 +32,14 @@ module Trapeze::ExecutorTest
       @executor.execute!
     end
     
-    def test_should_call_basic_probe_new_with_loader_when_sent_executeEXCLAMATION
+    def test_should_call_probe_new_with_loader_when_sent_executeEXCLAMATION
       Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probes::BasicProbe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
       @executor.execute!
     end
     
-    def test_should_call_test_unit_new_with_path_attribute_of_default_path_and_probe_attribute_of_basic_probe_when_sent_executeEXCLAMATION
-      Trapeze::Probes::BasicProbe.expects(:new).returns :stubbed_probe
+    def test_should_call_test_unit_new_with_path_attribute_of_default_path_and_probe_attribute_of_probe_when_sent_executeEXCLAMATION
+      Trapeze::Probe.expects(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => 'test/trapeze',
                                                             :probe => :stubbed_probe).returns stub_everything
       @executor.execute!
@@ -77,7 +77,7 @@ module Trapeze::ExecutorTest
       @executor = Trapeze::Executor.new(:arg1, :arg2)
       Dir.stubs(:glob).returns stub_everything
       Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probes::BasicProbe.stubs(:new).returns stub_everything
+      Trapeze::Probe.stubs(:new).returns stub_everything
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns stub_everything
     end
     
@@ -96,14 +96,14 @@ module Trapeze::ExecutorTest
       @executor.execute!
     end
     
-    def test_should_call_basic_probe_new_with_loader_when_sent_executeEXCLAMATION
+    def test_should_call_probe_new_with_loader_when_sent_executeEXCLAMATION
       Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probes::BasicProbe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
       @executor.execute!
     end
     
-    def test_should_call_test_unit_new_with_path_attribute_of_second_arg_and_probe_attribute_of_basic_probe_when_sent_executeEXCLAMATION
-      Trapeze::Probes::BasicProbe.expects(:new).returns :stubbed_probe
+    def test_should_call_test_unit_new_with_path_attribute_of_second_arg_and_probe_attribute_of_probe_when_sent_executeEXCLAMATION
+      Trapeze::Probe.expects(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => :arg2,
                                                             :probe => :stubbed_probe).returns stub_everything
       @executor.execute!

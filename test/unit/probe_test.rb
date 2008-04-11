@@ -1,11 +1,11 @@
-require File.expand_path("#{File.dirname __FILE__}/../../test")
-require File.expand_path("#{File.dirname __FILE__}/../../../lib/probes/basic_probe")
+require File.expand_path("#{File.dirname __FILE__}/../test")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/probe")
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
-require File.expand_path("#{File.dirname __FILE__}/../../assertion_helpers_extension")
+require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 
-module Trapeze::Probes::BasicProbeTest
+module Trapeze::ProbeTest
   
   class WithEmptyLoader < Test::Unit::TestCase
     
@@ -14,7 +14,7 @@ module Trapeze::Probes::BasicProbeTest
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []
       @mock_loader.stubs(:method_definitions).returns []
-      @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+      @probe = Trapeze::Probe.new(@mock_loader)
     end
     
     def test_should_return_expected_object_when_sent_loader
@@ -77,7 +77,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -159,7 +159,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -250,7 +250,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -353,7 +353,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -444,7 +444,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -527,7 +527,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -636,7 +636,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns @class_definitions
         @mock_loader.stubs(:module_definitions).returns []
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -729,7 +729,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -811,7 +811,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -894,7 +894,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -977,7 +977,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -1084,7 +1084,7 @@ module Trapeze::Probes::BasicProbeTest
         @mock_loader.stubs(:class_definitions).returns []
         @mock_loader.stubs(:module_definitions).returns @module_definitions
         @mock_loader.stubs(:method_definitions).returns []
-        @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+        @probe = Trapeze::Probe.new(@mock_loader)
       end
       
       def test_should_return_expected_object_when_sent_loader
@@ -1178,7 +1178,7 @@ module Trapeze::Probes::BasicProbeTest
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []
       @mock_loader.stubs(:method_definitions).returns @method_definitions
-      @probe = Trapeze::Probes::BasicProbe.new(@mock_loader)
+      @probe = Trapeze::Probe.new(@mock_loader)
     end
     
     def test_should_return_expected_object_when_sent_loader
