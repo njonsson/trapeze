@@ -1,9 +1,11 @@
 #!/usr/bin/ruby
 # A shell script that defines the command-line interface for Trapeze.
 
-require File.expand_path("#{File.dirname __FILE__}/../trapeze")
+begin
+  require 'trapeze'
+rescue
+  require 'rubygems'
+  require 'trapeze'
+end
 
-loader = Trapeze::Loader.new(*Dir.glob(ARGV[0]))
-probe = Trapeze::Probes::BasicProbe.new(loader)
-generator = Trapeze::SuiteGenerators::TestUnit.new(ARGV[1])
-generator.generate! probe.results
+Trapeze::Application.run *ARGV
