@@ -78,7 +78,7 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @generator = Trapeze::SuiteGenerators::TestUnit.new(:path => 'foo',
                                                             :probe => @mock_probe)
         File.stubs(:directory?).returns false
-        Dir.stubs :truncate
+        FileUtils.stubs :rm_rf
         Dir.stubs :mkdir
         File.stubs(:open).yields stub_everything
       end
@@ -122,9 +122,9 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @generator.generate!
       end
       
-      def test_should_call_dir_truncate_with_path_when_sent_generateEXCLAMATION_with_path_as_directory
+      def test_should_call_file_utils_rm_rf_with_path_when_sent_generateEXCLAMATION_with_path_as_directory
         File.stubs(:directory?).returns true
-        Dir.expects(:truncate).with 'foo'
+        FileUtils.expects(:rm_rf).with 'foo'
         @generator.generate!
       end
       

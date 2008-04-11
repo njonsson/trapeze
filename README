@@ -41,4 +41,3 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it
-* Replace <tt>Dir.truncate</tt> with <tt>FileUtils.rm_rf</tt>

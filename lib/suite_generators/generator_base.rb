@@ -1,7 +1,7 @@
 # Defines Trapeze::SuiteGenerators::GeneratorBase.
 
+require 'fileutils'
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
-require File.expand_path("#{File.dirname __FILE__}/../truncate_extension")
 
 # The base class for library-specific generators in Trapeze::SuiteGenerators.
 class Trapeze::SuiteGenerators::GeneratorBase
@@ -44,7 +44,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
   # Deletes the subdirectories and files in path and generates a suite of test
   # cases or specifications described by _probe_.
   def generate!
-    File.directory?(path) ? Dir.truncate(path) : Dir.mkdir(path)
+    File.directory?(path) ? FileUtils.rm_rf(path) : Dir.mkdir(path)
     
     generate_suite_file!
     generate_class_file!
