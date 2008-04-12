@@ -44,7 +44,8 @@ class Trapeze::SuiteGenerators::GeneratorBase
   # Deletes the subdirectories and files in path and generates a suite of test
   # cases or specifications described by _probe_.
   def generate!
-    File.directory?(path) ? FileUtils.rm_rf(path) : Dir.mkdir(path)
+    FileUtils.rm_rf path if File.exist?(path)
+    FileUtils.mkdir_p path
     
     generate_suite_file!
     generate_class_file!

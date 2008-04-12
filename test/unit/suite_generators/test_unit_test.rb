@@ -77,9 +77,9 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @mock_probe.stubs(:method_probe_results).returns []
         @generator = Trapeze::SuiteGenerators::TestUnit.new(:path => 'foo',
                                                             :probe => @mock_probe)
-        File.stubs(:directory?).returns false
+        File.stubs(:exist?).returns false
         FileUtils.stubs :rm_rf
-        Dir.stubs :mkdir
+        FileUtils.stubs :mkdir_p
         File.stubs(:open).yields stub_everything
       end
       
@@ -117,25 +117,23 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @generator.generate!
       end
       
-      def test_should_call_file_directoryQUESTION_with_path_when_sent_generateEXCLAMATION
-        File.expects(:directory?).with('foo').returns false
+      def test_should_call_file_existQUESTION_with_path_when_sent_generateEXCLAMATION
+        File.expects(:exist?).with('foo').returns false
         @generator.generate!
       end
       
       def test_should_call_file_utils_rm_rf_with_path_when_sent_generateEXCLAMATION_with_path_as_directory
-        File.stubs(:directory?).returns true
+        File.stubs(:exist?).returns true
         FileUtils.expects(:rm_rf).with 'foo'
         @generator.generate!
       end
       
-      def test_should_call_dir_mkdir_with_path_when_sent_generateEXCLAMATION_with_path_not_as_directory
-        File.stubs(:directory?).returns false
-        Dir.expects(:mkdir).with 'foo'
+      def test_should_call_file_utils_mkdir_p_with_path_when_sent_generateEXCLAMATION_with_path_not_as_directory
+        FileUtils.expects(:mkdir_p).with 'foo'
         @generator.generate!
       end
       
       def test_should_call_file_open_with_suite_filename_and_expected_modestring_when_sent_generateEXCLAMATION
-        File.stubs(:directory?).returns true
         File.expects(:open).with('foo/SUITE.rb', 'w').yields stub_everything
         @generator.generate!
       end
