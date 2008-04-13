@@ -12,9 +12,9 @@ class Trapeze::Application
   # arguments are as follows:
   # 
   # 1. A file pattern containing source code to analyze. Defaults to
-  #    'lib/**/*.rb'.
+  #    <i>lib/**/*.rb</i>.
   # 2. A path to a directory where a suite will be generated. Defaults to
-  #    'test/trapeze'.
+  #    <i>test/trapeze</i>.
   def self.run(*args)
     unless args.empty? || (args.length == 2)
       raise ArgumentError, 'expected two arguments'
