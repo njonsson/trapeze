@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/probe")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/probe")
 require 'test/unit'
 require 'rubygems'
 require 'mocha'

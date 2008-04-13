@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/envelope")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/message")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/envelope")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/message")
 require 'test/unit'
 
 module Trapeze::EnvelopeTest

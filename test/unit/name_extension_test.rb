@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/name_extension")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/name_extension")
 require 'test/unit'
 
 class Trapeze::NameExtensionTest < Test::Unit::TestCase

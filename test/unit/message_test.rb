@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/message")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/message")
 require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 

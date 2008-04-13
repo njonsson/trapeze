@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/sorted_methods_extension")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/sorted_methods_extension")
 require 'test/unit'
 
 class Trapeze::SortedInstanceMethodsExtensionTest < Test::Unit::TestCase

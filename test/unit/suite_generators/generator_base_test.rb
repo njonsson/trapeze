@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../../test")
-require File.expand_path("#{File.dirname __FILE__}/../../../lib/suite_generators/generator_base")
+require File.expand_path("#{File.dirname __FILE__}/../../../lib/trapeze/suite_generators/generator_base")
 require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/../../assertion_helpers_extension")
 

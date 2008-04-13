@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/inflections_extension")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/inflections_extension")
 require 'test/unit'
 
 module Trapeze::InflectionsExtensionTest

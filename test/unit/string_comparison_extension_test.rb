@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/string_comparison_extension")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/string_comparison_extension")
 require 'test/unit'
 
 class Trapeze::StringComparisonExtensionTest < Test::Unit::TestCase

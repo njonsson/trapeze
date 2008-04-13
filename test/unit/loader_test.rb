@@ -1,5 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../test")
-require File.expand_path("#{File.dirname __FILE__}/../../lib/loader")
+require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/loader")
 require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/../assertion_helpers_extension")
 require 'rubygems'

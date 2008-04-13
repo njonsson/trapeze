@@ -9,7 +9,6 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title    = 'Trapeze'
   rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('trapeze.rb')
   rdoc.rdoc_files.include('MIT-LICENSE')
   rdoc.rdoc_files.include('bin/trap')
   rdoc.rdoc_files.include('lib/**/*.rb')
