@@ -20,7 +20,9 @@ class Trapeze::Message
     def raised(attributes={})
       raise_if_unexpected attributes, :additional => [:error, :error_message]
       raise_unless_method_name attributes
-      raise ArgumentError, ":error attribute required" unless attributes[:error]
+      unless attributes[:error]
+        raise ArgumentError, ":error attribute required"
+      end
       
       raised = {:error => attributes.delete(:error)}
       if (error_message = attributes.delete(:error_message))

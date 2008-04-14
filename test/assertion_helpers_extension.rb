@@ -152,7 +152,7 @@ module Trapeze::AssertionHelpersExtension
       end
       if r[:instantiation]
         instantiation = message_to_description(r[:instantiation])
-        instantiation.delete(:returned) if instantiation.include?(:returned)
+        instantiation.delete :returned if instantiation.include?(:returned)
         r[:instantiation] = instantiation
       end
       if r[:instance_method_probings]
