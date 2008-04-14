@@ -33,9 +33,10 @@ module Trapeze::ApplicationTest
       Trapeze::Application.run
     end
     
-    def test_should_call_test_unit_new_with_path_attribute_of_default_path_and_probe_attribute_of_probe_when_sent_run
+    def test_should_call_test_unit_new_with_output_dir_attribute_of_default_output_dir_and_probe_attribute_of_probe_when_sent_run
       Trapeze::Probe.expects(:new).returns :stubbed_probe
-      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => 'test/trapeze',
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
+                                                            :output_dir => 'test/trapeze',
                                                             :probe => :stubbed_probe).returns stub_everything
       Trapeze::Application.run
     end
@@ -92,9 +93,10 @@ module Trapeze::ApplicationTest
       Trapeze::Application.run :arg1, :arg2
     end
     
-    def test_should_call_test_unit_new_with_path_attribute_of_second_arg_and_probe_attribute_of_probe_when_sent_run
+    def test_should_call_test_unit_new_with_output_dir_attribute_of_second_arg_and_probe_attribute_of_probe_when_sent_run
       Trapeze::Probe.expects(:new).returns :stubbed_probe
-      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:path => :arg2,
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => :arg1,
+                                                            :output_dir => :arg2,
                                                             :probe => :stubbed_probe).returns stub_everything
       Trapeze::Application.run :arg1, :arg2
     end

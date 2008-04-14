@@ -10,8 +10,9 @@ class Trapeze::SuiteGenerators::TestUnit <
       Trapeze::SuiteGenerators::GeneratorBase
   
   # Instantiates a new Trapeze::SuiteGenerators::TestUnit from the specified
-  # _attributes_. Attributes <tt>:path</tt> and <tt>:probe</tt> are required,
-  # and <tt>:path</tt> must not point to an existing file.
+  # _attributes_. Attributes <tt>:input_files_pattern</tt>,
+  # <tt>:output_dir</tt> and <tt>:probe</tt> are required, and
+  # <tt>:output_dir</tt> must not point to an existing file.
   def initialize(attributes={})
     super attributes
   end
@@ -33,7 +34,7 @@ private
     probe.class_probe_results.each do |r|
       klass = r[:class]
       class_name = type_name_for_type(klass)
-      file_path = "#{path}/#{class_name.pathify}_test.rb"
+      file_path = "#{output_dir}/#{class_name.pathify}_test.rb"
       test_class_name = "#{klass.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
@@ -63,7 +64,7 @@ private
   def generate_methods_file!
     return self if probe.method_probe_results.empty?
     
-    generate_test_file!(:file_path => "#{path}/_test.rb",
+    generate_test_file!(:file_path => "#{output_dir}/_test.rb",
                         :class_name => "Test_") do |f|
       probe.method_probe_results.each do |r|
         generate_test!(:file => f,
@@ -80,7 +81,7 @@ private
     probe.module_probe_results.each do |r|
       mod = r[:module]
       module_name = type_name_for_type(mod)
-      file_path = "#{path}/#{module_name.pathify}_test.rb"
+      file_path = "#{output_dir}/#{module_name.pathify}_test.rb"
       test_class_name = "#{mod.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
@@ -104,22 +105,6 @@ private
           end
         end
       end
-    end
-    self
-  end
-  
-  def generate_suite_file!
-    File.open("#{path}/SUITE.rb", 'w') do |f|
-      f.print <<-end_print
-#{file_boilerplate}
-Dir.glob(File.expand_path("\#{File.dirname __FILE__}/../input/**/*.rb")) do |source_file|
-  require File.expand_path(source_file)
-end
-
-Dir.glob(File.expand_path("\#{File.dirname __FILE__}/**/*_test.rb")) do |test_file|
-  require File.expand_path(test_file)
-end
-      end_print
     end
     self
   end
@@ -150,6 +135,10 @@ class #{options[:class_name]} < Test::Unit::TestCase
       f.puts 'end'
     end
     self
+  end
+  
+  def generated_files_pattern
+    '**/*_test.rb'
   end
   
   def type_name_for_type(type)

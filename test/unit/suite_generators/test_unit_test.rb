@@ -14,59 +14,71 @@ module Trapeze::SuiteGenerators::TestUnitTest
     class WithNoAttributes < Test::Unit::TestCase
       
       def test_should_raise_argument_error
-        assert_raise_message(ArgumentError, ':path attribute required') do
+        assert_raise_message(ArgumentError,
+                             ':input_files_pattern attribute required') do
           Trapeze::SuiteGenerators::TestUnit.new
         end
       end
       
     end
     
-    class WithPathAttributeAsFile < Test::Unit::TestCase
-      
-      def setup
-        File.stubs(:file?).returns true
-      end
-      
-      def test_should_call_file_fileQUESTION_with_path_attribute
-        File.expects(:file?).with('foo').returns true
-        begin
-          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
-        rescue ArgumentError
-        end
-      end
+    class WithInputFilesPatternAttribute < Test::Unit::TestCase
       
       def test_should_raise_argument_error
         assert_raise_message(ArgumentError,
-                             ':path attribute must not be a file') do
-          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
+                             ':output_dir attribute required') do
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo'
         end
       end
       
     end
     
-    class WithPathAttributeNotAsFile < Test::Unit::TestCase
+    class WithInputFilesPatternAttributeAndOutputDirAttributeAsFile <
+          Test::Unit::TestCase
       
-      def setup
-        File.stubs(:file?).returns false
-      end
-      
-      def test_should_call_file_fileQUESTION_with_path_attribute
-        File.expects(:file?).with('foo').returns false
+      def test_should_call_file_fileQUESTION_with_output_dir_attribute
+        File.expects(:file?).with('bar').returns true
         begin
-          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo',
+                                                 :output_dir => 'bar'
         rescue ArgumentError
         end
       end
       
       def test_should_raise_argument_error
-        assert_raise_message(ArgumentError, ':probe attribute required') do
-          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo'
+        File.stubs(:file?).returns true
+        assert_raise_message(ArgumentError,
+                             ':output_dir attribute must not be a file') do
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo',
+                                                 :output_dir => 'foo'
         end
       end
       
     end
     
-    class WithPathAttributeNotAsFileAndProbeAttributeHavingNoResults <
+    class WithInputFilesPatternAttributeAndOutputDirAttributeNotAsFile <
+          Test::Unit::TestCase
+      
+      def test_should_call_file_fileQUESTION_with_output_dir_attribute
+        File.expects(:file?).with('bar').returns false
+        begin
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo',
+                                                 :output_dir => 'bar'
+        rescue ArgumentError
+        end
+      end
+      
+      def test_should_raise_argument_error
+        File.stubs(:file?).returns false
+        assert_raise_message(ArgumentError, ':probe attribute required') do
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo',
+                                                 :output_dir => 'bar'
+        end
+      end
+      
+    end
+    
+    class WithInputFilesPatternAttributeAndOutputDirAttributeNotAsFileAndProbeAttributeHavingNoResults <
           Test::Unit::TestCase
       
       def setup
@@ -75,7 +87,8 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @mock_probe.stubs(:class_probe_results).returns []
         @mock_probe.stubs(:module_probe_results).returns []
         @mock_probe.stubs(:method_probe_results).returns []
-        @generator = Trapeze::SuiteGenerators::TestUnit.new(:path => 'foo',
+        @generator = Trapeze::SuiteGenerators::TestUnit.new(:input_files_pattern => 'foo',
+                                                            :output_dir => 'bar',
                                                             :probe => @mock_probe)
         File.stubs(:exist?).returns false
         FileUtils.stubs :rm_rf
@@ -83,15 +96,21 @@ module Trapeze::SuiteGenerators::TestUnitTest
         File.stubs(:open).yields stub_everything
       end
       
-      def test_should_call_file_fileQUESTION_with_path_attribute
-        File.expects(:file?).with('foo').returns false
+      def test_should_call_file_fileQUESTION_with_output_dir_attribute
+        File.expects(:file?).with('bar').returns false
         assert_nothing_raised do
-          Trapeze::SuiteGenerators::TestUnit.new :path => 'foo', :probe => 'bar'
+          Trapeze::SuiteGenerators::TestUnit.new :input_files_pattern => 'foo',
+                                                 :output_dir => 'bar',
+                                                 :probe => 'baz'
         end
       end
       
-      def test_should_return_expected_path_when_sent_path
-        assert_equal 'foo', @generator.path
+      def test_should_return_expected_input_files_pattern_when_sent_input_files_pattern
+        assert_equal 'foo', @generator.input_files_pattern
+      end
+      
+      def test_should_return_expected_output_dir_when_sent_output_dir
+        assert_equal 'bar', @generator.output_dir
       end
       
       def test_should_return_expected_probe_when_sent_probe
@@ -117,24 +136,24 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @generator.generate!
       end
       
-      def test_should_call_file_existQUESTION_with_path_when_sent_generateEXCLAMATION
-        File.expects(:exist?).with('foo').returns false
+      def test_should_call_file_existQUESTION_with_output_dir_when_sent_generateEXCLAMATION
+        File.expects(:exist?).with('bar').returns false
         @generator.generate!
       end
       
-      def test_should_call_file_utils_rm_rf_with_path_when_sent_generateEXCLAMATION_with_path_as_directory
+      def test_should_call_file_utils_rm_rf_with_output_dir_when_sent_generateEXCLAMATION_with_output_dir_as_directory
         File.stubs(:exist?).returns true
-        FileUtils.expects(:rm_rf).with 'foo'
+        FileUtils.expects(:rm_rf).with 'bar'
         @generator.generate!
       end
       
-      def test_should_call_file_utils_mkdir_p_with_path_when_sent_generateEXCLAMATION_with_path_not_as_directory
-        FileUtils.expects(:mkdir_p).with 'foo'
+      def test_should_call_file_utils_mkdir_p_with_output_dir_when_sent_generateEXCLAMATION_with_output_dir_not_as_directory
+        FileUtils.expects(:mkdir_p).with 'bar'
         @generator.generate!
       end
       
       def test_should_call_file_open_with_suite_filename_and_expected_modestring_when_sent_generateEXCLAMATION
-        File.expects(:open).with('foo/SUITE.rb', 'w').yields stub_everything
+        File.expects(:open).with('bar/SUITE.rb', 'w').yields stub_everything
         @generator.generate!
       end
       
@@ -144,7 +163,7 @@ module Trapeze::SuiteGenerators::TestUnitTest
 # This file was automatically generated by Trapeze, the safety-net generator for
 # Ruby. Visit http://trapeze.rubyforge.org/ for more information.
 
-Dir.glob(File.expand_path("\#{File.dirname __FILE__}/../input/**/*.rb")) do |source_file|
+Dir.glob(File.expand_path("\#{File.dirname __FILE__}/../foo")) do |source_file|
   require File.expand_path(source_file)
 end
 

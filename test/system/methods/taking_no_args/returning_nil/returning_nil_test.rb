@@ -13,13 +13,13 @@ module Trapeze::SystemTest
       class ReturningNil < Test::Unit::TestCase
         
         def test_should_generate_expected_output
-          input_path        = File.expand_path("#{File.dirname __FILE__}/input/**/*.rb")
-          output_path       = File.expand_path("#{File.dirname __FILE__}/output")
-          output_truth_path = File.expand_path("#{File.dirname __FILE__}/output_truth")
-          FileUtils.rm_rf output_path if File.exist?(output_path)
-          FileUtils.mkdir_p output_path
-          Trapeze::Application.run input_path, output_path
-          assert_dirs_identical output_truth_path, output_path
+          input_files_pattern = File.expand_path("#{File.dirname __FILE__}/input/**/*.rb")
+          output_dir          = File.expand_path("#{File.dirname __FILE__}/output")
+          output_truth_dir    = File.expand_path("#{File.dirname __FILE__}/output_truth")
+          FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
+          FileUtils.mkdir_p output_dir
+          Trapeze::Application.run input_files_pattern, output_dir
+          assert_dirs_identical output_truth_dir, output_dir
         end
         
       end

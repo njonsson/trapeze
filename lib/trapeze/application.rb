@@ -19,11 +19,13 @@ class Trapeze::Application
     unless args.empty? || (args.length == 2)
       raise ArgumentError, 'expected two arguments'
     end
-    input_filenames = Dir.glob(args[0] || 'lib/**/*.rb')
-    loader = Trapeze::Loader.new(*input_filenames)
+    input_files_pattern = args[0] || 'lib/**/*.rb'
+    input_files = Dir.glob(input_files_pattern)
+    loader = Trapeze::Loader.new(*input_files)
     probe = Trapeze::Probe.new(loader)
-    output_directory = args[1] || 'test/trapeze'
-    generator = Trapeze::SuiteGenerators::TestUnit.new(:path => output_directory,
+    output_dir = args[1] || 'test/trapeze'
+    generator = Trapeze::SuiteGenerators::TestUnit.new(:input_files_pattern => input_files_pattern,
+                                                       :output_dir => output_dir,
                                                        :probe => probe)
     generator.generate!
   end
