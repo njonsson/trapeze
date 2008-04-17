@@ -1,6 +1,5 @@
 require File.expand_path("#{File.dirname __FILE__}/../../test")
 require File.expand_path("#{File.dirname __FILE__}/../../../lib/trapeze/suite_generators/test_unit")
-require File.expand_path("#{File.dirname __FILE__}/../../../lib/trapeze/to_method_extension")
 require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/../../assertion_helpers_extension")
 require 'rubygems'
