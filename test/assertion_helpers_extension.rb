@@ -4,6 +4,7 @@ require File.expand_path("#{File.dirname __FILE__}/test")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/name_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/string_comparison_extension")
+require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/to_method_extension")
 require 'test/unit'
 
 # Adds additional assertions to Test::Unit::TestCase.
