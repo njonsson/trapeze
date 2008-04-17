@@ -1172,8 +1172,8 @@ module Trapeze::ProbeTest
     end
     
     def setup
-      @method_definitions = ['bar'.to_instance_method(MethodsModule),
-                             'baz'.to_instance_method(MethodsModule)]
+      @method_definitions = ['bar'._to_instance_method(MethodsModule),
+                             'baz'._to_instance_method(MethodsModule)]
       @mock_loader = mock
       @mock_loader.stubs(:class_definitions).returns []
       @mock_loader.stubs(:module_definitions).returns []

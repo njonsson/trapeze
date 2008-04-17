@@ -32,37 +32,36 @@ class Trapeze::SortedInstanceMethodsExtensionTest < Test::Unit::TestCase
     
   end
   
-  def test_should_return_sorted_instance_methods_when_sent_instance_methods_with_no_args
-    actual = Fizz.instance_methods
-    assert_equal Fizz.instance_methods_not_sorted.sort, actual
+  def test_should_return_sorted_instance_methods_when_sent_UNDERSCOREinstance_methods_sorted_with_no_args
+    actual = Fizz._instance_methods_sorted
+    assert_equal Fizz.instance_methods.sort, actual
     assert_equal actual.sort, actual
-    if Fizz.instance_methods_not_sorted == actual
-      puts 'Note that on this platform the output of ' +
-           'Module#instance_methods_not_sorted and ' +
-           'Module#instance_methods_sorted is the same for this test case.'
+    if Fizz.instance_methods == actual
+      puts 'Note that on this platform the output of Module#instance_methods ' +
+           'and Module#_instance_methods_sorted is the same for this test case.'
     end
   end
   
-  def test_should_return_sorted_instance_methods_when_sent_instance_methods_with_true
-    actual = Fizz.instance_methods(true)
-    assert_equal Fizz.instance_methods_not_sorted(true).sort, actual
+  def test_should_return_sorted_instance_methods_when_sent_UNDERSCOREinstance_methods_sorted_with_true
+    actual = Fizz._instance_methods_sorted(true)
+    assert_equal Fizz.instance_methods(true).sort, actual
     assert_equal actual.sort, actual
-    if Fizz.instance_methods_not_sorted(true) == actual
-      puts 'Note that on this platform the output of ' +
-           'Module#instance_methods_not_sorted(true) and ' +
-           'Module#instance_methods_sorted(true) is the same for this test ' +
+    if Fizz.instance_methods(true) == actual
+      puts 'Note that on this platform the output of '                        +
+           'Module#instance_methods(true) and '                               +
+           'Module#_instance_methods_sorted(true) is the same for this test ' +
            'case.'
     end
   end
   
-  def test_should_return_sorted_instance_methods_of_class_when_sent_instance_methods_with_false
-    actual = Fizz.instance_methods(false)
-    assert_equal Fizz.instance_methods_not_sorted(false).sort, actual
+  def test_should_return_sorted_instance_methods_of_class_when_sent_UNDERSCOREinstance_methods_sorted_with_false
+    actual = Fizz._instance_methods_sorted(false)
+    assert_equal Fizz.instance_methods(false).sort, actual
     assert_equal actual.sort, actual
-    if Fizz.instance_methods_not_sorted(false) == actual
-      puts 'Note that on this platform the output of ' +
-           'Module#instance_methods_not_sorted(false) and ' +
-           'Module#instance_methods_sorted(false) is the same for this test ' +
+    if Fizz.instance_methods(false) == actual
+      puts 'Note that on this platform the output of '                         +
+           'Module#instance_methods(false) and '                               +
+           'Module#_instance_methods_sorted(false) is the same for this test ' +
            'case.'
     end
   end
@@ -107,36 +106,33 @@ class Trapeze::SortedMethodsExtensionTest < Test::Unit::TestCase
     
   end
   
-  def test_should_return_sorted_methods_when_sent_methods_with_no_args
-    actual = Fizz.methods
-    assert_equal Fizz.methods_not_sorted.sort, actual
+  def test_should_return_sorted_methods_when_sent_UNDERSCOREmethods_sorted_with_no_args
+    actual = Fizz._methods_sorted
+    assert_equal Fizz.methods.sort, actual
     assert_equal actual.sort, actual
-    if Fizz.methods_not_sorted == actual
-      puts 'Note that on this platform the output of ' +
-           'Object#methods_not_sorted and Object#methods_sorted is the same ' +
-           'for this test case.'
+    if Fizz.methods == actual
+      puts 'Note that on this platform the output of Object#methods and ' +
+           'Object#_methods_sorted is the same for this test case.'
     end
   end
   
-  def test_should_return_sorted_methods_when_sent_methods_with_true
-    actual = Fizz.methods(true)
-    assert_equal Fizz.methods_not_sorted(true).sort, actual
+  def test_should_return_sorted_methods_when_sent_UNDERSCOREmethods_sorted_with_true
+    actual = Fizz._methods_sorted(true)
+    assert_equal Fizz.methods(true).sort, actual
     assert_equal actual.sort, actual
-    if Fizz.methods_not_sorted(true) == actual
-      puts 'Note that on this platform the output of ' +
-           'Object#methods_not_sorted(true) and Object#methods_sorted(true) ' +
-           'is the same for this test case.'
+    if Fizz.methods(true) == actual
+      puts 'Note that on this platform the output of Object#methods(true) ' +
+           'and Object#_methods_sorted(true) is the same for this test case.'
     end
   end
   
-  def test_should_return_sorted_methods_when_sent_methods_with_false
-    actual = Fizz.methods(false)
-    assert_equal Fizz.methods_not_sorted(false).sort, actual
+  def test_should_return_sorted_methods_when_sent_UNDERSCOREmethods_sorted_with_false
+    actual = Fizz._methods_sorted(false)
+    assert_equal Fizz.methods(false).sort, actual
     assert_equal actual.sort, actual
-    if Fizz.methods_not_sorted(false) == actual
-      puts 'Note that on this platform the output of ' +
-           'Object#methods_not_sorted(false) and ' +
-           'Object#methods_sorted(false) is the same for this test case.'
+    if Fizz.methods(false) == actual
+      puts 'Note that on this platform the output of Object#methods(false) ' +
+           'and Object#_methods_sorted(false) is the same for this test case.'
     end
   end
   

@@ -39,13 +39,13 @@ public
       unless all_methods.include?(m)
         all_methods << m
         armored = armor(m)
-        define_method("test_#{armored}_method_returns_#{armored}_when_sent_name") do
+        define_method("test_#{armored}_method_returns_#{armored}_when_sent_UNDERSCOREname") do
           method = obj.method(m)
           assert_not_equal m,
                            method.to_s,
                            'Expected Method#to_s to return something more ' +
                            'complicated than the bare name of the method'
-          assert_equal m, method.name
+          assert_equal m, method._name
         end
       end
     end

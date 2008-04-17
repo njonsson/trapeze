@@ -94,11 +94,11 @@ private
   
   def probe_class_methods_for_class!(klass)
     class_method_probings = (@results[:class_probe_results].last[:class_method_probings] = [])
-    class_methods = (klass.methods - Class.methods)
+    class_methods = (klass._methods_sorted - Class._methods_sorted)
     return false if class_methods.empty?
     
     class_methods.each do |m|
-      reply = self.class.probe_method(m.to_method(klass))
+      reply = self.class.probe_method(m._to_method(klass))
       class_method_probings << Trapeze::Message.returned(:method_name => m,
                                                          :args => reply[:args],
                                                          :returned => reply[:returned])
@@ -109,14 +109,15 @@ private
   def probe_instance_methods_for_class!(klass)
     class_probe_results = @results[:class_probe_results]
     instance_method_probings = (class_probe_results.last[:instance_method_probings] = [])
-    instance_methods = (klass.instance_methods - Object.instance_methods)
+    instance_methods = (klass._instance_methods_sorted -
+                        Object._instance_methods_sorted)
     return false if instance_methods.empty?
     
     instance = klass.new
     class_probe_results.last[:instantiation] = Trapeze::Message.returned(:method_name => 'new',
                                                                          :returned => instance)
     instance_methods.each do |m|
-      reply = self.class.probe_method(m.to_method(instance))
+      reply = self.class.probe_method(m._to_method(instance))
       instance_method_probings << Trapeze::Message.returned(:method_name => m,
                                                             :args => reply[:args],
                                                             :returned => reply[:returned])
@@ -126,14 +127,15 @@ private
   
   def probe_instance_methods_for_module!(mod)
     instance_method_probings = (@results[:module_probe_results].last[:instance_method_probings] = [])
-    instance_methods = (mod.instance_methods - Object.instance_methods)
+    instance_methods = (mod._instance_methods_sorted -
+                        Object._instance_methods_sorted)
     return false if instance_methods.empty?
     
     klass = Class.new
     klass.instance_eval { include mod }
     instance = klass.new
     instance_methods.each do |m|
-      reply = self.class.probe_method(m.to_method(instance))
+      reply = self.class.probe_method(m._to_method(instance))
       instance_method_probings << Trapeze::Message.returned(:method_name => m,
                                                             :args => reply[:args],
                                                             :returned => reply[:returned])
@@ -145,7 +147,7 @@ private
     method_probe_results = (@results[:method_probe_results] = [])
     @loader.method_definitions.each do |m|
       reply = self.class.probe_method(m)
-      method_probe_results << Trapeze::Message.returned(:method_name => m.name,
+      method_probe_results << Trapeze::Message.returned(:method_name => m._name,
                                                         :args => reply[:args],
                                                         :returned => reply[:returned])
     end
@@ -164,11 +166,11 @@ private
   
   def probe_module_methods_for_module!(mod)
     module_method_probings = (@results[:module_probe_results].last[:module_method_probings] = [])
-    module_methods = (mod.methods - Module.methods)
+    module_methods = (mod._methods_sorted - Module._methods_sorted)
     return false if module_methods.empty?
     
     module_methods.each do |m|
-      reply = self.class.probe_method(m.to_method(mod))
+      reply = self.class.probe_method(m._to_method(mod))
       module_method_probings << Trapeze::Message.returned(:method_name => m,
                                                           :args => reply[:args],
                                                           :returned => reply[:returned])

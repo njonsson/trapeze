@@ -2,6 +2,10 @@
 
 # Adds methods to String for converting among various inflected forms of
 # lexical and physical identifiers.
+# 
+# The names of these methods are prefixed with an underscore character in order
+# to reduce the likelihood of method name collisions, given that the purpose of
+# Trapeze is to load and analyze other Ruby programs.
 module Trapeze::InflectionsExtension
   
   # Returns a canonical file path, with <i>:</i> converted to <i>/</i>, other
@@ -10,9 +14,9 @@ module Trapeze::InflectionsExtension
   # 
   # Examples:
   # 
-  #   'FooBar'.pathify          # => 'foo_bar'
-  #   'FooBar::BazBat'.pathify  # => 'foo_bar/baz_bat'
-  def pathify
+  #   'FooBar'._pathify          # => 'foo_bar'
+  #   'FooBar::BazBat'._pathify  # => 'foo_bar/baz_bat'
+  def _pathify
     self.gsub(/:+/,                  '/').
          gsub(/([a-z\d])([A-Z])/,    '\1_\2').
          gsub(/([A-Z])([A-Z][a-z])/, '\1_\2').
@@ -29,9 +33,9 @@ module Trapeze::InflectionsExtension
   # 
   # Examples:
   # 
-  #   'foo_bar'.typify          # => 'FooBar'
-  #   'foo_bar/baz_bat'.typify  # => 'FooBar::BazBat'
-  def typify
+  #   'foo_bar'._typify          # => 'FooBar'
+  #   'foo_bar/baz_bat'._typify  # => 'FooBar::BazBat'
+  def _typify
     self.gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
          gsub(/[\\\/:]+/,                     '::').
          gsub(/([a-z\d])[^a-z\d:]([a-z\d])/i, '\1\2').
@@ -47,10 +51,10 @@ module Trapeze::InflectionsExtension
   # 
   # Examples:
   # 
-  #   'FooBar'.variablize          # => 'foo_bar'
-  #   'FooBar::BazBat'.variablize  # => 'foo_bar_baz_bat'
-  def variablize
-    pathify.gsub('/', '_').gsub /^(\d)/, '_\1'
+  #   'FooBar'._variablize          # => 'foo_bar'
+  #   'FooBar::BazBat'._variablize  # => 'foo_bar_baz_bat'
+  def _variablize
+    _pathify.gsub('/', '_').gsub /^(\d)/, '_\1'
   end
   
 end

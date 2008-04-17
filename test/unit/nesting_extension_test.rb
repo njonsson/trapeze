@@ -4,16 +4,16 @@ require 'test/unit'
 
 class Trapeze::NestingExtensionTest < Test::Unit::TestCase
   
-  def test_single
-    assert_equal %w(foo), File.nesting('foo')
+  def test_single_should_return_expected_nesting_when_sent_UNDERSCOREnesting
+    assert_equal %w(foo), File._nesting('foo')
   end
   
-  def test_slash_delimited
-    assert_equal %w(foo bar), File.nesting('foo/bar')
+  def test_slash_delimited_should_return_expected_nesting_when_sent_UNDERSCOREnesting
+    assert_equal %w(foo bar), File._nesting('foo/bar')
   end
   
-  def test_backslash_delimited
-    assert_equal %w(foo bar), File.nesting('foo\bar')
+  def test_backslash_delimited_should_return_expected_nesting_when_sent_UNDERSCOREnesting
+    assert_equal %w(foo bar), File._nesting('foo\bar')
   end
   
 end

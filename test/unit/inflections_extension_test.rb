@@ -4,417 +4,417 @@ require 'test/unit'
 
 module Trapeze::InflectionsExtensionTest
   
-  class Pathify < Test::Unit::TestCase
+  class UNDERSCOREPathify < Test::Unit::TestCase
     
     def test_with_lowercase_word
-      assert_equal 'foo', 'foo'.pathify
+      assert_equal 'foo', 'foo'._pathify
     end
     
     def test_with_uppercase_word
-      assert_equal 'foo', 'FOO'.pathify
+      assert_equal 'foo', 'FOO'._pathify
     end
     
     def test_with_underscore_delimited_words
-      assert_equal 'foo_bar', 'foo_bar'.pathify
+      assert_equal 'foo_bar', 'foo_bar'._pathify
     end
     
     def test_with_double_underscore_delimited_words
-      assert_equal 'foo_bar', 'foo__bar'.pathify
+      assert_equal 'foo_bar', 'foo__bar'._pathify
     end
     
     def test_with_slash_delimited_words
-      assert_equal 'foo/bar', 'foo/bar'.pathify
+      assert_equal 'foo/bar', 'foo/bar'._pathify
     end
     
     def test_with_double_slash_delimited_words
-      assert_equal 'foo//bar', 'foo//bar'.pathify
+      assert_equal 'foo//bar', 'foo//bar'._pathify
     end
     
     def test_with_camel_case
-      assert_equal 'foo_bar', 'FooBar'.pathify
+      assert_equal 'foo_bar', 'FooBar'._pathify
     end
     
     def test_with_colon_delimited_camel_case_terms
-      assert_equal 'foo_bar/baz_bat', 'FooBar:BazBat'.pathify
+      assert_equal 'foo_bar/baz_bat', 'FooBar:BazBat'._pathify
     end
     
     def test_with_colon_delimited_words
-      assert_equal 'foo/bar', 'foo:bar'.pathify
+      assert_equal 'foo/bar', 'foo:bar'._pathify
     end
     
     def test_with_double_colon_delimited_camel_case_terms
-      assert_equal 'foo_bar/baz_bat', 'FooBar::BazBat'.pathify
+      assert_equal 'foo_bar/baz_bat', 'FooBar::BazBat'._pathify
     end
     
     def test_with_leading_acronym
-      assert_equal 'fbi_or_the_feds', 'FBIOrTheFeds'.pathify
+      assert_equal 'fbi_or_the_feds', 'FBIOrTheFeds'._pathify
     end
     
     def test_with_embedded_acronym
-      assert_equal 'the_fbi_or_the_feds', 'TheFBIOrTheFeds'.pathify
+      assert_equal 'the_fbi_or_the_feds', 'TheFBIOrTheFeds'._pathify
     end
     
     def test_with_trailing_acronym
-      assert_equal 'the_feds_or_the_fbi', 'TheFedsOrTheFBI'.pathify
+      assert_equal 'the_feds_or_the_fbi', 'TheFedsOrTheFBI'._pathify
     end
     
     def test_with_numerals_preceding_lowercase
-      assert_equal '123abc', '123abc'.pathify
+      assert_equal '123abc', '123abc'._pathify
     end
     
     def test_with_numerals_preceding_uppercase
-      assert_equal '123_abc', '123ABC'.pathify
+      assert_equal '123_abc', '123ABC'._pathify
     end
     
     def test_with_numerals_within_lowercase
-      assert_equal 'abc_123def', 'abc123def'.pathify
+      assert_equal 'abc_123def', 'abc123def'._pathify
     end
     
     def test_with_numerals_within_uppercase
-      assert_equal 'abc123_def', 'ABC123DEF'.pathify
+      assert_equal 'abc123_def', 'ABC123DEF'._pathify
     end
     
     def test_with_numerals_following_lowercase
-      assert_equal 'abc_123', 'abc123'.pathify
+      assert_equal 'abc_123', 'abc123'._pathify
     end
     
     def test_with_numerals_following_uppercase
-      assert_equal 'abc123', 'ABC123'.pathify
+      assert_equal 'abc123', 'ABC123'._pathify
     end
     
     def test_with_multiple_punctuation_preceding_lowercase
-      assert_equal '_foo', %q{"'foo}.pathify
+      assert_equal '_foo', %q{"'foo}._pathify
     end
     
     def test_with_multiple_punctuation_preceding_uppercase
-      assert_equal '_foo', %q{"'FOO}.pathify
+      assert_equal '_foo', %q{"'FOO}._pathify
     end
     
     def test_with_multiple_punctuation_within_lowercase
-      assert_equal 'foo_bar', 'foo--bar'.pathify
+      assert_equal 'foo_bar', 'foo--bar'._pathify
     end
     
     def test_with_multiple_punctuation_within_uppercase
-      assert_equal 'foo_bar', 'FOO--BAR'.pathify
+      assert_equal 'foo_bar', 'FOO--BAR'._pathify
     end
     
     def test_with_multiple_punctuation_following_lowercase
-      assert_equal 'foo_', %q{foo'"}.pathify
+      assert_equal 'foo_', %q{foo'"}._pathify
     end
     
     def test_with_multiple_punctuation_following_uppercase
-      assert_equal 'foo_', %q{FOO'"}.pathify
+      assert_equal 'foo_', %q{FOO'"}._pathify
     end
     
     def test_with_multiple_spaces_preceding_lowercase
-      assert_equal '_foo', '  foo'.pathify
+      assert_equal '_foo', '  foo'._pathify
     end
     
     def test_with_multiple_spaces_preceding_uppercase
-      assert_equal '_foo', '  FOO'.pathify
+      assert_equal '_foo', '  FOO'._pathify
     end
     
     def test_with_multiple_spaces_within_lowercase
-      assert_equal 'foo_bar', 'foo  bar'.pathify
+      assert_equal 'foo_bar', 'foo  bar'._pathify
     end
     
     def test_with_multiple_spaces_within_uppercase
-      assert_equal 'foo_bar', 'FOO  BAR'.pathify
+      assert_equal 'foo_bar', 'FOO  BAR'._pathify
     end
     
     def test_with_multiple_spaces_following_lowercase
-      assert_equal 'foo_', 'foo  '.pathify
+      assert_equal 'foo_', 'foo  '._pathify
     end
     
     def test_with_multiple_spaces_following_uppercase
-      assert_equal 'foo_', 'FOO  '.pathify
+      assert_equal 'foo_', 'FOO  '._pathify
     end
     
   end
   
-  class Typify < Test::Unit::TestCase
+  class UNDERSCORETypify < Test::Unit::TestCase
     
     def test_with_lowercase_word
-      assert_equal 'Foo', 'foo'.typify
+      assert_equal 'Foo', 'foo'._typify
     end
     
     def test_with_uppercase_word
-      assert_equal 'FOO', 'FOO'.typify
+      assert_equal 'FOO', 'FOO'._typify
     end
     
     def test_with_underscore_delimited_words
-      assert_equal 'FooBar', 'foo_bar'.typify
+      assert_equal 'FooBar', 'foo_bar'._typify
     end
     
     def test_with_double_underscore_delimited_words
-      assert_equal 'Foo_Bar', 'foo__bar'.typify
+      assert_equal 'Foo_Bar', 'foo__bar'._typify
     end
     
     def test_with_slash_delimited_words
-      assert_equal 'Foo::Bar', 'foo/bar'.typify
+      assert_equal 'Foo::Bar', 'foo/bar'._typify
     end
     
     def test_with_backslash_delimited_words
-      assert_equal 'Foo::Bar', 'foo\bar'.typify
+      assert_equal 'Foo::Bar', 'foo\bar'._typify
     end
     
     def test_with_double_slash_delimited_words
-      assert_equal 'Foo::Bar', 'foo//bar'.typify
+      assert_equal 'Foo::Bar', 'foo//bar'._typify
     end
     
     def test_with_double_backslash_delimited_words
-      assert_equal 'Foo::Bar', 'foo//bar'.typify
+      assert_equal 'Foo::Bar', 'foo//bar'._typify
     end
     
     def test_with_camel_case
-      assert_equal 'FooBar', 'FooBar'.typify
+      assert_equal 'FooBar', 'FooBar'._typify
     end
     
     def test_with_colon_delimited_camel_case_terms
-      assert_equal 'FooBar::BazBat', 'FooBar:BazBat'.typify
+      assert_equal 'FooBar::BazBat', 'FooBar:BazBat'._typify
     end
     
     def test_with_slash_delimited_underscore_terms
-      assert_equal 'FooBar::BazBat', 'foo_bar/baz_bat'.typify
+      assert_equal 'FooBar::BazBat', 'foo_bar/baz_bat'._typify
     end
     
     def test_with_backslash_delimited_underscore_terms
-      assert_equal 'FooBar::BazBat', 'foo_bar\baz_bat'.typify
+      assert_equal 'FooBar::BazBat', 'foo_bar\baz_bat'._typify
     end
     
     def test_with_colon_delimited_words
-      assert_equal 'Foo::Bar', 'foo:bar'.typify
+      assert_equal 'Foo::Bar', 'foo:bar'._typify
     end
     
     def test_with_double_colon_delimited_camel_case_terms
-      assert_equal 'FooBar::BazBat', 'FooBar::BazBat'.typify
+      assert_equal 'FooBar::BazBat', 'FooBar::BazBat'._typify
     end
     
     def test_with_leading_acronym
-      assert_equal 'FBIOrTheFeds', 'FBIOrTheFeds'.typify
+      assert_equal 'FBIOrTheFeds', 'FBIOrTheFeds'._typify
     end
     
     def test_with_embedded_acronym
-      assert_equal 'TheFBIOrTheFeds', 'TheFBIOrTheFeds'.typify
+      assert_equal 'TheFBIOrTheFeds', 'TheFBIOrTheFeds'._typify
     end
     
     def test_with_trailing_acronym
-      assert_equal 'TheFedsOrTheFBI', 'TheFedsOrTheFBI'.typify
+      assert_equal 'TheFedsOrTheFBI', 'TheFedsOrTheFBI'._typify
     end
     
     def test_with_numerals_preceding_lowercase
-      assert_equal '_123abc', '123abc'.typify
+      assert_equal '_123abc', '123abc'._typify
     end
     
     def test_with_numerals_preceding_uppercase
-      assert_equal '_123ABC', '123ABC'.typify
+      assert_equal '_123ABC', '123ABC'._typify
     end
     
     def test_with_numerals_within_lowercase
-      assert_equal 'Abc123def', 'abc123def'.typify
+      assert_equal 'Abc123def', 'abc123def'._typify
     end
     
     def test_with_numerals_within_uppercase
-      assert_equal 'ABC123DEF', 'ABC123DEF'.typify
+      assert_equal 'ABC123DEF', 'ABC123DEF'._typify
     end
     
     def test_with_numerals_following_lowercase
-      assert_equal 'Abc123', 'abc123'.typify
+      assert_equal 'Abc123', 'abc123'._typify
     end
     
     def test_with_numerals_following_uppercase
-      assert_equal 'ABC123', 'ABC123'.typify
+      assert_equal 'ABC123', 'ABC123'._typify
     end
     
     def test_with_multiple_punctuation_preceding_lowercase
-      assert_equal 'Foo', %q{"'foo}.typify
+      assert_equal 'Foo', %q{"'foo}._typify
     end
     
     def test_with_multiple_punctuation_preceding_uppercase
-      assert_equal 'FOO', %q{"'FOO}.typify
+      assert_equal 'FOO', %q{"'FOO}._typify
     end
     
     def test_with_multiple_punctuation_within_lowercase
-      assert_equal 'Foo_Bar', 'foo--bar'.typify
+      assert_equal 'Foo_Bar', 'foo--bar'._typify
     end
     
     def test_with_multiple_punctuation_within_uppercase
-      assert_equal 'FOO_BAR', 'FOO--BAR'.typify
+      assert_equal 'FOO_BAR', 'FOO--BAR'._typify
     end
     
     def test_with_multiple_punctuation_following_lowercase
-      assert_equal 'Foo', %q{foo'"}.typify
+      assert_equal 'Foo', %q{foo'"}._typify
     end
     
     def test_with_multiple_punctuation_following_uppercase
-      assert_equal 'FOO', %q{FOO'"}.typify
+      assert_equal 'FOO', %q{FOO'"}._typify
     end
     
     def test_with_multiple_spaces_preceding_lowercase
-      assert_equal 'Foo', '  foo'.typify
+      assert_equal 'Foo', '  foo'._typify
     end
     
     def test_with_multiple_spaces_preceding_uppercase
-      assert_equal 'FOO', '  FOO'.typify
+      assert_equal 'FOO', '  FOO'._typify
     end
     
     def test_with_multiple_spaces_within_lowercase
-      assert_equal 'Foo_Bar', 'foo  bar'.typify
+      assert_equal 'Foo_Bar', 'foo  bar'._typify
     end
     
     def test_with_multiple_spaces_within_uppercase
-      assert_equal 'FOO_BAR', 'FOO  BAR'.typify
+      assert_equal 'FOO_BAR', 'FOO  BAR'._typify
     end
     
     def test_with_multiple_spaces_following_lowercase
-      assert_equal 'Foo', 'foo  '.typify
+      assert_equal 'Foo', 'foo  '._typify
     end
     
     def test_with_multiple_spaces_following_uppercase
-      assert_equal 'FOO', 'FOO  '.typify
+      assert_equal 'FOO', 'FOO  '._typify
     end
     
   end
   
-  class Variablize < Test::Unit::TestCase
+  class UNDERSCOREVariablize < Test::Unit::TestCase
     
     def test_with_lowercase_word
-      assert_equal 'foo', 'foo'.variablize
+      assert_equal 'foo', 'foo'._variablize
     end
     
     def test_with_uppercase_word
-      assert_equal 'foo', 'FOO'.variablize
+      assert_equal 'foo', 'FOO'._variablize
     end
     
     def test_with_underscore_delimited_words
-      assert_equal 'foo_bar', 'foo_bar'.variablize
+      assert_equal 'foo_bar', 'foo_bar'._variablize
     end
     
     def test_with_double_underscore_delimited_words
-      assert_equal 'foo_bar', 'foo__bar'.variablize
+      assert_equal 'foo_bar', 'foo__bar'._variablize
     end
     
     def test_with_slash_delimited_words
-      assert_equal 'foo_bar', 'foo/bar'.variablize
+      assert_equal 'foo_bar', 'foo/bar'._variablize
     end
     
     def test_with_double_slash_delimited_words
-      assert_equal 'foo__bar', 'foo//bar'.variablize
+      assert_equal 'foo__bar', 'foo//bar'._variablize
     end
     
     def test_with_camel_case
-      assert_equal 'foo_bar', 'FooBar'.variablize
+      assert_equal 'foo_bar', 'FooBar'._variablize
     end
     
     def test_with_colon_delimited_camel_case_terms
       assert_equal 'foo_bar_baz_bat',
-                   'FooBar:BazBat'.variablize
+                   'FooBar:BazBat'._variablize
     end
     
     def test_with_slash_delimited_underscore_terms
       assert_equal 'foo_bar_baz_bat',
-                   'foo_bar/baz_bat'.variablize
+                   'foo_bar/baz_bat'._variablize
     end
     
     def test_with_backslash_delimited_underscore_terms
       assert_equal 'foo_bar_baz_bat',
-                   'foo_bar\baz_bat'.variablize
+                   'foo_bar\baz_bat'._variablize
     end
     
     def test_with_colon_delimited_words
-      assert_equal 'foo_bar', 'foo:bar'.variablize
+      assert_equal 'foo_bar', 'foo:bar'._variablize
     end
     
     def test_with_double_colon_delimited_camel_case_terms
       assert_equal 'foo_bar_baz_bat',
-                   'FooBar::BazBat'.variablize
+                   'FooBar::BazBat'._variablize
     end
     
     def test_with_leading_acronym
       assert_equal 'fbi_or_the_feds',
-                   'FBIOrTheFeds'.variablize
+                   'FBIOrTheFeds'._variablize
     end
     
     def test_with_embedded_acronym
       assert_equal 'the_fbi_or_the_feds',
-                   'TheFBIOrTheFeds'.variablize
+                   'TheFBIOrTheFeds'._variablize
     end
     
     def test_with_trailing_acronym
       assert_equal 'the_feds_or_the_fbi',
-                   'TheFedsOrTheFBI'.variablize
+                   'TheFedsOrTheFBI'._variablize
     end
     
     def test_with_numerals_preceding_lowercase
-      assert_equal '_123abc', '123abc'.variablize
+      assert_equal '_123abc', '123abc'._variablize
     end
     
     def test_with_numerals_preceding_uppercase
-      assert_equal '_123_abc', '123ABC'.variablize
+      assert_equal '_123_abc', '123ABC'._variablize
     end
     
     def test_with_numerals_within_lowercase
-      assert_equal 'abc_123def', 'abc123def'.variablize
+      assert_equal 'abc_123def', 'abc123def'._variablize
     end
     
     def test_with_numerals_within_uppercase
-      assert_equal 'abc123_def', 'ABC123DEF'.variablize
+      assert_equal 'abc123_def', 'ABC123DEF'._variablize
     end
     
     def test_with_numerals_following_lowercase
-      assert_equal 'abc_123', 'abc123'.variablize
+      assert_equal 'abc_123', 'abc123'._variablize
     end
     
     def test_with_numerals_following_uppercase
-      assert_equal 'abc123', 'ABC123'.variablize
+      assert_equal 'abc123', 'ABC123'._variablize
     end
     
     def test_with_multiple_punctuation_preceding_lowercase
-      assert_equal '_foo', %q{"'foo}.variablize
+      assert_equal '_foo', %q{"'foo}._variablize
     end
     
     def test_with_multiple_punctuation_preceding_uppercase
-      assert_equal '_foo', %q{"'FOO}.variablize
+      assert_equal '_foo', %q{"'FOO}._variablize
     end
     
     def test_with_multiple_punctuation_within_lowercase
-      assert_equal 'foo_bar', 'foo--bar'.variablize
+      assert_equal 'foo_bar', 'foo--bar'._variablize
     end
     
     def test_with_multiple_punctuation_within_uppercase
-      assert_equal 'foo_bar', 'FOO--BAR'.variablize
+      assert_equal 'foo_bar', 'FOO--BAR'._variablize
     end
     
     def test_with_multiple_punctuation_following_lowercase
-      assert_equal 'foo_', %q{foo'"}.variablize
+      assert_equal 'foo_', %q{foo'"}._variablize
     end
     
     def test_with_multiple_punctuation_following_uppercase
-      assert_equal 'foo_', %q{FOO'"}.variablize
+      assert_equal 'foo_', %q{FOO'"}._variablize
     end
     
     def test_with_multiple_spaces_preceding_lowercase
-      assert_equal '_foo', '  foo'.variablize
+      assert_equal '_foo', '  foo'._variablize
     end
     
     def test_with_multiple_spaces_preceding_uppercase
-      assert_equal '_foo', '  FOO'.variablize
+      assert_equal '_foo', '  FOO'._variablize
     end
     
     def test_with_multiple_spaces_within_lowercase
-      assert_equal 'foo_bar', 'foo  bar'.variablize
+      assert_equal 'foo_bar', 'foo  bar'._variablize
     end
     
     def test_with_multiple_spaces_within_uppercase
-      assert_equal 'foo_bar', 'FOO  BAR'.variablize
+      assert_equal 'foo_bar', 'FOO  BAR'._variablize
     end
     
     def test_with_multiple_spaces_following_lowercase
-      assert_equal 'foo_', 'foo  '.variablize
+      assert_equal 'foo_', 'foo  '._variablize
     end
     
     def test_with_multiple_spaces_following_uppercase
-      assert_equal 'foo_', 'FOO  '.variablize
+      assert_equal 'foo_', 'FOO  '._variablize
     end
     
   end

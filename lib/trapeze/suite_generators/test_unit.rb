@@ -34,11 +34,11 @@ private
     probe.class_probe_results.each do |r|
       klass = r[:class]
       class_name = type_name_for_type(klass)
-      file_path = "#{output_dir}/#{class_name.pathify}_test.rb"
+      file_path = "#{output_dir}/#{class_name._pathify}_test.rb"
       test_class_name = "#{klass.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
-        instance_var_name = "@#{class_name.variablize}"
+        instance_var_name = "@#{class_name._variablize}"
         if (instantiation = r[:instantiation])
           generate_test!(:file => f, :method_name => 'setup') do |f|
             f.puts "    #{instance_var_name} = #{class_name}.#{instantiation.method_name}"
@@ -49,7 +49,7 @@ private
         end
         r[:instance_method_probings].each do |m|
           method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
+          test_method_name = "test_#{method_name}_returns_#{returned.inspect._variablize}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
             assertion = equality_assertion(returned,
                                            "#{instance_var_name}.#{method_name}")
@@ -81,11 +81,11 @@ private
     probe.module_probe_results.each do |r|
       mod = r[:module]
       module_name = type_name_for_type(mod)
-      file_path = "#{output_dir}/#{module_name.pathify}_test.rb"
+      file_path = "#{output_dir}/#{module_name._pathify}_test.rb"
       test_class_name = "#{mod.name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
-        instance_var_name = "@#{module_name.variablize}"
+        instance_var_name = "@#{module_name._variablize}"
         unless r[:instance_method_probings].empty?
           generate_test!(:file => f, :method_name => 'setup') do |f|
             f.puts "    #{instance_var_name} = Object.new"
@@ -97,7 +97,7 @@ private
         end
         r[:instance_method_probings].each do |m|
           method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned.inspect}"
+          test_method_name = "test_#{method_name}_returns_#{returned.inspect._variablize}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
             assertion = equality_assertion(returned,
                                            "#{instance_var_name}.#{method_name}")

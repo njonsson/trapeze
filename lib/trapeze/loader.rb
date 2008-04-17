@@ -33,7 +33,9 @@ private
     end
     
     def extract_method_definitions(sandbox) #:nodoc:
-      sandbox.instance_methods.collect { |m| m.to_instance_method sandbox }
+      sandbox._instance_methods_sorted.collect do |m|
+        m._to_instance_method sandbox
+      end
     end
     
   end

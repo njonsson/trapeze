@@ -104,8 +104,8 @@ end
   end
   
   def relative_path_to_input_files_pattern
-    input_dirs  = File.nesting(input_files_pattern)
-    output_dirs = File.nesting(output_dir)
+    input_dirs  = File._nesting(input_files_pattern)
+    output_dirs = File._nesting(output_dir)
     min = [input_dirs.length, output_dirs.length].min
     first_different_dir_index = (0..min).detect do |i|
       input_dirs[0..i] != output_dirs[0..i]

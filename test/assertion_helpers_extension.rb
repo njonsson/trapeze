@@ -205,14 +205,14 @@ private
     actual_descriptions = actuals.inject({}) do |result, t|
       type_name = t.name.gsub(/^.+?::/, '')
       type_definition = {:type => class_or_module}
-      unless (class_methods = t.methods(false)).empty?
+      unless (class_methods = t._methods_sorted(false)).empty?
         type_definition[:class_methods] = class_methods.collect do |m|
-          method_description m.to_method(t)
+          method_description m._to_method(t)
         end
       end
-      unless (instance_methods = t.instance_methods(false)).empty?
+      unless (instance_methods = t._instance_methods_sorted(false)).empty?
         type_definition[:instance_methods] = instance_methods.collect do |m|
-          method_description m.to_instance_method(t)
+          method_description m._to_instance_method(t)
         end
       end
       result[type_name] = type_definition
@@ -236,7 +236,7 @@ private
   end
   
   def method_description(method)
-    [method.name, {:arity => method.arity}]
+    [method._name, {:arity => method.arity}]
   end
   
   def with_clean_backtrace

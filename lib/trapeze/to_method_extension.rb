@@ -1,11 +1,15 @@
 # Defines Trapeze::ToMethodExtension.
 
-# Adds a _to_instance_method_ and a _to_method_ method to String objects.
+# Adds methods to String objects for obtaining MethodInfo objects.
+# 
+# The names of these methods are prefixed with an underscore character in order
+# to reduce the likelihood of method name collisions, given that the purpose of
+# Trapeze is to load and analyze other Ruby programs.
 module Trapeze::ToMethodExtension
   
   # Returns the Method object for a String that represents an instance method on
   # _type_. Raises ArgumentError if _type_ is neither a Class nor a Module.
-  def to_instance_method(type)
+  def _to_instance_method(type)
     klass = case type.class.name
               when 'Class'
                 type
@@ -23,7 +27,7 @@ module Trapeze::ToMethodExtension
   end
   
   # Returns the Method object for a String that represents a method on _obj_.
-  def to_method(obj)
+  def _to_method(obj)
     obj.method self
   rescue NameError
     nil
