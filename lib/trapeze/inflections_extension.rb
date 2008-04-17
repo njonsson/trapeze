@@ -47,8 +47,8 @@ module Trapeze::InflectionsExtension
   # 
   # Examples:
   # 
-  #   'FooBar'.pathify          # => 'foo_bar'
-  #   'FooBar::BazBat'.pathify  # => 'foo_bar_baz_bat'
+  #   'FooBar'.variablize          # => 'foo_bar'
+  #   'FooBar::BazBat'.variablize  # => 'foo_bar_baz_bat'
   def variablize
     pathify.gsub('/', '_').gsub /^(\d)/, '_\1'
   end
