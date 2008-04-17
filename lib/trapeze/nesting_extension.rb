@@ -3,7 +3,7 @@
 # Adds a <i>_nesting</i> class method to File that splits a file path into its
 # constituent parts.
 # 
-# The names of this method is prefixed with an underscore character in order to
+# The name of this method is prefixed with an underscore character in order to
 # reduce the likelihood of method name collisions, given that the purpose of
 # Trapeze is to load and analyze other Ruby programs.
 module Trapeze::NestingExtension

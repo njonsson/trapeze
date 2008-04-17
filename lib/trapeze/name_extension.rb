@@ -1,10 +1,10 @@
 # Defines Trapeze::NameExtension.
 
-# Adds a <i>_name</i> method to Method objects that provides the bare name of
-# the method without the class information contained in Method#to_s.
+# Adds a _name method to Method objects that provides the bare name of the
+# method without the class information contained in Method#to_s.
 # 
-# The names of these methods are prefixed with an underscore character in order
-# to reduce the likelihood of method name collisions, given that the purpose of
+# The name of this method is prefixed with an underscore character in order to
+# reduce the likelihood of method name collisions, given that the purpose of
 # Trapeze is to load and analyze other Ruby programs.
 module Trapeze::NameExtension
   

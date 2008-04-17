@@ -1,7 +1,7 @@
 # Defines Trapeze::StringComparisonExtension.
 
 # Adds an implementation of the comparison operator, <tt><=></tt>, to Symbol.
-# The operator compares two Symbol#to_s values.
+# The operator compares two symbols alphanumerically.
 module Trapeze::StringComparisonExtension
   
   # Returns an integer (-1, 0, or +1) if this object is less than, equal to, or

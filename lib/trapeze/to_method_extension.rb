@@ -1,6 +1,6 @@
 # Defines Trapeze::ToMethodExtension.
 
-# Adds methods to String objects for obtaining MethodInfo objects.
+# Adds methods to String objects for obtaining accordingly named Method objects.
 # 
 # The names of these methods are prefixed with an underscore character in order
 # to reduce the likelihood of method name collisions, given that the purpose of

@@ -1,8 +1,8 @@
 # Defines Trapeze::SortedInstanceMethodsExtension and
 # Trapeze::SortedMethodsExtension.
 
-# Adds an implementation of the Module#instance_methods method that returns the
-# names of methods sorted by name.
+# Adds an _instance_methods_sorted method to Module that returns the results of
+# Module#instance_methods, sorted by name.
 # 
 # This mixin exists because Module#instance_methods has not proven to behave
 # uniformly for all receivers.
@@ -23,8 +23,8 @@ module Trapeze::SortedInstanceMethodsExtension
   
 end
 
-# Adds an implementation of the Object#methods method that returns the names of
-# methods sorted by name.
+# Adds a _methods_sorted method to Object that returns the results of
+# Object#methods, sorted by name.
 # 
 # This mixin exists because Object#methods has not proven to behave uniformly
 # for all receivers.
