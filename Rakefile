@@ -1,7 +1,16 @@
 require 'rake'
 require 'rake/rdoctask'
 require 'rake/testtask'
-require 'rcov/rcovtask'
+begin
+  require 'rcov/rcovtask'
+  rcov_missing = false
+rescue LoadError
+  rcov_missing = true
+  $stderr.puts '***********************************************************'
+  $stderr.puts 'RCov tasks are not available because RCov is not installed.'
+  $stderr.puts "To install RCov, type 'gem install rcov'."
+  $stderr.puts '***********************************************************'
+end
 
 task :default => :test
 
@@ -22,10 +31,12 @@ Rake::TestTask.new(:test) do |t|
 end
 
 namespace :test do
-  desc 'Create a code coverage report for the tests'
-  Rcov::RcovTask.new(:coverage) do |t|
-    t.test_files = 'test/SUITE.rb'
-    t.verbose = true
+  unless rcov_missing
+    desc 'Create a code coverage report for the tests'
+    Rcov::RcovTask.new(:coverage) do |t|
+      t.test_files = 'test/SUITE.rb'
+      t.verbose = true
+    end
   end
   
   Rake::TestTask.new(:unit) do |t|
@@ -33,12 +44,14 @@ namespace :test do
     t.verbose = true
   end
   
-  namespace :unit do
-    desc 'Create a code coverage report for the tests in test/unit'
-    Rcov::RcovTask.new(:coverage) do |t|
-      t.output_dir = 'coverage-unit'
-      t.test_files = 'test/UNIT_TESTS.rb'
-      t.verbose = true
+  unless rcov_missing
+    namespace :unit do
+      desc 'Create a code coverage report for the tests in test/unit'
+      Rcov::RcovTask.new(:coverage) do |t|
+        t.output_dir = 'coverage-unit'
+        t.test_files = 'test/UNIT_TESTS.rb'
+        t.verbose = true
+      end
     end
   end
   
@@ -48,11 +61,13 @@ namespace :test do
   end
   
   namespace :system do
-    desc 'Create a code coverage report for the tests in test/system'
-    Rcov::RcovTask.new(:coverage) do |t|
-      t.output_dir = 'coverage-system'
-      t.test_files = 'test/SYSTEM_TESTS.rb'
-      t.verbose = true
+    unless rcov_missing
+      desc 'Create a code coverage report for the tests in test/system'
+      Rcov::RcovTask.new(:coverage) do |t|
+        t.output_dir = 'coverage-system'
+        t.test_files = 'test/SYSTEM_TESTS.rb'
+        t.verbose = true
+      end
     end
     
     desc 'Run generated system tests'
