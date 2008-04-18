@@ -203,11 +203,11 @@ module Trapeze::InflectionsExtensionTest
     end
     
     def test_with_numerals_preceding_lowercase
-      assert_equal '_123abc', '123abc'._typify
+      assert_equal '123abc', '123abc'._typify
     end
     
     def test_with_numerals_preceding_uppercase
-      assert_equal '_123ABC', '123ABC'._typify
+      assert_equal '123ABC', '123ABC'._typify
     end
     
     def test_with_numerals_within_lowercase

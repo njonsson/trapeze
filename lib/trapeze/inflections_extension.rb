@@ -42,7 +42,6 @@ module Trapeze::InflectionsExtension
          gsub(/[^a-z\d:]+/i,                  '_').
          gsub(/^_+/,                          '').
          gsub(/_+$/,                          '').
-         gsub(/^(\d)/,                        '_\1').
          gsub(/^[a-z]/) { |char| char.upcase }
   end
   
