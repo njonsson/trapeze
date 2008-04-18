@@ -25,10 +25,7 @@ tuned.
 1. From the root of your Ruby project, type <tt>trap</tt>. This will search for
    files matching the pattern <i>lib/**/*.rb</i> and generate a safety-net suite
    in <i>test/trapeze</i>.
-2. To change the source code files analyzed by Trapeze, provide two command-line
-   arguments as follows: <tt>trap <i>source_file_pattern</i>
-   <i>output_dir</i></tt>.
-3. Run the generated suite by typing <tt>ruby test/trapeze/SUITE.rb</tt>.
+2. Run the generated suite by typing <tt>ruby test/trapeze/SUITE.rb</tt>.
 
 == Credits
 
