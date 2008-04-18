@@ -18,10 +18,7 @@ tuned.
 
 == How to install Trapeze
 
-1. Download the source from http://trapeze.rubyforge.org/svn or
-   svn://rubyforge.org/var/svn/trapeze
-2. Build the RubyGem: <tt>gem build trapeze.gemspec</tt>
-3. Install the RubyGem locally: <tt>gem install trapeze --local</tt>
+  gem install --source http://trapeze.rubyforge.org trapeze
 
 == How to use Trapeze
 
