@@ -40,7 +40,7 @@ class Trapeze::Probe
   end
   
   # Returns the results of probing class definitions in _loader_, calling probe!
-  # if they have not already been obtained. Results are supplied in an array of
+  # if they have not been obtained already. Results are supplied in an array of
   # hashes of the form: <tt>{:class => _class_,
   # :class_method_probings => _array_of_Message_objects_,
   # :instantiation => _Message_,
@@ -50,14 +50,14 @@ class Trapeze::Probe
   end
   
   # Returns the results of probing method definitions in _loader_, calling
-  # probe! if they have not already been obtained. Results are supplied in an
+  # probe! if they have not been obtained already. Results are supplied in an
   # array of Message objects.
   def method_probe_results
     probe_or_get_results :method
   end
   
   # Returns the results of probing module definitions in _loader_, calling
-  # probe! if they have not already been obtained. Results are supplied in an
+  # probe! if they have not been obtained already. Results are supplied in an
   # array of hashes of the form: <tt>{:module => _module_,
   # :module_method_probings => _array_of_Message_objects_,
   # :instance_method_probings => _array_of_Message_objects_}</tt>.

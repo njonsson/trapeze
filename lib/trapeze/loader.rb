@@ -52,7 +52,7 @@ public
   end
   
   # Returns Class definitions present in _filenames_, calling load! if they have
-  # not already been retrieved.
+  # not been retrieved already.
   def class_definitions
     load_or_get_definitions! :class
   end
@@ -67,13 +67,13 @@ public
   end
   
   # Returns Method definitions present in _filenames_, calling load! if they
-  # have not already been retrieved.
+  # have not been retrieved already.
   def method_definitions
     load_or_get_definitions! :method
   end
   
   # Returns Module definitions present in _filenames_, calling load! if they
-  # have not already been retrieved.
+  # have not been retrieved already.
   def module_definitions
     load_or_get_definitions! :module
   end
