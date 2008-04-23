@@ -1,31 +1,85 @@
 == Introduction
 
+Writing bug-free code is very difficult. Some of the difficulty can be mitigated
+through the use of automated tests or executable specifications which can give
+programmers reasons for confidence in the code they write. With automated tests
+or executable specifications, the programmer expresses his intent twice -- once
+in the code itself and once in the tests or specs. Without a double-check of
+programmer intent, it is easy for defects to creep into a program undetected.
+
+Programs written in statically-typed languages are hard enough to get right. Any
+programmer worth her salt knows that just because her code compiles cleanly
+doesn't mean that it works. An interpreted, dynamically-typed language like Ruby
+compounds the problem for programmers who don't make use of automated tests or
+executable specifications. There are more degrees of freedom in Ruby code and
+therefore more dark places for bugs to hide.
+
+So automated tests and executable specifications are good things. <i>But lots of
+code doesn't have test cases or specs.</i> In many cases, code that has them is
+inadequately covered. This is a sad reality.
+
+What to do? Wouldn't it be nice if you could have test cases generated for you
+automatically? At least then you would have a guard against regression when you
+make changes to a program.
+
+== About Trapeze
+
+Enter Trapeze, the safety-net generator for Ruby.
+
 Trapeze generates a suite of unit tests or specifications for existing Ruby
-source code.
+source code. This is accomplished through dynamic analysis, by reflecting on the
+public interfaces of classes, modules and global methods defined in the source.
+Trapeze then exercises each object, module and method, recording the behavior of
+the code. This recorded behavior is captured in a suite of test cases or
+specifications that can be rendered as test code or executable specifications.
 
-Trapeze does this through dynamic analysis, by reflecting on the
-public interfaces of classes and modules (as well as global methods) defined in
-the source. Trapeze then calls each public method, stubbing the behavior of
-arguments, and recording all the stubbed behavior for use in generating mock
-objects. This recorded behavior is used to generate a test/specification suite
-that can be rendered as Test::Unit test cases or other TDD/BDD libraries.
+There is a built-in suite renderer for the Test::Unit library. Other tools such
+as the RSpec library and Jay Fields's Expectations library may be supported also
+at some future time.
 
-There is a suite renderer for Test::Unit. RSpec and Jay Fields's Expectations
-may be supported at some point.
+In essence, Trapeze is a tool for characterizing Ruby source code. Trapeze lets
+you fly high as you maintain and enhance a Ruby codebase that lacks test or spec
+coverage, knowing that you have a regression safety net underneath you.
 
-<b>Trapeze is a pre-alpha product.</b> There's a lot that doesn't work yet. Stay
-tuned.
+<b>Trapeze is a pre-alpha product.</b> Multiple major features are not yet ready
+for prime time. Stay tuned.
 
 == How to install Trapeze
 
+Trapeze is packaged as a RubyGem. You will need the RubyGems tool installed in
+order to take advantage of a one-step installation procedure. With RubyGems
+installed, type the following:
+
   gem install --source http://trapeze.rubyforge.org trapeze
+
+If the installation is successful, you should have the latest version of Trapeze
+installed on your system, and along with it, the <tt>trap</tt> command in your
+path.
 
 == How to use Trapeze
 
-1. From the root of your Ruby project, type <tt>trap</tt>. This will search for
-   files matching the pattern <i>lib/**/*.rb</i> and generate a safety-net suite
-   in <i>test/trapeze</i>.
-2. Run the generated suite by typing <tt>ruby test/trapeze/SUITE.rb</tt>.
+Trapeze does just one thing: generate a suite of test cases for a given Ruby
+codebase. After you generate the suite you can run it.
+
+=== Generate a suite
+
+From the root of your Ruby project, type:
+
+  trap
+
+This will search for files matching the pattern <i>lib/**/*.rb</i> and generate
+a safety-net suite in the directory <i>test/trapeze</i>.
+
+Type <tt>trap -h</tt> to learn about available options, including how to search
+for source code files matching a different pattern and how to generate a suite
+in a different output directory.
+
+=== Run the suite
+
+Find the file named <i>SUITE.rb</i> which is located in the generated output
+directory. (By default this directory is <i>test/trapeze</i>.)
+
+Execute this file: <tt>ruby SUITE.rb</tt>.
 
 == Credits
 
@@ -33,5 +87,8 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 
 == To do
 
+* Add support for --quiet/-q and --verbose/-v command-line options
+* Add support for thrown symbols and raised errors in addition to returned
+  objects
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it

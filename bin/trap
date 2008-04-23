@@ -8,4 +8,4 @@ rescue
   require 'trapeze'
 end
 
-Trapeze::Application.run *ARGV
+Trapeze::Application.new(*ARGV).run!

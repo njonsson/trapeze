@@ -20,7 +20,11 @@ module Trapeze::SystemTest
             output_truth_dir    = File.expand_path("#{File.dirname __FILE__}/output_truth")
             FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
             FileUtils.mkdir_p output_dir
-            Trapeze::Application.run input_files_pattern, output_dir
+            application = Trapeze::Application.new('--input-files-pattern',
+                                                   input_files_pattern,
+                                                   '--output-dir',
+                                                   output_dir)
+            application.run!
             assert_dirs_identical output_truth_dir, output_dir
           end
           
