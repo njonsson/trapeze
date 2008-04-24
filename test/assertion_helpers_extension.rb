@@ -125,9 +125,7 @@ module Trapeze::AssertionHelpersExtension
   def assert_methods(expected_descriptions, actuals, message=nil)
     actual_descriptions = actuals.collect { |m| method_description m }
     with_clean_backtrace do
-      assert_equal expected_descriptions, #.sort(&method_descriptions_sorter),
-                   actual_descriptions, #.sort(&method_descriptions_sorter),
-                   message
+      assert_equal expected_descriptions, actual_descriptions, message
     end
   end
   
