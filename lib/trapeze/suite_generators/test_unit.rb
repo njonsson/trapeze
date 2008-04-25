@@ -48,15 +48,25 @@ private
         generate_test!(:file => f, :method_name => 'test_is_class') do |f|
           f.puts "    assert_instance_of Class, #{class_name}"
         end
-        r[:instance_method_probings].each do |m|
-          method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
-          generate_test!(:file => f, :method_name => test_method_name) do |f|
-            assertion = equality_assertion(returned,
-                                           "#{instance_var_name}.#{method_name}")
-            f.puts "    #{assertion}"
-          end
-        end
+        generate_equality_tests! :file => f,
+                                 :instance_var_name => instance_var_name,
+                                 :method_probings => r[:instance_method_probings]
+      end
+    end
+    self
+  end
+  
+  def generate_equality_tests!(options={})
+    file              = options[:file]
+    instance_var_name = options[:instance_var_name]
+    method_probings   = options[:method_probings]
+    method_probings.each do |m|
+      method_name, returned = m.method_name, m.reply[:returned]
+      test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
+      generate_test!(:file => file, :method_name => test_method_name) do |f|
+        assertion = equality_assertion(returned,
+                                       "#{instance_var_name}.#{method_name}")
+        f.puts "    #{assertion}"
       end
     end
     self
@@ -96,15 +106,9 @@ private
         generate_test!(:file => f, :method_name => "test_is_module") do |f|
           f.puts "    assert_instance_of Module, #{module_name}"
         end
-        r[:instance_method_probings].each do |m|
-          method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
-          generate_test!(:file => f, :method_name => test_method_name) do |f|
-            assertion = equality_assertion(returned,
-                                           "#{instance_var_name}.#{method_name}")
-            f.puts "    #{assertion}"
-          end
-        end
+        generate_equality_tests! :file => f,
+                                 :instance_var_name => instance_var_name,
+                                 :method_probings => r[:instance_method_probings]
       end
     end
     self
