@@ -2,6 +2,7 @@
 
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator_base")
+require File.expand_path("#{File.dirname __FILE__}/../describe_extension")
 require File.expand_path("#{File.dirname __FILE__}/../inflections_extension")
 require File.expand_path("#{File.dirname __FILE__}/../name_extension")
 
@@ -26,7 +27,7 @@ private
       when Regexp
         "assert_match #{expected_value.inspect}, #{actual_expr}"
       else
-        "assert_equal #{actual_expr}"
+        "assert_equal #{expected_value.inspect}, #{actual_expr}"
     end
   end
   
@@ -49,7 +50,7 @@ private
         end
         r[:instance_method_probings].each do |m|
           method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned.inspect._variablize}"
+          test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
             assertion = equality_assertion(returned,
                                            "#{instance_var_name}.#{method_name}")
@@ -97,7 +98,7 @@ private
         end
         r[:instance_method_probings].each do |m|
           method_name, returned = m.method_name, m.reply[:returned]
-          test_method_name = "test_#{method_name}_returns_#{returned.inspect._variablize}"
+          test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
           generate_test!(:file => f, :method_name => test_method_name) do |f|
             assertion = equality_assertion(returned,
                                            "#{instance_var_name}.#{method_name}")

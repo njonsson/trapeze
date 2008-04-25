@@ -17,14 +17,14 @@ module Trapeze::InflectionsExtension
   #   'FooBar'._pathify          # => 'foo_bar'
   #   'FooBar::BazBat'._pathify  # => 'foo_bar/baz_bat'
   def _pathify
-    self.gsub(/:+/,                  '/').
-         gsub(/([a-z\d])([A-Z])/,    '\1_\2').
-         gsub(/([A-Z])([A-Z][a-z])/, '\1_\2').
-         gsub(/([a-z])(\d)/,         '\1_\2').
-         gsub(/[^A-Za-z\d_\/]/,      '_').
-         gsub(/\//,                  '/').
-         gsub(/_+/,                  '_').
-         downcase
+    gsub(/:+/,                  '/').
+    gsub(/([a-z\d])([A-Z])/,    '\1_\2').
+    gsub(/([A-Z])([A-Z][a-z])/, '\1_\2').
+    gsub(/([a-z])(\d)/,         '\1_\2').
+    gsub(/[^A-Za-z\d_\/]/,      '_').
+    gsub(/\//,                  '/').
+    gsub(/_+/,                  '_').
+    downcase
   end
   
   # Returns a canonical, namespaced type name, with filesystem directory
@@ -36,13 +36,13 @@ module Trapeze::InflectionsExtension
   #   'foo_bar'._typify          # => 'FooBar'
   #   'foo_bar/baz_bat'._typify  # => 'FooBar::BazBat'
   def _typify
-    self.gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
-         gsub(/[\\\/:]+/,                     '::').
-         gsub(/([a-z\d])[^a-z\d:]([a-z\d])/i, '\1\2').
-         gsub(/[^a-z\d:]+/i,                  '_').
-         gsub(/^_+/,                          '').
-         gsub(/_+$/,                          '').
-         gsub(/^[a-z]/) { |char| char.upcase }
+    gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
+    gsub(/[\\\/:]+/,                     '::').
+    gsub(/([a-z\d])[^a-z\d:]([a-z\d])/i, '\1\2').
+    gsub(/[^a-z\d:]+/i,                  '_').
+    gsub(/^_+/,                          '').
+    gsub(/_+$/,                          '').
+    gsub(/^[a-z]/) { |char| char.upcase }
   end
   
   # Returns a canonical variable or method name, with nonalphanumeric characters
@@ -53,7 +53,10 @@ module Trapeze::InflectionsExtension
   #   'FooBar'._variablize          # => 'foo_bar'
   #   'FooBar::BazBat'._variablize  # => 'foo_bar_baz_bat'
   def _variablize
-    _pathify.gsub('/', '_').gsub /^(\d)/, '_\1'
+    _pathify.gsub('/',             '_').
+             gsub(/^[^a-z\d]+/i,   '').
+             gsub(/([^a-z\d])+$/i, '').
+             gsub /^(\d)/,         '_\1'
   end
   
 end

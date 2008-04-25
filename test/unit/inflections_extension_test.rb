@@ -370,11 +370,11 @@ module Trapeze::InflectionsExtensionTest
     end
     
     def test_with_multiple_punctuation_preceding_lowercase
-      assert_equal '_foo', %q{"'foo}._variablize
+      assert_equal 'foo', %q{"'foo}._variablize
     end
     
     def test_with_multiple_punctuation_preceding_uppercase
-      assert_equal '_foo', %q{"'FOO}._variablize
+      assert_equal 'foo', %q{"'FOO}._variablize
     end
     
     def test_with_multiple_punctuation_within_lowercase
@@ -386,19 +386,19 @@ module Trapeze::InflectionsExtensionTest
     end
     
     def test_with_multiple_punctuation_following_lowercase
-      assert_equal 'foo_', %q{foo'"}._variablize
+      assert_equal 'foo', %q{foo'"}._variablize
     end
     
     def test_with_multiple_punctuation_following_uppercase
-      assert_equal 'foo_', %q{FOO'"}._variablize
+      assert_equal 'foo', %q{FOO'"}._variablize
     end
     
     def test_with_multiple_spaces_preceding_lowercase
-      assert_equal '_foo', '  foo'._variablize
+      assert_equal 'foo', '  foo'._variablize
     end
     
     def test_with_multiple_spaces_preceding_uppercase
-      assert_equal '_foo', '  FOO'._variablize
+      assert_equal 'foo', '  FOO'._variablize
     end
     
     def test_with_multiple_spaces_within_lowercase
@@ -410,11 +410,11 @@ module Trapeze::InflectionsExtensionTest
     end
     
     def test_with_multiple_spaces_following_lowercase
-      assert_equal 'foo_', 'foo  '._variablize
+      assert_equal 'foo', 'foo  '._variablize
     end
     
     def test_with_multiple_spaces_following_uppercase
-      assert_equal 'foo_', 'FOO  '._variablize
+      assert_equal 'foo', 'FOO  '._variablize
     end
     
   end
