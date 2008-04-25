@@ -49,7 +49,7 @@ module Trapeze::ApplicationTest
 
 Usage:
 
-  trap [options]
+  trp [options]
 
 Options:
 
@@ -95,7 +95,7 @@ Options:
 
 Usage:
 
-  trap [options]
+  trp [options]
 
 Options:
 
@@ -140,7 +140,7 @@ Options:
 
 Usage:
 
-  trap [options]
+  trp [options]
 
 Options:
 
@@ -185,7 +185,7 @@ Options:
 
 Usage:
 
-  trap [options]
+  trp [options]
 
 Options:
 

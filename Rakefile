@@ -19,7 +19,7 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.title    = 'Trapeze'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('MIT-LICENSE')
-  rdoc.rdoc_files.include('bin/trap')
+  rdoc.rdoc_files.include('bin/trp')
   rdoc.rdoc_files.include('lib/**/*.rb')
   rdoc.options << '--line-numbers' << '--inline-source'
 end

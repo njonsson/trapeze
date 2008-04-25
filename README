@@ -53,7 +53,7 @@ installed, type the following:
   gem install --source http://trapeze.rubyforge.org trapeze
 
 If the installation is successful, you should have the latest version of Trapeze
-installed on your system, and along with it, the <tt>trap</tt> command in your
+installed on your system, and along with it, the <tt>trp</tt> command in your
 path.
 
 == How to use Trapeze
@@ -65,12 +65,12 @@ codebase. After you generate the suite you can run it.
 
 From the root of your Ruby project, type:
 
-  trap
+  trp
 
 This will search for files matching the pattern <i>lib/**/*.rb</i> and generate
 a safety-net suite in the directory <i>test/trapeze</i>.
 
-Type <tt>trap -h</tt> to learn about available options, including how to search
+Type <tt>trp -h</tt> to learn about available options, including how to search
 for source code files matching a different pattern and how to generate a suite
 in a different output directory.
 

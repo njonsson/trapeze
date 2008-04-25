@@ -76,7 +76,7 @@ private
 
 Usage:
 
-  trap [options]
+  trp [options]
 
 Options:
 

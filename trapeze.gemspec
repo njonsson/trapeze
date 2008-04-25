@@ -29,9 +29,9 @@ spec = Gem::Specification.new do |s|
   s.requirements << 'Mocha v0.5.6 or later'
   s.add_dependency 'mocha', '~> 0.5.6'
   s.has_rdoc          = true
-  s.extra_rdoc_files  = %w(MIT-LICENSE README bin/trap)
+  s.extra_rdoc_files  = %w(MIT-LICENSE README bin/trp)
   s.rubyforge_project = 'trapeze'
-  s.executables       = %w(trap)
+  s.executables       = %w(trp)
   s.rdoc_options      = %w(--title Trapeze
                            --main README
                            --line-numbers
