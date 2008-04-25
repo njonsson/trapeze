@@ -2,8 +2,8 @@
 
 require 'date'
 
-# Adds a _describe_ method to all objects that provides a description of their
-# identity and state.
+# Adds a <i>_describe</i> method to all objects that provides a description of
+# their identity and state.
 # 
 # The name of this method is prefixed with an underscore character in order to
 # reduce the likelihood of method name collisions, given that the purpose of
@@ -12,7 +12,7 @@ module Trapeze::DescribeExtension
   
 private
   
-  class Transform
+  class Transform #:nodoc:
     
     SPELLINGS = {0 => 'zero',
                  1 => 'one',
