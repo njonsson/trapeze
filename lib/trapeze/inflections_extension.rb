@@ -17,13 +17,13 @@ module Trapeze::InflectionsExtension
   #   'FooBar'._pathify          # => 'foo_bar'
   #   'FooBar::BazBat'._pathify  # => 'foo_bar/baz_bat'
   def _pathify
-    gsub(/:+/,                  '/').
-    gsub(/([a-z\d])([A-Z])/,    '\1_\2').
-    gsub(/([A-Z])([A-Z][a-z])/, '\1_\2').
-    gsub(/([a-z])(\d)/,         '\1_\2').
-    gsub(/[^A-Za-z\d_\/]/,      '_').
-    gsub(/\//,                  '/').
-    gsub(/_+/,                  '_').
+    gsub(/:+/,                    '/').
+    gsub(/([a-z\d])(?=[A-Z])/,    '\1_').
+    gsub(/([A-Z])(?=[A-Z][a-z])/, '\1_').
+    gsub(/([a-z])(?=\d)/,         '\1_').
+    gsub(/[^A-Za-z\d_\/]/,        '_').
+    gsub(/\//,                    '/').
+    gsub(/_+/,                    '_').
     downcase
   end
   
@@ -36,12 +36,12 @@ module Trapeze::InflectionsExtension
   #   'foo_bar'._typify          # => 'FooBar'
   #   'foo_bar/baz_bat'._typify  # => 'FooBar::BazBat'
   def _typify
-    gsub(/[^A-Za-z\d][a-z]/) { |text| text.upcase }.
-    gsub(/[\\\/:]+/,                     '::').
-    gsub(/([a-z\d])[^a-z\d:]([a-z\d])/i, '\1\2').
-    gsub(/[^a-z\d:]+/i,                  '_').
-    gsub(/^_+/,                          '').
-    gsub(/_+$/,                          '').
+    gsub(/[^a-z\d][a-z]/i) { |text| text.upcase }.
+    gsub(/[\\\/:]+/,                       '::').
+    gsub(/([a-z\d])[^a-z\d:](?=[a-z\d])/i, '\1').
+    gsub(/[^a-z\d:]+/i,                    '_').
+    gsub(/^_+/,                            '').
+    gsub(/_+$/,                            '').
     gsub(/^[a-z]/) { |char| char.upcase }
   end
   

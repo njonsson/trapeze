@@ -18,6 +18,10 @@ module Trapeze::InflectionsExtensionTest
       assert_equal 'foo_bar', 'foo_bar'._pathify
     end
     
+    def test_with_underscore_delimited_single_character_words
+      assert_equal 'this_is_a_test', 'this_is_a_test'._pathify
+    end
+    
     def test_with_double_underscore_delimited_words
       assert_equal 'foo_bar', 'foo__bar'._pathify
     end
@@ -144,6 +148,10 @@ module Trapeze::InflectionsExtensionTest
     
     def test_with_underscore_delimited_words
       assert_equal 'FooBar', 'foo_bar'._typify
+    end
+    
+    def test_with_underscore_delimited_single_character_words
+      assert_equal 'ThisIsATest', 'this_is_a_test'._typify
     end
     
     def test_with_double_underscore_delimited_words
@@ -288,6 +296,10 @@ module Trapeze::InflectionsExtensionTest
     
     def test_with_underscore_delimited_words
       assert_equal 'foo_bar', 'foo_bar'._variablize
+    end
+    
+    def test_with_underscore_delimited_single_character_words
+      assert_equal 'this_is_a_test', 'this_is_a_test'._variablize
     end
     
     def test_with_double_underscore_delimited_words
