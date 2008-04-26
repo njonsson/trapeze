@@ -1,11 +1,11 @@
-class Foo
+module Foo
   
   def bar
-    'BAZ!'
+    :baz
   end
   
   def bat
-    'PWOP!'
+    :pwop
   end
   
 end

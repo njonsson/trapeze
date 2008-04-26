@@ -62,7 +62,8 @@ private
     method_probings   = options[:method_probings]
     method_probings.each do |m|
       method_name, returned = m.method_name, m.reply[:returned]
-      test_method_name = "test_#{method_name}_returns_#{returned._describe._variablize}"
+      value_as_var_name = returned._describe._variablize
+      test_method_name = "test_#{method_name}_returns_#{value_as_var_name.gsub /^_/, ''}"
       generate_test!(:file => file, :method_name => test_method_name) do |f|
         assertion = equality_assertion(returned,
                                        "#{instance_var_name}.#{method_name}")

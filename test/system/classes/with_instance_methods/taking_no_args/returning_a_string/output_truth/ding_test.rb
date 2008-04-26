@@ -3,22 +3,22 @@
 
 require 'test/unit'
 
-class FooTest < Test::Unit::TestCase
+class DingTest < Test::Unit::TestCase
   
   def setup
-    @foo = Foo.new
+    @ding = Ding.new
   end
   
   def test_is_class
-    assert_instance_of Class, Foo
+    assert_instance_of Class, Ding
   end
   
-  def test_bar_returns_baz
-    assert_equal "BAZ!", @foo.bar
+  def test_dit_returns_dot
+    assert_equal "DOT!", @ding.dit
   end
   
-  def test_bat_returns_pwop
-    assert_equal "PWOP!", @foo.bat
+  def test_doot_returns_deet
+    assert_equal "DEET!", @ding.doot
   end
   
 end

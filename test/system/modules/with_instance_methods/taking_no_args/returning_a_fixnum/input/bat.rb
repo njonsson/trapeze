@@ -1,11 +1,11 @@
-class Bat
+module Bat
   
   def pwop
-    'PWOP!'
+    888
   end
   
   def ding
-    'DING!'
+    999
   end
   
 end

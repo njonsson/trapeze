@@ -1,11 +1,11 @@
 class Foo
   
   def bar
-    'BAZ!'
+    666
   end
   
-  def bat
-    'PWOP!'
+  def baz
+    777
   end
   
 end

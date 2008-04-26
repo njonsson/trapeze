@@ -13,12 +13,12 @@ class BatTest < Test::Unit::TestCase
     assert_instance_of Class, Bat
   end
   
-  def test_ding_returns_ding
-    assert_equal "DING!", @bat.ding
+  def test_ding_returns_999
+    assert_equal 999, @bat.ding
   end
   
-  def test_pwop_returns_pwop
-    assert_equal "PWOP!", @bat.pwop
+  def test_pwop_returns_888
+    assert_equal 888, @bat.pwop
   end
   
 end

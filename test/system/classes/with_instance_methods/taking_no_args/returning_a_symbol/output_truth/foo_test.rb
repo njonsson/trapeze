@@ -14,11 +14,11 @@ class FooTest < Test::Unit::TestCase
   end
   
   def test_bar_returns_baz
-    assert_equal "BAZ!", @foo.bar
+    assert_equal :baz, @foo.bar
   end
   
   def test_bat_returns_pwop
-    assert_equal "PWOP!", @foo.bat
+    assert_equal :pwop, @foo.bat
   end
   
 end

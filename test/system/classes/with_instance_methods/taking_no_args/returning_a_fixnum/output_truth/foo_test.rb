@@ -13,12 +13,12 @@ class FooTest < Test::Unit::TestCase
     assert_instance_of Class, Foo
   end
   
-  def test_bar_returns_baz
-    assert_equal "BAZ!", @foo.bar
+  def test_bar_returns_666
+    assert_equal 666, @foo.bar
   end
   
-  def test_bat_returns_pwop
-    assert_equal "PWOP!", @foo.bat
+  def test_baz_returns_777
+    assert_equal 777, @foo.baz
   end
   
 end

@@ -6,11 +6,12 @@ require 'test/unit'
 class FooTest < Test::Unit::TestCase
   
   def setup
-    @foo = Foo.new
+    @foo = Object.new
+    @foo.extend Foo
   end
   
-  def test_is_class
-    assert_instance_of Class, Foo
+  def test_is_module
+    assert_instance_of Module, Foo
   end
   
   def test_bar_returns_baz
