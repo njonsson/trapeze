@@ -10,15 +10,15 @@ class BatTest < Test::Unit::TestCase
     @bat.extend Bat
   end
   
-  def test_is_module
+  def test_should_be_instance_of_module
     assert_instance_of Module, Bat
   end
   
-  def test_ding_returns_nil
+  def test_should_return_nil_when_sent_ding
     assert_nil @bat.ding
   end
   
-  def test_pwop_returns_nil
+  def test_should_return_nil_when_sent_pwop
     assert_nil @bat.pwop
   end
   

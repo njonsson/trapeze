@@ -10,15 +10,15 @@ class FooTest < Test::Unit::TestCase
     @foo.extend Foo
   end
   
-  def test_is_module
+  def test_should_be_instance_of_module
     assert_instance_of Module, Foo
   end
   
-  def test_bar_returns_666
+  def test_should_return_666_when_sent_bar
     assert_equal 666, @foo.bar
   end
   
-  def test_baz_returns_777
+  def test_should_return_777_when_sent_baz
     assert_equal 777, @foo.baz
   end
   

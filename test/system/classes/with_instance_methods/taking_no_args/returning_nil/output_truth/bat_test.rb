@@ -9,15 +9,15 @@ class BatTest < Test::Unit::TestCase
     @bat = Bat.new
   end
   
-  def test_is_class
+  def test_should_be_instance_of_class
     assert_instance_of Class, Bat
   end
   
-  def test_ding_returns_nil
+  def test_should_return_nil_when_sent_ding
     assert_nil @bat.ding
   end
   
-  def test_pwop_returns_nil
+  def test_should_return_nil_when_sent_pwop
     assert_nil @bat.pwop
   end
   

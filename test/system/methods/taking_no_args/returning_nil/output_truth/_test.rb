@@ -5,11 +5,11 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  def test_bar_returns_nil
+  def test_should_return_nil_when_sent_bar
     assert_nil bar
   end
   
-  def test_foo_returns_nil
+  def test_should_return_nil_when_sent_foo
     assert_nil foo
   end
   

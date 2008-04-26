@@ -5,11 +5,11 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  def test_baz_returns_bat
+  def test_should_return_bat_when_sent_baz
     assert_equal :bat, baz
   end
   
-  def test_foo_returns_bar
+  def test_should_return_bar_when_sent_foo
     assert_equal :bar, foo
   end
   

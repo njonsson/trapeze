@@ -45,7 +45,7 @@ private
             f.puts "    #{instance_var_name} = #{class_name}.#{instantiation.method_name}"
           end
         end
-        generate_test!(:file => f, :method_name => 'test_is_class') do |f|
+        generate_test!(:file => f, :method_name => 'test_should_be_instance_of_class') do |f|
           f.puts "    assert_instance_of Class, #{class_name}"
         end
         generate_equality_tests! :file => f,
@@ -63,7 +63,7 @@ private
     method_probings.each do |m|
       method_name, returned = m.method_name, m.reply[:returned]
       value_as_var_name = returned._describe._variablize
-      test_method_name = "test_#{method_name}_returns_#{value_as_var_name.gsub /^_/, ''}"
+      test_method_name = "test_should_return_#{value_as_var_name.gsub /^_/, ''}_when_sent_#{method_name}"
       generate_test!(:file => file, :method_name => test_method_name) do |f|
         assertion = equality_assertion(returned,
                                        "#{instance_var_name}.#{method_name}")
@@ -81,7 +81,7 @@ private
       probe.method_probe_results.each do |r|
         method_name, returned = r.method_name, r.reply[:returned]
         value_as_var_name = returned._describe._variablize
-        test_method_name = "test_#{method_name}_returns_#{value_as_var_name.gsub /^_/, ''}"
+        test_method_name = "test_should_return_#{value_as_var_name.gsub /^_/, ''}_when_sent_#{method_name}"
         generate_test!(:file => f, :method_name => test_method_name) do |f|
           assertion = equality_assertion(returned, method_name)
           f.puts "    #{assertion}"
@@ -106,7 +106,7 @@ private
             f.puts "    #{instance_var_name}.extend #{module_name}"
           end
         end
-        generate_test!(:file => f, :method_name => "test_is_module") do |f|
+        generate_test!(:file => f, :method_name => "test_should_be_instance_of_module") do |f|
           f.puts "    assert_instance_of Module, #{module_name}"
         end
         generate_equality_tests! :file => f,

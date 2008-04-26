@@ -5,11 +5,11 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  def test_bar_returns_888
+  def test_should_return_888_when_sent_bar
     assert_equal 888, bar
   end
   
-  def test_foo_returns_777
+  def test_should_return_777_when_sent_foo
     assert_equal 777, foo
   end
   

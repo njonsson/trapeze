@@ -9,15 +9,15 @@ class FooTest < Test::Unit::TestCase
     @foo = Foo.new
   end
   
-  def test_is_class
+  def test_should_be_instance_of_class
     assert_instance_of Class, Foo
   end
   
-  def test_bar_returns_baz
+  def test_should_return_baz_when_sent_bar
     assert_equal :baz, @foo.bar
   end
   
-  def test_bat_returns_pwop
+  def test_should_return_pwop_when_sent_bat
     assert_equal :pwop, @foo.bat
   end
   

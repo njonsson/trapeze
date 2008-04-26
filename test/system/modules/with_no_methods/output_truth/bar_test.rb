@@ -5,7 +5,7 @@ require 'test/unit'
 
 class BarTest < Test::Unit::TestCase
   
-  def test_is_module
+  def test_should_be_instance_of_module
     assert_instance_of Module, Bar
   end
   

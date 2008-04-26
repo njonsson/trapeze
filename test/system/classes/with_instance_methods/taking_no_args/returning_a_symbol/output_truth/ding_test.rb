@@ -9,15 +9,15 @@ class DingTest < Test::Unit::TestCase
     @ding = Ding.new
   end
   
-  def test_is_class
+  def test_should_be_instance_of_class
     assert_instance_of Class, Ding
   end
   
-  def test_dit_returns_dot
+  def test_should_return_dot_when_sent_dit
     assert_equal :dot, @ding.dit
   end
   
-  def test_doot_returns_deet
+  def test_should_return_deet_when_sent_doot
     assert_equal :deet, @ding.doot
   end
   

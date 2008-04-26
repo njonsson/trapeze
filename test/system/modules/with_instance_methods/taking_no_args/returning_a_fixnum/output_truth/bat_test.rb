@@ -10,15 +10,15 @@ class BatTest < Test::Unit::TestCase
     @bat.extend Bat
   end
   
-  def test_is_module
+  def test_should_be_instance_of_module
     assert_instance_of Module, Bat
   end
   
-  def test_ding_returns_999
+  def test_should_return_999_when_sent_ding
     assert_equal 999, @bat.ding
   end
   
-  def test_pwop_returns_888
+  def test_should_return_888_when_sent_pwop
     assert_equal 888, @bat.pwop
   end
   
