@@ -79,9 +79,11 @@ private
     generate_test_file!(:file_path => "#{output_dir}/_test.rb",
                         :class_name => "Test_") do |f|
       probe.method_probe_results.each do |r|
-        generate_test!(:file => f,
-                       :method_name => "test_#{r.method_name}_returns_nil") do |f|
-          assertion = equality_assertion(r.reply[:returned], r.method_name)
+        method_name, returned = r.method_name, r.reply[:returned]
+        value_as_var_name = returned._describe._variablize
+        test_method_name = "test_#{method_name}_returns_#{value_as_var_name.gsub /^_/, ''}"
+        generate_test!(:file => f, :method_name => test_method_name) do |f|
+          assertion = equality_assertion(returned, method_name)
           f.puts "    #{assertion}"
         end
       end
