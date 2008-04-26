@@ -2,7 +2,6 @@
 
 require File.expand_path("#{File.dirname __FILE__}/test")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/name_extension")
-require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/string_comparison_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/to_method_extension")
 require 'test/unit'
@@ -203,12 +202,12 @@ private
     actual_descriptions = actuals.inject({}) do |result, t|
       type_name = t.name.gsub(/^.+?::/, '')
       type_definition = {:type => class_or_module}
-      unless (class_methods = t._methods_sorted(false)).empty?
+      unless (class_methods = t.methods(false).sort).empty?
         type_definition[:class_methods] = class_methods.collect do |m|
           method_description m._to_method(t)
         end
       end
-      unless (instance_methods = t._instance_methods_sorted(false)).empty?
+      unless (instance_methods = t.instance_methods(false).sort).empty?
         type_definition[:instance_methods] = instance_methods.collect do |m|
           method_description m._to_instance_method(t)
         end

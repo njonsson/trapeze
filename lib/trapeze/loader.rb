@@ -1,6 +1,5 @@
 # Defines Trapeze::Loader.
 
-require File.expand_path("#{File.dirname __FILE__}/sorted_methods_extension")
 require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
 # Loads source code files and retrieves Class, Module and Method definitions
@@ -33,7 +32,7 @@ private
     end
     
     def extract_method_definitions(sandbox) #:nodoc:
-      sandbox._instance_methods_sorted.collect do |m|
+      sandbox.instance_methods.sort.collect do |m|
         m._to_instance_method sandbox
       end
     end

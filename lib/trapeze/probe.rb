@@ -94,7 +94,7 @@ private
   
   def probe_class_methods_for_class!(klass)
     class_method_probings = (@results[:class_probe_results].last[:class_method_probings] = [])
-    class_methods = (klass._methods_sorted - Class._methods_sorted)
+    class_methods = (klass.methods.sort - Class.methods.sort)
     return false if class_methods.empty?
     
     class_methods.each do |m|
@@ -109,8 +109,8 @@ private
   def probe_instance_methods_for_class!(klass)
     class_probe_results = @results[:class_probe_results]
     instance_method_probings = (class_probe_results.last[:instance_method_probings] = [])
-    instance_methods = (klass._instance_methods_sorted -
-                        Object._instance_methods_sorted)
+    instance_methods = (klass.instance_methods.sort -
+                        Object.instance_methods.sort)
     return false if instance_methods.empty?
     
     instance = klass.new
@@ -127,8 +127,8 @@ private
   
   def probe_instance_methods_for_module!(mod)
     instance_method_probings = (@results[:module_probe_results].last[:instance_method_probings] = [])
-    instance_methods = (mod._instance_methods_sorted -
-                        Object._instance_methods_sorted)
+    instance_methods = (mod.instance_methods.sort -
+                        Object.instance_methods.sort)
     return false if instance_methods.empty?
     
     klass = Class.new
@@ -166,7 +166,7 @@ private
   
   def probe_module_methods_for_module!(mod)
     module_method_probings = (@results[:module_probe_results].last[:module_method_probings] = [])
-    module_methods = (mod._methods_sorted - Module._methods_sorted)
+    module_methods = (mod.methods.sort - Module.methods.sort)
     return false if module_methods.empty?
     
     module_methods.each do |m|
