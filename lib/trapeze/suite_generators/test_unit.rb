@@ -1,5 +1,6 @@
 # Defines Trapeze::SuiteGenerators::TestUnit.
 
+require 'bigdecimal'
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator_base")
 require File.expand_path("#{File.dirname __FILE__}/../describe_extension")
