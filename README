@@ -90,5 +90,7 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 * Add support for --quiet/-q and --verbose/-v command-line options
 * Add support for thrown symbols and raised errors in addition to returned
   objects
+* Create mocks and stubs of core- and standard-library IO classes in order to
+  make the generated suite more "unit-ish"
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it
