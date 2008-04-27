@@ -6,11 +6,11 @@ require 'test/unit'
 class Test_ < Test::Unit::TestCase
   
   def test_should_return_0_888_e1_when_sent_bar
-    assert_equal 0.888E1, bar
+    assert_equal BigDecimal.new("0.888E1"), bar
   end
   
   def test_should_return_0_777_e1_when_sent_foo
-    assert_equal 0.777E1, foo
+    assert_equal BigDecimal.new("0.777E1"), foo
   end
   
 end

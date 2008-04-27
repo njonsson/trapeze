@@ -14,11 +14,11 @@ class FooTest < Test::Unit::TestCase
   end
   
   def test_should_return_0_666_e1_when_sent_bar
-    assert_equal 0.666E1, @foo.bar
+    assert_equal BigDecimal.new("0.666E1"), @foo.bar
   end
   
   def test_should_return_0_777_e1_when_sent_baz
-    assert_equal 0.777E1, @foo.baz
+    assert_equal BigDecimal.new("0.777E1"), @foo.baz
   end
   
 end

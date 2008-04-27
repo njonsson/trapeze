@@ -14,11 +14,11 @@ class BatTest < Test::Unit::TestCase
   end
   
   def test_should_return_0_999_e1_when_sent_ding
-    assert_equal 0.999E1, @bat.ding
+    assert_equal BigDecimal.new("0.999E1"), @bat.ding
   end
   
   def test_should_return_0_888_e1_when_sent_pwop
-    assert_equal 0.888E1, @bat.pwop
+    assert_equal BigDecimal.new("0.888E1"), @bat.pwop
   end
   
 end
