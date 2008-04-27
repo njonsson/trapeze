@@ -22,6 +22,8 @@ private
   
   def equality_assertion(expected_value, actual_expr)
     case expected_value
+      when BigDecimal
+        "assert_equal #{expected_value}, #{actual_expr}"
       when NilClass
         "assert_nil #{actual_expr}"
       when Regexp
