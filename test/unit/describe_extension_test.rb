@@ -34,6 +34,12 @@ module Trapeze::DescribeExtensionTest
       assert_equal '777', 777._describe
     end
     
+    def test_bignum_should_return_expected_description_when_sent_describe
+      bignum = ('7' * 30).to_i
+      assert_instance_of Bignum, bignum
+      assert_equal '7' * 30, bignum._describe
+    end
+    
     def test_float_should_return_expected_description_when_sent_describe
       assert_equal '7.77', 7.77._describe
     end
