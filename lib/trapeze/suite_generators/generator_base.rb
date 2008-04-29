@@ -1,7 +1,6 @@
 # Defines Trapeze::SuiteGenerators::GeneratorBase.
 
 require 'fileutils'
-require File.expand_path("#{File.dirname __FILE__}/../nesting_extension")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 
 # The base class for library-specific generators in Trapeze::SuiteGenerators.
@@ -104,8 +103,8 @@ end
   end
   
   def relative_path_to_input_files_pattern
-    input_dirs  = File._nesting(input_files_pattern)
-    output_dirs = File._nesting(output_dir)
+    input_dirs  = input_files_pattern.split(/[\\\/]+/)
+    output_dirs = output_dir.split(/[\\\/]+/)
     min = [input_dirs.length, output_dirs.length].min
     first_different_dir_index = (0..min).detect do |i|
       input_dirs[0..i] != output_dirs[0..i]
