@@ -1,5 +1,6 @@
 # Defines Trapeze::DescribeExtension.
 
+require File.expand_path("#{File.dirname __FILE__}/sandbox")
 require 'date'
 
 # Adds a <i>_describe</i> method to all objects that provides a description of
@@ -77,7 +78,7 @@ public
     elsif instance_of?(NilClass) || instance_of?(String) || instance_of?(Symbol)
       inspect
     elsif instance_of?(Class) || instance_of?(Module)
-      to_s
+      Trapeze::Sandbox.strip_from_type_name self
     elsif kind_of?(Date) || kind_of?(Time) || kind_of?(Numeric)
       to_s
     elsif instance_of?(Range)

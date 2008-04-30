@@ -1,45 +1,11 @@
 # Defines Trapeze::Loader.
 
+require File.expand_path("#{File.dirname __FILE__}/sandbox")
 require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
 # Loads source code files and retrieves Class, Module and Method definitions
 # contained within them.
 class Trapeze::Loader
-  
-private
-  
-  class << self
-    
-    def extract_class_definitions_and_module_definitions(sandbox) #:nodoc:
-      classes, modules = [], []
-      sandbox.constants.each do |c|
-        constant = sandbox.module_eval(c)
-        case constant.class.name
-          when 'Class'
-            classes << constant
-          when 'Module'
-            modules << constant
-        end
-      end
-      [classes, modules]
-    end
-    
-    def extract_definitions(sandbox) #:nodoc:
-      classes, modules = extract_class_definitions_and_module_definitions(sandbox)
-      {:class_definitions => classes,
-       :module_definitions => modules,
-       :method_definitions => extract_method_definitions(sandbox)}
-    end
-    
-    def extract_method_definitions(sandbox) #:nodoc:
-      sandbox.instance_methods.sort.collect do |m|
-        m._to_instance_method sandbox
-      end
-    end
-    
-  end
-  
-public
   
   # The paths of source code files to load.
   attr_reader :filenames
@@ -59,9 +25,9 @@ public
   # Loads the source code files supplied in _filenames_ and retrieves Class,
   # Module and Method definitions from them.
   def load!
-    sandbox = Module.new
+    sandbox = Trapeze::Sandbox.create
     @filenames.each { |f| sandbox.module_eval File.read(f) }
-    @definitions = self.class.extract_definitions(sandbox)
+    @definitions = extract_definitions(sandbox)
     self
   end
   
@@ -78,6 +44,33 @@ public
   end
   
 private
+  
+  def extract_class_definitions_and_module_definitions(sandbox)
+    classes, modules = [], []
+    sandbox.constants.each do |c|
+      constant = sandbox.module_eval(c)
+      case constant.class.name
+        when 'Class'
+          classes << constant
+        when 'Module'
+          modules << constant
+      end
+    end
+    [classes, modules]
+  end
+  
+  def extract_definitions(sandbox)
+    classes, modules = extract_class_definitions_and_module_definitions(sandbox)
+    {:class_definitions => classes,
+     :module_definitions => modules,
+     :method_definitions => extract_method_definitions(sandbox)}
+  end
+  
+  def extract_method_definitions(sandbox)
+    sandbox.instance_methods.sort.collect do |m|
+      m._to_instance_method sandbox
+    end
+  end
   
   def load_or_get_definitions!(class_or_module_or_method)
     load! unless @definitions

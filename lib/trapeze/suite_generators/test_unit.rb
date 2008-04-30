@@ -25,6 +25,9 @@ private
     case expected_value
       when BigDecimal
         %Q(assert_equal BigDecimal.new("#{expected_value}"), #{actual_expr})
+      when Class, Module
+        type_name = Trapeze::Sandbox.strip_from_type_name(expected_value)
+        "assert_equal #{type_name}, #{actual_expr}"
       when NilClass
         "assert_nil #{actual_expr}"
       when Regexp
@@ -37,9 +40,9 @@ private
   def generate_class_file!
     probe.class_probe_results.each do |r|
       klass = r[:class]
-      class_name = type_name_for_type(klass)
+      class_name = Trapeze::Sandbox.strip_from_type_name(klass)
       file_path = "#{output_dir}/#{class_name._pathify}_test.rb"
-      test_class_name = "#{klass.name.split('::').last}Test"
+      test_class_name = "#{class_name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
         instance_var_name = "@#{class_name._variablize}"
@@ -103,9 +106,9 @@ private
   def generate_module_file!
     probe.module_probe_results.each do |r|
       mod = r[:module]
-      module_name = type_name_for_type(mod)
+      module_name = Trapeze::Sandbox.strip_from_type_name(mod)
       file_path = "#{output_dir}/#{module_name._pathify}_test.rb"
-      test_class_name = "#{mod.name.split('::').last}Test"
+      test_class_name = "#{module_name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
                           :class_name => test_class_name) do |f|
         instance_var_name = "@#{module_name._variablize}"
@@ -157,10 +160,6 @@ class #{options[:class_name]} < Test::Unit::TestCase
   
   def generated_files_pattern
     '**/*_test.rb'
-  end
-  
-  def type_name_for_type(type)
-    type.name.gsub /^.+?::/, ''
   end
   
 end
