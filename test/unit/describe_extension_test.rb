@@ -56,7 +56,7 @@ module Trapeze::DescribeExtensionTest
       assert_equal 'an Object object', Object.new._describe
     end
     
-    def test_object_of_custom_class_should_return_expected_description_when_sent_describe
+    def test_object_should_return_expected_description_when_sent_describe
       assert_equal 'a Trapeze::DescribeExtensionTest::Scalar::Foo object',
                    Foo.new._describe
     end
