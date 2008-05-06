@@ -87,6 +87,9 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 
 == To do
 
+* Decide how to test return values that are not basic Ruby types -- assert on
+  the state of their instance variables, or figure out how to detect required
+  mocks?
 * Add support for --quiet/-q and --verbose/-v command-line options
 * Add support for thrown symbols and raised errors in addition to returned
   objects
