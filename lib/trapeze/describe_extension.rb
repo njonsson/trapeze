@@ -86,7 +86,8 @@ public
       "#{exclude_end? ? 'to and excluding' : 'through'} " +
       Transform.spell(self.end)
     else
-      "#{Transform.with_indefinite_article self.class.to_s} object"
+      class_name = Trapeze::Sandbox.strip_from_type_name(self.class)
+      "#{Transform.with_indefinite_article class_name} object"
     end
   end
   
