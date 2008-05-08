@@ -23,6 +23,8 @@ private
   
   def equality_assertion(expected_value, actual_expr)
     case expected_value
+      when Bignum, Fixnum, Float, Rational, String, Symbol
+        "assert_equal #{expected_value.inspect}, #{actual_expr}"
       when BigDecimal
         %Q(assert_equal BigDecimal.new("#{expected_value}"), #{actual_expr})
       when Class, Module
@@ -30,10 +32,8 @@ private
         "assert_equal #{type_name}, #{actual_expr}"
       when NilClass
         "assert_nil #{actual_expr}"
-      when Regexp
-        "assert_match #{expected_value.inspect}, #{actual_expr}"
       else
-        "assert_equal #{expected_value.inspect}, #{actual_expr}"
+        nil
     end
   end
   
@@ -75,9 +75,20 @@ private
                          "#{value_as_var_name.gsub /^_/, ''}_when_sent_" +
                          method_name
       generate_test!(:file => file, :method_name => test_method_name) do
-        assertion = equality_assertion(returned,
-                                       "#{instance_var_name}.#{method_name}")
-        file.puts "    #{assertion}"
+        actual_expression = "#{instance_var_name}.#{method_name}"
+        assertion = equality_assertion(returned, actual_expression)
+        if assertion
+          file.puts "    #{assertion}"
+        else
+          returned_type_name = Trapeze::Sandbox.strip_from_type_name(returned.class)
+          file.puts "    assert_instance_of #{returned_type_name}, #{actual_expression}"
+          returned.instance_variables.sort.each do |v|
+            value = returned.instance_variable_get(v)
+            assertion = equality_assertion(value,
+                                           "#{actual_expression}.instance_variable_get('#{v}')")
+            file.puts "    #{assertion}"
+          end
+        end
       end
     end
     self
