@@ -15,12 +15,14 @@ class BatTest < Test::Unit::TestCase
   
   def test_should_return_a_bat_ding_object_when_sent_ding
     assert_instance_of Bat::Ding, @bat.ding
-    assert_equal :something_else_entirely, @bat.ding.instance_variable_get('@my_state')
+    assert_equal :something_else_entirely1, @bat.ding.instance_variable_get('@my_state1')
+    assert_equal :something_else_entirely2, @bat.ding.instance_variable_get('@my_state2')
   end
   
   def test_should_return_a_bat_pwop_object_when_sent_pwop
     assert_instance_of Bat::Pwop, @bat.pwop
-    assert_equal :something_else_again, @bat.pwop.instance_variable_get('@my_state')
+    assert_equal :something_else_again1, @bat.pwop.instance_variable_get('@my_state1')
+    assert_equal :something_else_again2, @bat.pwop.instance_variable_get('@my_state2')
   end
   
 end

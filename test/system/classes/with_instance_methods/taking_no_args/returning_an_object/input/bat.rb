@@ -3,7 +3,8 @@ class Bat
   class Pwop
     
     def initialize
-      @my_state = :something_else_again
+      @my_state1 = :something_else_again1
+      @my_state2 = :something_else_again2
     end
     
   end
@@ -11,7 +12,8 @@ class Bat
   class Ding
     
     def initialize
-      @my_state = :something_else_entirely
+      @my_state1 = :something_else_entirely1
+      @my_state2 = :something_else_entirely2
     end
     
   end

@@ -15,12 +15,14 @@ class FooTest < Test::Unit::TestCase
   
   def test_should_return_a_foo_bar_object_when_sent_bar
     assert_instance_of Foo::Bar, @foo.bar
-    assert_equal :something, @foo.bar.instance_variable_get('@my_state')
+    assert_equal :something1, @foo.bar.instance_variable_get('@my_state1')
+    assert_equal :something2, @foo.bar.instance_variable_get('@my_state2')
   end
   
   def test_should_return_a_foo_baz_object_when_sent_baz
     assert_instance_of Foo::Baz, @foo.baz
-    assert_equal :something_else, @foo.baz.instance_variable_get('@my_state')
+    assert_equal :something_else1, @foo.baz.instance_variable_get('@my_state1')
+    assert_equal :something_else2, @foo.baz.instance_variable_get('@my_state2')
   end
   
 end

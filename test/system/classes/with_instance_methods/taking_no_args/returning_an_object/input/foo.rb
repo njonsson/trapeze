@@ -3,7 +3,8 @@ class Foo
   class Bar
     
     def initialize
-      @my_state = :something
+      @my_state1 = :something1
+      @my_state2 = :something2
     end
     
   end
@@ -11,7 +12,8 @@ class Foo
   class Baz
     
     def initialize
-      @my_state = :something_else
+      @my_state1 = :something_else1
+      @my_state2 = :something_else2
     end
     
   end
