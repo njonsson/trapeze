@@ -1,3 +1,5 @@
+require 'rational'
+
 module Bat
   
   def pwop

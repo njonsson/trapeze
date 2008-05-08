@@ -1,3 +1,5 @@
+require 'rational'
+
 class Foo
   
   def bar

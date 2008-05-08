@@ -1,3 +1,5 @@
+require 'rational'
+
 module Foo
   
   def bar

@@ -1,3 +1,5 @@
+require 'rational'
+
 def foo
   Rational 7, 77
 end
