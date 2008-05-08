@@ -46,6 +46,10 @@ module Trapeze::DescribeExtensionTest
       assert_equal '7.77', 7.77._describe
     end
     
+    def test_rational_should_return_expected_description_when_sent_describe
+      assert_equal '7/22', Rational(7, 22)._describe
+    end
+    
     def test_big_decimal_should_return_expected_description_when_sent_describe
       assert_equal '0.777E1', BigDecimal.new('7.77')._describe
     end
