@@ -78,10 +78,10 @@ public
       inspect
     elsif instance_of?(Class) || instance_of?(Module)
       Trapeze::Sandbox.strip_from_type_name self
-    elsif (self.class.to_s =~ /^Date(Time)?$/) ||
-          kind_of?(Time) ||
-          kind_of?(Numeric)
+    elsif (self.class.to_s =~ /^Date(Time)?$/) || kind_of?(Numeric)
       to_s
+    elsif kind_of?(Time)
+      utc.to_s
     elsif instance_of?(Range)
       "a range from #{Transform.spell self.begin} "       +
       "#{exclude_end? ? 'to and excluding' : 'through'} " +

@@ -42,6 +42,14 @@ class Trapeze::SuiteGenerators::GeneratorBase
               'Regexp'     => INSPECT_LITERAL,
               'String'     => INSPECT_LITERAL,
               'Symbol'     => INSPECT_LITERAL,
+              'Time'       => lambda do |o|
+                                utc = o.utc
+                                expr = %w(year month day
+                                          hour min sec usec).collect do |attr|
+                                  utc.send(attr).to_s
+                                end.join(', ')
+                                "Time.utc(#{expr})"
+                              end,
               'TrueClass'  => INSPECT_LITERAL}
   
   # The Dir.glob pattern used to find source files being analyzed.
