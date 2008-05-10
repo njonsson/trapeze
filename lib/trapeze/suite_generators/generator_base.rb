@@ -24,6 +24,25 @@ class Trapeze::SuiteGenerators::GeneratorBase
     
   end
   
+  INSPECT_LITERAL = lambda { |o| o.inspect }
+  TYPE_LITERAL    = lambda { |o| Trapeze::Sandbox.strip_from_type_name o }
+  LITERALS = {'Array'      => INSPECT_LITERAL,
+              'BigDecimal' => lambda { |o| %Q<BigDecimal.new("#{o}")> },
+              'Bignum'     => INSPECT_LITERAL,
+              'Class'      => TYPE_LITERAL,
+              'Date'       => lambda { |o| %Q<Date.parse("#{o}")> },
+              'FalseClass' => INSPECT_LITERAL,
+              'Fixnum'     => INSPECT_LITERAL,
+              'Float'      => INSPECT_LITERAL,
+              'Hash'       => INSPECT_LITERAL,
+              'Module'     => TYPE_LITERAL,
+              'Range'      => INSPECT_LITERAL,
+              'Rational'   => INSPECT_LITERAL,
+              'Regexp'     => INSPECT_LITERAL,
+              'String'     => INSPECT_LITERAL,
+              'Symbol'     => INSPECT_LITERAL,
+              'TrueClass'  => INSPECT_LITERAL}
+  
   # The Dir.glob pattern used to find source files being analyzed.
   attr_reader :input_files_pattern
   

@@ -1,6 +1,5 @@
 # Defines Trapeze::SuiteGenerators::TestUnit.
 
-require 'bigdecimal'
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators/generator_base")
 require File.expand_path("#{File.dirname __FILE__}/../describe_extension")
@@ -22,19 +21,9 @@ class Trapeze::SuiteGenerators::TestUnit <
 private
   
   def equality_assertion(expected_value, actual_expr)
-    case expected_value
-      when Bignum, Fixnum, Float, Rational, String, Symbol
-        "assert_equal #{expected_value.inspect}, #{actual_expr}"
-      when BigDecimal
-        %Q(assert_equal BigDecimal.new("#{expected_value}"), #{actual_expr})
-      when Class, Module
-        type_name = Trapeze::Sandbox.strip_from_type_name(expected_value)
-        "assert_equal #{type_name}, #{actual_expr}"
-      when NilClass
-        "assert_nil #{actual_expr}"
-      else
-        nil
-    end
+    return "assert_nil #{actual_expr}" if expected_value.nil?
+    return nil unless (literal = LITERALS[expected_value.class.to_s])
+    "assert_equal #{literal.call expected_value}, #{actual_expr}"
   end
   
   def generate_class_file!

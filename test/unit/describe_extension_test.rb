@@ -3,6 +3,7 @@ require File.expand_path("#{File.dirname __FILE__}/../../lib/trapeze/describe_ex
 require 'test/unit'
 require 'bigdecimal'
 require 'date'
+require 'rational'
 require 'rubygems'
 require 'mocha'
 
