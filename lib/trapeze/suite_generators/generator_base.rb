@@ -31,6 +31,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
               'Bignum'     => INSPECT_LITERAL,
               'Class'      => TYPE_LITERAL,
               'Date'       => lambda { |o| %Q<Date.parse("#{o}")> },
+              'DateTime'   => lambda { |o| %Q<DateTime.parse("#{o}")> },
               'FalseClass' => INSPECT_LITERAL,
               'Fixnum'     => INSPECT_LITERAL,
               'Float'      => INSPECT_LITERAL,
