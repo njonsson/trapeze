@@ -3,11 +3,11 @@ require 'bigdecimal'
 module Foo
   
   def bar
-    BigDecimal.new '6.66'
+    BigDecimal.new '0.' + ('6' * 384)
   end
   
   def baz
-    BigDecimal.new '7.77'
+    BigDecimal.new '0.' + ('7' * 384)
   end
   
 end

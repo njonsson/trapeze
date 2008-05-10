@@ -1,9 +1,9 @@
 require 'bigdecimal'
 
 def foo
-  BigDecimal.new '7.77'
+    BigDecimal.new '0.' + ('7' * 384)
 end
 
 def bar
-  BigDecimal.new '8.88'
+    BigDecimal.new '0.' + ('8' * 384)
 end

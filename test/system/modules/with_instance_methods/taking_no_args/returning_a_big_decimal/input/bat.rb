@@ -3,11 +3,11 @@ require 'bigdecimal'
 module Bat
   
   def pwop
-    BigDecimal.new '8.88'
+    BigDecimal.new '0.' + ('8' * 384)
   end
   
   def ding
-    BigDecimal.new '9.99'
+    BigDecimal.new '0.' + ('9' * 384)
   end
   
 end
