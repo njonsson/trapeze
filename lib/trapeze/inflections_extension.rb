@@ -56,6 +56,7 @@ module Trapeze::InflectionsExtension
     _pathify.gsub('/',             '_').
              gsub(/^[^a-z\d]+/i,   '').
              gsub(/([^a-z\d])+$/i, '').
+             gsub(/[^a-z\d]+/i,    '_').
              gsub /^(\d)/,         '_\1'
   end
   

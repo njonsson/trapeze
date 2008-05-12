@@ -311,7 +311,7 @@ module Trapeze::InflectionsExtensionTest
     end
     
     def test_with_double_slash_delimited_words
-      assert_equal 'foo__bar', 'foo//bar'._variablize
+      assert_equal 'foo_bar', 'foo//bar'._variablize
     end
     
     def test_with_camel_case
@@ -391,6 +391,10 @@ module Trapeze::InflectionsExtensionTest
     
     def test_with_multiple_punctuation_within_lowercase
       assert_equal 'foo_bar', 'foo--bar'._variablize
+    end
+    
+    def test_with_space_and_punctuation_within_lowercase
+      assert_equal 'foo_bar', 'foo :bar'._variablize
     end
     
     def test_with_multiple_punctuation_within_uppercase
