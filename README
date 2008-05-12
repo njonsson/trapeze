@@ -87,6 +87,7 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 
 == To do
 
+* Search classes and modules recursively for nested classes and modules
 * Add support for --quiet/-q and --verbose/-v command-line options
 * Add support for thrown symbols and raised errors in addition to returned
   objects
