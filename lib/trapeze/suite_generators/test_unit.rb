@@ -23,7 +23,14 @@ private
   def equality_assertion(expected_value, actual_expr)
     return "assert_nil #{actual_expr}" if expected_value.nil?
     return nil unless (literal = LITERALS[expected_value.class.to_s])
-    "assert_equal #{literal.call expected_value}, #{actual_expr}"
+    literal_value = literal.call(expected_value)
+    args = "#{literal_value}, #{actual_expr}"
+    if args[0..0] == '{'
+      args = "(#{args})"
+    else
+      args = " #{args}"
+    end
+    "assert_equal#{args}"
   end
   
   def generate_class_file!

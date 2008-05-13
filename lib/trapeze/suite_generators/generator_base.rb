@@ -30,6 +30,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
               'BigDecimal' => lambda { |o| %Q<BigDecimal.new("#{o}")> },
               'Bignum'     => INSPECT_LITERAL,
               'Class'      => TYPE_LITERAL,
+              'Complex'    => INSPECT_LITERAL,
               'Date'       => lambda { |o| %Q<Date.parse("#{o}")> },
               'DateTime'   => lambda { |o| %Q<DateTime.parse("#{o}")> },
               'FalseClass' => INSPECT_LITERAL,
