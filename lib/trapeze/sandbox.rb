@@ -13,9 +13,8 @@ module Trapeze::Sandbox
       Trapeze.const_set unique, Module.new
     end
     
-    # Returns the name of _type_ but with
-    # <strong>Trapeze::Sandbox<i>xxxx</i></strong> removed from the beginning of
-    # it.
+    # Returns the name of _type_ but with <b>Trapeze::Sandbox<i>xxxx</i></b>
+    # removed from the beginning of it.
     def strip_from_type_name(type)
       type.name.gsub /^Trapeze::Sandbox\d+::/, ''
     end
