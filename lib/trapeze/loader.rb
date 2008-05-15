@@ -26,7 +26,13 @@ class Trapeze::Loader
   # Module and Method definitions from them.
   def load!
     sandbox = Trapeze::Sandbox.create
-    @filenames.each { |f| sandbox.module_eval File.read(f) }
+    @filenames.each do |f|
+      begin
+        sandbox.module_eval File.read(f)
+      rescue Exception => e
+        $stderr.puts "#{Trapeze::Sandbox.strip_from_message e.message} in #{f}"
+      end
+    end
     @definitions = extract_definitions(sandbox)
     self
   end

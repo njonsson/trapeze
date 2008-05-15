@@ -51,6 +51,21 @@ module Trapeze::SandboxTest
     
   end
   
+  class StripFromMessage < Test::Unit::TestCase
+    
+    def test_should_return_arg_stripped_of_sandbox_prefix
+      message  = 'something bad happened in Trapeze::Sandbox9999::Foo'
+      expected = 'something bad happened in Foo'
+      assert_equal expected, Trapeze::Sandbox.strip_from_message(message)
+    end
+    
+    def test_should_return_arg_unchanged_if_lacking_sandbox_prefix
+      message  = 'something bad happened in Foo'
+      assert_equal message, Trapeze::Sandbox.strip_from_message(message)
+    end
+    
+  end
+  
   class StripFromTypeName < Test::Unit::TestCase
     
     def test_should_call_name_on_arg
