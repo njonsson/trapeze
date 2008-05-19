@@ -37,6 +37,7 @@ module Trapeze::LoaderTest
       
       def setup
         @loader = Trapeze::Loader.new('empty.rb')
+        File.stubs(:read).returns ''
       end
       
       def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -49,7 +50,6 @@ module Trapeze::LoaderTest
       end
       
       def test_should_return_self_when_sent_loadEXCLAMATION
-        File.stubs(:read).returns ''
         assert_equal @loader, @loader.load!
       end
       
@@ -60,7 +60,6 @@ module Trapeze::LoaderTest
       end
       
       def test_should_return_empty_array_when_sent_class_definitions
-        File.stubs(:read).returns ''
         assert_equal [], @loader.class_definitions
       end
       
@@ -71,7 +70,6 @@ module Trapeze::LoaderTest
       end
       
       def test_should_return_empty_array_when_sent_module_definitions
-        File.stubs(:read).returns ''
         assert_equal [], @loader.module_definitions
       end
       
@@ -82,7 +80,6 @@ module Trapeze::LoaderTest
       end
       
       def test_should_return_empty_array_when_sent_method_definitions
-        File.stubs(:read).returns ''
         assert_equal [], @loader.method_definitions
       end
       
@@ -98,6 +95,7 @@ module Trapeze::LoaderTest
             class BarClass; end
           end_source
           @loader = Trapeze::Loader.new('methodless_classes.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -110,7 +108,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -121,7 +118,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          File.stubs(:read).returns @source
           expected = {'FooClass' => {}, 'BarClass' => {}}
           assert_classes expected, @loader.class_definitions
         end
@@ -133,7 +129,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -144,7 +139,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -168,6 +162,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -180,7 +175,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -191,7 +185,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          File.stubs(:read).returns @source
           expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
                                                         ['baz', {:arity => 0}]]},
                       'BatClass' => {:class_methods => [['ding', {:arity => 0}],
@@ -206,7 +199,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -217,7 +209,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -237,6 +228,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('classes_with_class_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -249,7 +241,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -260,7 +251,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          File.stubs(:read).returns @source
           expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
                                                         ['baz', {:arity => 0}]]},
                       'BatClass' => {:class_methods => [['ding', {:arity => 0}],
@@ -275,7 +265,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -286,7 +275,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -306,6 +294,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('classes_with_instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -318,7 +307,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -329,7 +317,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          File.stubs(:read).returns @source
           expected = {'FooClass' => {:instance_methods => [['bar', {:arity => 0}],
                                                            ['baz', {:arity => 0}]]},
                       'BatClass' => {:instance_methods => [['ding', {:arity => 0}],
@@ -344,7 +331,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -355,7 +341,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -387,6 +372,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -400,7 +386,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -411,7 +396,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          File.stubs(:read).returns @source
           expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
                                                         ['baz', {:arity => 0}],
                                                         ['fizz', {:arity => 0}],
@@ -434,7 +418,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -445,7 +428,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -463,6 +445,7 @@ module Trapeze::LoaderTest
             module BarModule; end
           end_source
           @loader = Trapeze::Loader.new('methodless_modules.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -475,7 +458,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -486,7 +468,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -497,7 +478,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          File.stubs(:read).returns @source
           expected = {'FooModule' => {}, 'BarModule' => {}}
           assert_modules expected, @loader.module_definitions
         end
@@ -509,7 +489,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -533,6 +512,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -545,7 +525,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -556,7 +535,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -567,7 +545,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          File.stubs(:read).returns @source
           expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
                                                          ['baz', {:arity => 0}]]},
                       'BatModule' => {:class_methods => [['ding', {:arity => 0}],
@@ -582,7 +559,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -602,6 +578,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('modules_with_class_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -614,7 +591,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -625,7 +601,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -651,7 +626,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -671,6 +645,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('modules_with_instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -683,7 +658,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -694,7 +668,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -705,7 +678,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          File.stubs(:read).returns @source
           expected = {'FooModule' => {:instance_methods => [['bar', {:arity => 0}],
                                                             ['baz', {:arity => 0}]]},
                       'BatModule' => {:instance_methods => [['ding', {:arity => 0}],
@@ -720,7 +692,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -752,6 +723,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -765,7 +737,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -776,7 +747,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -787,7 +757,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          File.stubs(:read).returns @source
           expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
                                                          ['baz', {:arity => 0}],
                                                          ['fizz', {:arity => 0}],
@@ -810,7 +779,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -830,6 +798,7 @@ module Trapeze::LoaderTest
             end
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -842,7 +811,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -853,7 +821,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -864,7 +831,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -875,7 +841,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -889,6 +854,7 @@ module Trapeze::LoaderTest
             def self.bar; end
           end_source
           @loader = Trapeze::Loader.new('class_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -901,7 +867,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -912,7 +877,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -923,7 +887,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -934,7 +897,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_method_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.method_definitions
         end
         
@@ -948,6 +910,7 @@ module Trapeze::LoaderTest
             def bar; end
           end_source
           @loader = Trapeze::Loader.new('instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -960,7 +923,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -971,7 +933,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -982,7 +943,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -993,7 +953,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
-          File.stubs(:read).returns @source
           expected = [['bar', {:arity => 0}], ['foo', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
         end
@@ -1014,6 +973,7 @@ module Trapeze::LoaderTest
             def ding; end
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods_and_class_methods_and_instance_methods.rb')
+          File.stubs(:read).returns @source
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -1027,7 +987,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_self_when_sent_loadEXCLAMATION
-          File.stubs(:read).returns @source
           assert_equal @loader, @loader.load!
         end
         
@@ -1038,7 +997,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_class_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.class_definitions
         end
         
@@ -1049,7 +1007,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_empty_array_when_sent_module_definitions
-          File.stubs(:read).returns @source
           assert_equal [], @loader.module_definitions
         end
         
@@ -1060,7 +1017,6 @@ module Trapeze::LoaderTest
         end
         
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
-          File.stubs(:read).returns @source
           expected = [['ding', {:arity => 0}], ['pwop', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
         end
