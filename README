@@ -88,7 +88,7 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 == To do
 
 * Search classes and modules recursively for nested classes and modules
-* Assert the values of user-defined constants
+* Assert the values of user-defined constants and the superclasses of classes
 * Test not just user-defined types but also methods and constants added to all
   types in the system
 * Add support for --verbose/-v command-line option
