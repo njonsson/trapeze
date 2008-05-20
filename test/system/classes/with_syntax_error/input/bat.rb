@@ -4,7 +4,7 @@ class Bat
     'PWOP!'
   end
   
-  biddle!  # Nonexistent method
+  this_is_a_nonexistent_method
   
   def ding
     'DING!'

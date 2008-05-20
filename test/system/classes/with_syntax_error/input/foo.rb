@@ -4,7 +4,7 @@ class Foo
     'BAR!'
   end
   
-  bzork!  # Nonexistent method
+  this_method_also_does_not_exist
   
   def baz
     'BAZ!'
