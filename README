@@ -91,7 +91,7 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 * Assert the values of user-defined constants
 * Test not just user-defined types but also methods and constants added to all
   types in the system
-* Add support for --quiet/-q and --verbose/-v command-line options
+* Add support for --verbose/-v command-line option
 * Add support for thrown symbols and raised errors in addition to returned
   objects
 * Create mocks and stubs of core- and standard-library IO classes in order to

@@ -39,7 +39,8 @@ system_test_dirs.each do |d|
       application = Trapeze::Application.new('--input-files-pattern',
                                              input_files_pattern,
                                              '--output-dir',
-                                             output_dir)
+                                             output_dir,
+                                             '--quiet')
       application.run!
       assert_dirs_identical output_truth_dir, output_dir
     end

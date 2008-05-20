@@ -23,6 +23,7 @@ class Trapeze::Application
   def initialize(*args)
     valid_options = {'--input-files-pattern' => %w(-i lib/**/*.rb),
                      '--output-dir'          => %w(-o test/trapeze),
+                     '--quiet'               => '-q',
                      '--help'                => '-h'}
     @args = Trapeze::Command.new(:args => args,
                                          :valid_options => valid_options)
@@ -62,6 +63,12 @@ class Trapeze::Application
     options = @args.options
     input_files = Dir.glob(options[:input_files_pattern])
     loader = Trapeze::Loader.new(*input_files)
+    unless options[:quiet]
+      loader.exceptions.each do |filename, exception|
+        $stderr.puts "#{Trapeze::Sandbox.strip_from_message exception.message} " +
+                     "in #{filename}"
+      end
+    end
     probe = Trapeze::Probe.new(loader)
     generator = Trapeze::SuiteGenerators::TestUnit.new(:input_files_pattern => options[:input_files_pattern],
                                                        :output_dir => options[:output_dir],
@@ -91,6 +98,9 @@ Options:
                                            generated files will be created. The
                                            default value of this option is
                                            'test/trapeze'.
+
+                --quiet, -q                Suppresses all stdout and stderr
+                                           output.
 
                  --help, -h                Displays this help message.
     end_puts

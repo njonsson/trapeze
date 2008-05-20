@@ -16,37 +16,44 @@ class Trapeze::Loader
     @filenames = filenames
   end
   
-  # Returns Class definitions present in _filenames_, calling load! if they have
-  # not been retrieved already.
+  # Returns Class definitions present in _filenames_, calling load! if it has
+  # not been called already.
   def class_definitions
-    load_or_get_definitions! :class
+    load_or_get! :class_definitions
+  end
+  
+  # Returns exceptions raised while loading _filenames_, calling load! if it has
+  # not been called already.
+  def exceptions
+    load_or_get! :exceptions
   end
   
   # Loads the source code files supplied in _filenames_ and retrieves Class,
   # Module and Method definitions from them.
   def load!
     sandbox = Trapeze::Sandbox.create
-    @filenames.each do |f|
+    exceptions = @filenames.inject([]) do |exceptions, filename|
       begin
-        sandbox.module_eval File.read(f)
+        sandbox.module_eval File.read(filename)
       rescue Exception => e
-        $stderr.puts "#{Trapeze::Sandbox.strip_from_message e.message} in #{f}"
+        exceptions << [filename, e]
       end
+      exceptions
     end
-    @definitions = extract_definitions(sandbox)
+    @loaded = extract_definitions(sandbox).merge(:exceptions => exceptions)
     self
   end
   
-  # Returns Method definitions present in _filenames_, calling load! if they
-  # have not been retrieved already.
+  # Returns Method definitions present in _filenames_, calling load! if it has
+  # not been called already.
   def method_definitions
-    load_or_get_definitions! :method
+    load_or_get! :method_definitions
   end
   
-  # Returns Module definitions present in _filenames_, calling load! if they
-  # have not been retrieved already.
+  # Returns Module definitions present in _filenames_, calling load! if it has
+  # not been called already.
   def module_definitions
-    load_or_get_definitions! :module
+    load_or_get! :module_definitions
   end
   
 private
@@ -78,9 +85,9 @@ private
     end
   end
   
-  def load_or_get_definitions!(class_or_module_or_method)
-    load! unless @definitions
-    @definitions["#{class_or_module_or_method}_definitions".to_sym]
+  def load_or_get!(attr)
+    load! unless @loaded
+    @loaded[attr]
   end
   
 end

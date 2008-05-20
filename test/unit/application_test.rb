@@ -65,6 +65,9 @@ Options:
                                            default value of this option is
                                            'test/trapeze'.
 
+                --quiet, -q                Suppresses all stdout and stderr
+                                           output.
+
                  --help, -h                Displays this help message.
         end_stdout
         Trapeze::Application.new '--this-option-is-not-valid'
@@ -111,6 +114,9 @@ Options:
                                            default value of this option is
                                            'test/trapeze'.
 
+                --quiet, -q                Suppresses all stdout and stderr
+                                           output.
+
                  --help, -h                Displays this help message.
         end_stdout
         Trapeze::Application.new 'this-arg-is-not-valid'
@@ -155,6 +161,9 @@ Options:
                                            generated files will be created. The
                                            default value of this option is
                                            'test/trapeze'.
+
+                --quiet, -q                Suppresses all stdout and stderr
+                                           output.
 
                  --help, -h                Displays this help message.
         end_stdout
@@ -201,6 +210,9 @@ Options:
                                            default value of this option is
                                            'test/trapeze'.
 
+                --quiet, -q                Suppresses all stdout and stderr
+                                           output.
+
                  --help, -h                Displays this help message.
         end_stdout
         Trapeze::Application.new '-h'
@@ -209,6 +221,44 @@ Options:
       def test_should_call_kernel_exit
         Kernel.expects :exit
         Trapeze::Application.new '-h'
+      end
+      
+    end
+    
+    class WithQuietOption < Test::Unit::TestCase
+      
+      def test_should_not_print_to_stderr
+        $stderr.expects(:puts).never
+        Trapeze::Application.new *%w(--quiet)
+      end
+      
+      def test_should_not_print_to_stdout
+        $stdout.expects(:puts).never
+        Trapeze::Application.new *%w(--quiet)
+      end
+      
+      def test_should_not_call_kernel_exit
+        Kernel.expects(:exit).never
+        Trapeze::Application.new *%w(--quiet)
+      end
+      
+    end
+    
+    class WithQOption < Test::Unit::TestCase
+      
+      def test_should_not_print_to_stderr
+        $stderr.expects(:puts).never
+        Trapeze::Application.new *%w(-q)
+      end
+      
+      def test_should_not_print_to_stdout
+        $stdout.expects(:puts).never
+        Trapeze::Application.new *%w(-q)
+      end
+      
+      def test_should_not_call_kernel_exit
+        Kernel.expects(:exit).never
+        Trapeze::Application.new *%w(-q)
       end
       
     end
@@ -294,10 +344,13 @@ Options:
   class WithNoArgs < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:glob).returns stub_everything
-      Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probe.stubs(:new).returns stub_everything
-      @mock_generator = stub_everything
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
       @application = Trapeze::Application.new
     end
@@ -315,27 +368,144 @@ Options:
     end
     
     def test_should_call_dir_glob_with_default_pattern_when_sent_runEXCLAMATION
-      Dir.expects(:glob).with('lib/**/*.rb').returns stub_everything
+      Dir.expects(:glob).with('lib/**/*.rb').returns @mock_filenames
       @application.run!
     end
     
     def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
-      Dir.stubs(:glob).returns :stubbed_filenames
-      Trapeze::Loader.expects(:new).with :stubbed_filenames
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
       @application.run!
     end
     
     def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
-      Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
       @application.run!
     end
     
     def test_should_call_test_unit_new_with_default_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
-      Trapeze::Probe.stubs(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
                                                             :output_dir => 'test/trapeze',
-                                                            :probe => :stubbed_probe).returns stub_everything
+                                                            :probe => @mock_probe).returns @mock_generator
+      @application.run!
+    end
+    
+    def test_should_call_generateEXCLAMATION_with_no_args_on_generator_when_sent_runEXCLAMATION
+      @mock_generator.expects(:generate!).with()
+      @application.run!
+    end
+    
+    def test_should_return_result_of_call_to_generateEXCLAMATION_on_generator_when_sent_runEXCLAMATION
+      @mock_generator.stubs(:generate!).returns :generate_result
+      assert_equal :generate_result, @application.run!
+    end
+    
+  end
+  
+  class WithQuietOption < Test::Unit::TestCase
+    
+    def setup
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
+      Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
+      @application = Trapeze::Application.new(*%w(--quiet))
+    end
+    
+    def test_should_return_array_containing_expected_args_when_sent_args
+      assert_equal %w(--quiet), @application.args
+    end
+    
+    def test_should_return_expected_pattern_when_sent_input_files_pattern
+      assert_equal 'lib/**/*.rb', @application.input_files_pattern
+    end
+    
+    def test_should_return_default_path_when_sent_output_dir
+      assert_equal 'test/trapeze', @application.output_dir
+    end
+    
+    def test_should_call_dir_glob_with_expected_pattern_when_sent_runEXCLAMATION
+      Dir.expects(:glob).with('lib/**/*.rb').returns @mock_filenames
+      @application.run!
+    end
+    
+    def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
+      @application.run!
+    end
+    
+    def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
+      @application.run!
+    end
+    
+    def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
+                                                            :output_dir => 'test/trapeze',
+                                                            :probe => @mock_probe).returns @mock_generator
+      @application.run!
+    end
+    
+    def test_should_call_generateEXCLAMATION_with_no_args_on_generator_when_sent_runEXCLAMATION
+      @mock_generator.expects(:generate!).with()
+      @application.run!
+    end
+    
+    def test_should_return_result_of_call_to_generateEXCLAMATION_on_generator_when_sent_runEXCLAMATION
+      @mock_generator.stubs(:generate!).returns :generate_result
+      assert_equal :generate_result, @application.run!
+    end
+    
+  end
+  
+  class WithQOption < Test::Unit::TestCase
+    
+    def setup
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
+      Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
+      @application = Trapeze::Application.new(*%w(-q))
+    end
+    
+    def test_should_return_array_containing_expected_args_when_sent_args
+      assert_equal %w(-q), @application.args
+    end
+    
+    def test_should_return_expected_pattern_when_sent_input_files_pattern
+      assert_equal 'lib/**/*.rb', @application.input_files_pattern
+    end
+    
+    def test_should_return_default_path_when_sent_output_dir
+      assert_equal 'test/trapeze', @application.output_dir
+    end
+    
+    def test_should_call_dir_glob_with_expected_pattern_when_sent_runEXCLAMATION
+      Dir.expects(:glob).with('lib/**/*.rb').returns @mock_filenames
+      @application.run!
+    end
+    
+    def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
+      @application.run!
+    end
+    
+    def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
+      @application.run!
+    end
+    
+    def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
+      Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
+                                                            :output_dir => 'test/trapeze',
+                                                            :probe => @mock_probe).returns @mock_generator
       @application.run!
     end
     
@@ -354,10 +524,13 @@ Options:
   class WithInputFilesPatternOption < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:glob).returns stub_everything
-      Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probe.stubs(:new).returns stub_everything
-      @mock_generator = stub_everything
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
       @application = Trapeze::Application.new(*%w(--input-files-pattern foo))
     end
@@ -375,27 +548,24 @@ Options:
     end
     
     def test_should_call_dir_glob_with_expected_pattern_when_sent_runEXCLAMATION
-      Dir.expects(:glob).with('foo').returns stub_everything
+      Dir.expects(:glob).with('foo').returns @mock_filenames
       @application.run!
     end
     
     def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
-      Dir.stubs(:glob).returns :stubbed_filenames
-      Trapeze::Loader.expects(:new).with :stubbed_filenames
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
       @application.run!
     end
     
     def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
-      Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
       @application.run!
     end
     
     def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
-      Trapeze::Probe.stubs(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'foo',
                                                             :output_dir => 'test/trapeze',
-                                                            :probe => :stubbed_probe).returns stub_everything
+                                                            :probe => @mock_probe).returns @mock_generator
       @application.run!
     end
     
@@ -414,10 +584,13 @@ Options:
   class WithIOption < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:glob).returns stub_everything
-      Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probe.stubs(:new).returns stub_everything
-      @mock_generator = stub_everything
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
       @application = Trapeze::Application.new(*%w(-i foo))
     end
@@ -435,27 +608,24 @@ Options:
     end
     
     def test_should_call_dir_glob_with_expected_pattern_when_sent_runEXCLAMATION
-      Dir.expects(:glob).with('foo').returns stub_everything
+      Dir.expects(:glob).with('foo').returns @mock_filenames
       @application.run!
     end
     
     def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
-      Dir.stubs(:glob).returns :stubbed_filenames
-      Trapeze::Loader.expects(:new).with :stubbed_filenames
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
       @application.run!
     end
     
     def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
-      Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
       @application.run!
     end
     
     def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
-      Trapeze::Probe.stubs(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'foo',
                                                             :output_dir => 'test/trapeze',
-                                                            :probe => :stubbed_probe).returns stub_everything
+                                                            :probe => @mock_probe).returns @mock_generator
       @application.run!
     end
     
@@ -474,10 +644,13 @@ Options:
   class WithOutputDirOption < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:glob).returns stub_everything
-      Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probe.stubs(:new).returns stub_everything
-      @mock_generator = stub_everything
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
       @application = Trapeze::Application.new(*%w(--output-dir foo))
     end
@@ -495,27 +668,24 @@ Options:
     end
     
     def test_should_call_dir_glob_with_default_pattern_when_sent_runEXCLAMATION
-      Dir.expects(:glob).with('lib/**/*.rb').returns stub_everything
+      Dir.expects(:glob).with('lib/**/*.rb').returns @mock_filenames
       @application.run!
     end
     
     def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
-      Dir.stubs(:glob).returns :stubbed_filenames
-      Trapeze::Loader.expects(:new).with :stubbed_filenames
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
       @application.run!
     end
     
     def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
-      Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
       @application.run!
     end
     
     def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
-      Trapeze::Probe.stubs(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
                                                             :output_dir => 'foo',
-                                                            :probe => :stubbed_probe).returns stub_everything
+                                                            :probe => @mock_probe).returns @mock_generator
       @application.run!
     end
     
@@ -534,10 +704,13 @@ Options:
   class WithOOption < Test::Unit::TestCase
     
     def setup
-      Dir.stubs(:glob).returns stub_everything
-      Trapeze::Loader.stubs(:new).returns stub_everything
-      Trapeze::Probe.stubs(:new).returns stub_everything
-      @mock_generator = stub_everything
+      @mock_filenames = stub_everything('Array')
+      Dir.stubs(:glob).returns @mock_filenames
+      @mock_loader = stub_everything('Trapeze::Loader', :exceptions => [])
+      Trapeze::Loader.stubs(:new).returns @mock_loader
+      @mock_probe = stub_everything('Trapeze::Probe')
+      Trapeze::Probe.stubs(:new).returns @mock_probe
+      @mock_generator = stub_everything('Trapeze::SuiteGenerators::TestUnit')
       Trapeze::SuiteGenerators::TestUnit.stubs(:new).returns @mock_generator
       @application = Trapeze::Application.new(*%w(-o foo))
     end
@@ -555,27 +728,24 @@ Options:
     end
     
     def test_should_call_dir_glob_with_default_pattern_when_sent_runEXCLAMATION
-      Dir.expects(:glob).with('lib/**/*.rb').returns stub_everything
+      Dir.expects(:glob).with('lib/**/*.rb').returns @mock_filenames
       @application.run!
     end
     
     def test_should_call_loader_new_with_expected_filenames_when_sent_runEXCLAMATION
-      Dir.stubs(:glob).returns :stubbed_filenames
-      Trapeze::Loader.expects(:new).with :stubbed_filenames
+      Trapeze::Loader.expects(:new).with(@mock_filenames).returns @mock_loader
       @application.run!
     end
     
     def test_should_call_probe_new_with_loader_when_sent_runEXCLAMATION
-      Trapeze::Loader.stubs(:new).returns :stubbed_loader
-      Trapeze::Probe.expects(:new).with(:stubbed_loader).returns stub_everything
+      Trapeze::Probe.expects(:new).with(@mock_loader).returns @mock_probe
       @application.run!
     end
     
     def test_should_call_test_unit_new_with_expected_input_files_pattern_attribute_and_default_output_dir_attribute_and_probe_attribute_when_sent_runEXCLAMATION
-      Trapeze::Probe.stubs(:new).returns :stubbed_probe
       Trapeze::SuiteGenerators::TestUnit.expects(:new).with(:input_files_pattern => 'lib/**/*.rb',
                                                             :output_dir => 'foo',
-                                                            :probe => :stubbed_probe).returns stub_everything
+                                                            :probe => @mock_probe).returns @mock_generator
       @application.run!
     end
     

@@ -29,6 +29,10 @@ module Trapeze::LoaderTest
       assert_equal [], @loader.method_definitions
     end
     
+    def test_should_return_empty_array_when_sent_exceptions
+      assert_equal [], @loader.exceptions
+    end
+    
   end
   
   module WithOneFilename
@@ -81,6 +85,10 @@ module Trapeze::LoaderTest
       
       def test_should_return_empty_array_when_sent_method_definitions
         assert_equal [], @loader.method_definitions
+      end
+      
+      def test_should_return_empty_array_when_sent_exceptions
+        assert_equal [], @loader.exceptions
       end
       
     end
@@ -140,6 +148,10 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           assert_equal [], @loader.method_definitions
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -212,6 +224,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
       class ClassesWithClassMethods < Test::Unit::TestCase
@@ -278,6 +294,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
       class ClassesWithInstanceMethods < Test::Unit::TestCase
@@ -342,6 +362,10 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           assert_equal [], @loader.method_definitions
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -431,6 +455,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
     end
@@ -490,6 +518,10 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           assert_equal [], @loader.method_definitions
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -562,6 +594,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
       class ModulesWithModuleMethods < Test::Unit::TestCase
@@ -629,6 +665,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
       class ModulesWithInstanceMethods < Test::Unit::TestCase
@@ -693,6 +733,10 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           assert_equal [], @loader.method_definitions
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -782,6 +826,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
     end
@@ -844,6 +892,10 @@ module Trapeze::LoaderTest
           assert_equal [], @loader.method_definitions
         end
         
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
+        end
+        
       end
       
       class ClassMethods < Test::Unit::TestCase
@@ -898,6 +950,10 @@ module Trapeze::LoaderTest
         
         def test_should_return_empty_array_when_sent_method_definitions
           assert_equal [], @loader.method_definitions
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -955,6 +1011,10 @@ module Trapeze::LoaderTest
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
           expected = [['bar', {:arity => 0}], ['foo', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
@@ -1019,6 +1079,10 @@ module Trapeze::LoaderTest
         def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
           expected = [['ding', {:arity => 0}], ['pwop', {:arity => 0}]]
           assert_methods(expected, @loader.method_definitions)
+        end
+        
+        def test_should_return_empty_array_when_sent_exceptions
+          assert_equal [], @loader.exceptions
         end
         
       end
