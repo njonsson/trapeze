@@ -98,3 +98,6 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
   make the generated suite more "unit-ish"
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it
+* Address the elephant-in-the-room question of code execution paths and how to
+  get predictable code coverage in generated tests -- create an alternative
+  implementation of Trapeze::Probe that leverages the ParseTree gem
