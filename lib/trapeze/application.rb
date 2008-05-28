@@ -25,8 +25,7 @@ class Trapeze::Application
                      '--output-dir'          => %w(-o test/trapeze),
                      '--quiet'               => '-q',
                      '--help'                => '-h'}
-    @args = Trapeze::Command.new(:args => args,
-                                         :valid_options => valid_options)
+    @args = Trapeze::Command.new(:args => args, :valid_options => valid_options)
     unless @args.valid?
       $stderr.puts
       @args.errors.each do |arg, error_message|
@@ -65,8 +64,7 @@ class Trapeze::Application
     loader = Trapeze::Loader.new(*input_files)
     unless options[:quiet]
       loader.exceptions.each do |filename, exception|
-        $stderr.puts "#{Trapeze::Sandbox.strip_from_message exception.message} " +
-                     "in #{filename}"
+        $stderr.puts "#{exception.message} in #{filename}"
       end
     end
     probe = Trapeze::Probe.new(loader)

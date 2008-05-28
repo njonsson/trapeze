@@ -1,7 +1,5 @@
 # Defines Trapeze::DescribeExtension.
 
-require File.expand_path("#{File.dirname __FILE__}/sandbox")
-
 # Adds a <i>_describe</i> method to all objects that provides a description of
 # their identity and state.
 # 
@@ -77,7 +75,7 @@ public
     elsif nil? || instance_of?(String) || instance_of?(Symbol)
       inspect
     elsif instance_of?(Class) || instance_of?(Module)
-      Trapeze::Sandbox.strip_from_type_name self
+      name
     elsif (self.class.to_s =~ /^Date(Time)?$/) || kind_of?(Numeric)
       to_s
     elsif kind_of?(Time)
@@ -87,7 +85,7 @@ public
       "#{exclude_end? ? 'to and excluding' : 'through'} " +
       Transform.spell(self.end)
     else
-      class_name = Trapeze::Sandbox.strip_from_type_name(self.class)
+      class_name = self.class.name
       "#{Transform.with_indefinite_article class_name} object"
     end
   end

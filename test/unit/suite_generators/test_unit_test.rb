@@ -85,7 +85,7 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @mock_probe = mock
         @mock_probe.stubs(:class_probe_results).returns []
         @mock_probe.stubs(:module_probe_results).returns []
-        @mock_probe.stubs(:method_probe_results).returns []
+        @mock_probe.stubs(:top_level_method_probe_results).returns []
         @generator = Trapeze::SuiteGenerators::TestUnit.new(:input_files_pattern => 'foo',
                                                             :output_dir => 'bar',
                                                             :probe => @mock_probe)
@@ -130,8 +130,8 @@ module Trapeze::SuiteGenerators::TestUnitTest
         @generator.generate!
       end
       
-      def test_should_call_probe_method_probe_results_when_sent_generateEXCLAMATION
-        @mock_probe.expects(:method_probe_results).with().returns []
+      def test_should_call_probe_top_level_method_probe_results_when_sent_generateEXCLAMATION
+        @mock_probe.expects(:top_level_method_probe_results).with().returns []
         @generator.generate!
       end
       

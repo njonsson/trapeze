@@ -2,7 +2,6 @@
 
 require File.expand_path("#{File.dirname __FILE__}/test")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/name_extension")
-require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/sandbox")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/string_comparison_extension")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/to_method_extension")
 require 'test/unit'
@@ -76,7 +75,19 @@ module Trapeze::AssertionHelpersExtension
   end
   
   def assert_classes(expected_descriptions, actuals, message=nil)
-    assert_types expected_descriptions, actuals, :class, message
+    actual_descriptions = actuals.inject({}) do |result, type|
+      result[type] = {}
+      unless type._defined_methods.empty?
+        result[type][:class_methods] = type._defined_methods
+      end
+      unless type._defined_instance_methods.empty?
+        result[type][:instance_methods] = type._defined_instance_methods
+      end
+      result
+    end
+    with_clean_backtrace do
+      assert_equal expected_descriptions, actual_descriptions, message
+    end
   end
   
   def assert_dirs_identical(truth_dir, actual_dir)
@@ -122,15 +133,20 @@ module Trapeze::AssertionHelpersExtension
     end
   end
   
-  def assert_methods(expected_descriptions, actuals, message=nil)
-    actual_descriptions = actuals.collect { |m| method_description m }
+  def assert_modules(expected_descriptions, actuals, message=nil)
+    actual_descriptions = actuals.inject({}) do |result, type|
+      result[type] = {}
+      unless type._defined_methods.empty?
+        result[type][:module_methods] = type._defined_methods
+      end
+      unless type._defined_instance_methods.empty?
+        result[type][:instance_methods] = type._defined_instance_methods
+      end
+      result
+    end
     with_clean_backtrace do
       assert_equal expected_descriptions, actual_descriptions, message
     end
-  end
-  
-  def assert_modules(expected_descriptions, actuals, message=nil)
-    assert_types expected_descriptions, actuals, :module, message
   end
   
   def assert_probe_results(expected, actual, message=nil)
@@ -191,35 +207,6 @@ module Trapeze::AssertionHelpersExtension
   end
   
 private
-  
-  def assert_types(expected_descriptions, actuals, class_or_module, message=nil)
-    expected_descriptions = expected_descriptions.inject({}) do |result,
-                                                                 key_and_value|
-      key, value = key_and_value
-      value[:type] = class_or_module
-      result[key] = value
-      result
-    end
-    actual_descriptions = actuals.inject({}) do |result, t|
-      type_name = Trapeze::Sandbox.strip_from_type_name(t)
-      type_definition = {:type => class_or_module}
-      unless (class_methods = t.methods(false).sort).empty?
-        type_definition[:class_methods] = class_methods.collect do |m|
-          method_description m._to_method(t)
-        end
-      end
-      unless (instance_methods = t.instance_methods(false).sort).empty?
-        type_definition[:instance_methods] = instance_methods.collect do |m|
-          method_description m._to_instance_method(t)
-        end
-      end
-      result[type_name] = type_definition
-      result
-    end
-    with_clean_backtrace do
-      assert_equal expected_descriptions, actual_descriptions, message
-    end
-  end
   
   def message_to_description(message)
     hash = message.reply.merge(:method_name => message.method_name)

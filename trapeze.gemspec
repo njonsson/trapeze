@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
                   "\n\n"                                                       +
                   'Trapeze does this through dynamic analysis, by reflecting ' +
                   'on the public interfaces of classes and modules (as well '  +
-                  'as global methods) defined in the source. Trapeze then '    +
+                  'as top-level methods) defined in the source. Trapeze then ' +
                   'calls each public method, stubbing the behavior of '        +
                   'arguments, and recording all the stubbed behavior for use ' +
                   'in generating mock objects. This recorded behavior is '     +

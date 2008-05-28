@@ -36,7 +36,7 @@ private
   def generate_class_file!
     probe.class_probe_results.each do |r|
       klass = r[:class]
-      class_name = Trapeze::Sandbox.strip_from_type_name(klass)
+      class_name = klass.name
       file_path = "#{output_dir}/#{class_name._pathify}_test.rb"
       test_class_name = "#{class_name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,
@@ -76,7 +76,7 @@ private
         if assertion
           file.puts "    #{assertion}"
         else
-          returned_type_name = Trapeze::Sandbox.strip_from_type_name(returned.class)
+          returned_type_name = returned.class.name
           file.puts "    assert_instance_of #{returned_type_name}, #{actual_expression}"
           returned.instance_variables.sort.each do |v|
             value = returned.instance_variable_get(v)
@@ -90,21 +90,42 @@ private
     self
   end
   
-  def generate_methods_file!
-    return self if probe.method_probe_results.empty?
+  def generate_top_level_methods_file!
+    return self if probe.top_level_method_probe_results.empty?
     
-    generate_test_file!(:file_path => "#{output_dir}/_test.rb",
+    file_path = "#{output_dir}/_test.rb"
+    generate_test_file!(:file_path => file_path,
                         :class_name => "Test_") do |f|
-      probe.method_probe_results.each do |r|
+      f.print <<-end_print
+  class << self
+    
+    def top_level_method_calls
+      @top_level_method_calls ||= {}
+    end
+    
+  end
+  
+      end_print
+      probe.top_level_method_probe_results.each do |r|
         method_name, returned = r.method_name, r.reply[:returned]
         value_as_var_name = returned._describe._variablize
         test_method_name = 'test_should_return_'                           +
                            "#{value_as_var_name.gsub /^_/, ''}_when_sent_" +
                            method_name
         generate_test!(:file => f, :method_name => test_method_name) do
-          assertion = equality_assertion(returned, method_name)
+          assertion = equality_assertion(returned,
+                                         "Test_.top_level_method_calls[:#{method_name}].call")
           f.puts "    #{assertion}"
         end
+      end
+    end
+    
+    File.open(file_path, 'a') do |f|
+      f.puts
+      probe.top_level_method_probe_results.each do |r|
+        f.print <<-end_print
+Test_.top_level_method_calls[:#{r.method_name}] = lambda { #{r.method_name} }
+        end_print
       end
     end
     self
@@ -113,7 +134,7 @@ private
   def generate_module_file!
     probe.module_probe_results.each do |r|
       mod = r[:module]
-      module_name = Trapeze::Sandbox.strip_from_type_name(mod)
+      module_name = mod.name
       file_path = "#{output_dir}/#{module_name._pathify}_test.rb"
       test_class_name = "#{module_name.split('::').last}Test"
       generate_test_file!(:file_path => file_path,

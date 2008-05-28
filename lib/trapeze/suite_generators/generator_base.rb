@@ -25,7 +25,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
   end
   
   INSPECT_LITERAL = lambda { |o| o.inspect }
-  TYPE_LITERAL    = lambda { |o| Trapeze::Sandbox.strip_from_type_name o }
+  TYPE_LITERAL    = lambda { |o| o.name }
   LITERALS = {'Array'      => INSPECT_LITERAL,
               'BigDecimal' => lambda { |o| %Q<BigDecimal.new("#{o}")> },
               'Bignum'     => INSPECT_LITERAL,
@@ -85,7 +85,7 @@ class Trapeze::SuiteGenerators::GeneratorBase
     generate_suite_file!
     generate_class_file!
     generate_module_file!
-    generate_methods_file!
+    generate_top_level_methods_file!
     
     self
   end

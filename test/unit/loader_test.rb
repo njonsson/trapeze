@@ -11,22 +11,30 @@ module Trapeze::LoaderTest
     
     def setup
       @loader = Trapeze::Loader.new
+      File.stubs(:read).returns ''
+      @loader.stubs(:unsandbox!).returns stub_everything
+      @loader.stubs(:constantize).returns stub_everything
     end
     
     def test_should_return_empty_array_when_sent_filenames
       assert_equal [], @loader.filenames
     end
     
-    def test_should_return_empty_array_when_sent_class_definitions
-      assert_equal [], @loader.class_definitions
+    def test_should_not_call_file_read_when_sent_loadEXCLAMATION
+      File.expects(:read).never.returns ''
+      @loader.load!
     end
     
-    def test_should_return_empty_array_when_sent_module_definitions
-      assert_equal [], @loader.module_definitions
+    def test_should_return_empty_array_when_sent_classes
+      assert_equal [], @loader.classes
     end
     
-    def test_should_return_empty_array_when_sent_method_definitions
-      assert_equal [], @loader.method_definitions
+    def test_should_return_empty_array_when_sent_modules
+      assert_equal [], @loader.modules
+    end
+    
+    def test_should_return_empty_array_when_sent_top_level_methods
+      assert_equal [], @loader.top_level_methods
     end
     
     def test_should_return_empty_array_when_sent_exceptions
@@ -42,14 +50,17 @@ module Trapeze::LoaderTest
       def setup
         @loader = Trapeze::Loader.new('empty.rb')
         File.stubs(:read).returns ''
+        @loader.stubs(:unsandbox!).returns stub_everything
+        @loader.stubs(:constantize).returns stub_everything
       end
       
       def test_should_return_array_of_expected_filenames_when_sent_filenames
         assert_equal ['empty.rb'], @loader.filenames
       end
       
-      def test_should_call_file_read_when_sent_loadEXCLAMATION
+      def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
         File.expects(:read).with('empty.rb').returns ''
+        @loader.load!
         @loader.load!
       end
       
@@ -57,34 +68,34 @@ module Trapeze::LoaderTest
         assert_equal @loader, @loader.load!
       end
       
-      def test_should_call_file_read_once_when_sent_class_definitions_twice
+      def test_should_call_file_read_once_when_sent_classes_twice
         File.expects(:read).with('empty.rb').returns ''
-        @loader.class_definitions
-        @loader.class_definitions
+        @loader.classes
+        @loader.classes
       end
       
-      def test_should_return_empty_array_when_sent_class_definitions
-        assert_equal [], @loader.class_definitions
+      def test_should_return_empty_array_when_sent_classes
+        assert_equal [], @loader.classes
       end
       
-      def test_should_call_file_read_once_when_sent_module_definitions_twice
+      def test_should_call_file_read_once_when_sent_modules_twice
         File.expects(:read).with('empty.rb').returns ''
-        @loader.module_definitions
-        @loader.module_definitions
+        @loader.modules
+        @loader.modules
       end
       
-      def test_should_return_empty_array_when_sent_module_definitions
-        assert_equal [], @loader.module_definitions
+      def test_should_return_empty_array_when_sent_modules
+        assert_equal [], @loader.modules
       end
       
-      def test_should_call_file_read_once_when_sent_method_definitions_twice
+      def test_should_call_file_read_once_when_sent_top_level_methods_twice
         File.expects(:read).with('empty.rb').returns ''
-        @loader.method_definitions
-        @loader.method_definitions
+        @loader.top_level_methods
+        @loader.top_level_methods
       end
       
-      def test_should_return_empty_array_when_sent_method_definitions
-        assert_equal [], @loader.method_definitions
+      def test_should_return_empty_array_when_sent_top_level_methods
+        assert_equal [], @loader.top_level_methods
       end
       
       def test_should_return_empty_array_when_sent_exceptions
@@ -104,14 +115,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('methodless_classes.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['methodless_classes.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('methodless_classes.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('methodless_classes.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -119,35 +133,43 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('methodless_classes.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          expected = {'FooClass' => {}, 'BarClass' => {}}
-          assert_classes expected, @loader.class_definitions
+        def test_should_return_array_of_expected_classes_when_sent_classes
+          foo_class = stub('FooClass', :class => Class,
+                                       :_defined_methods => [],
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooClass').returns foo_class
+          bar_class = stub('BarClass', :class => Class,
+                                       :_defined_methods => [],
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BarClass').returns bar_class
+          expected = {foo_class => {}, bar_class => {}}
+          assert_classes expected, @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('methodless_classes.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('methodless_classes.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -175,14 +197,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['classes_with_metaclass_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('classes_with_metaclass_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('classes_with_metaclass_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -190,38 +215,44 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('classes_with_metaclass_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
-                                                        ['baz', {:arity => 0}]]},
-                      'BatClass' => {:class_methods => [['ding', {:arity => 0}],
-                                                        ['pwop', {:arity => 0}]]}}
-          assert_classes expected, @loader.class_definitions
+        def test_should_return_array_of_expected_classes_when_sent_classes
+          foo_class = stub('FooClass', :class => Class,
+                                       :_defined_methods => %w(bar baz),
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooClass').returns foo_class
+          bat_class = stub('BatClass', :class => Class,
+                                       :_defined_methods => %w(ding pwop),
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BatClass').returns bat_class
+          expected = {foo_class => {:class_methods => %w(bar baz)},
+                      bat_class => {:class_methods => %w(ding pwop)}}
+          assert_classes expected, @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('classes_with_metaclass_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('classes_with_metaclass_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -245,14 +276,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_class_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['classes_with_class_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('classes_with_class_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('classes_with_class_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -260,38 +294,44 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('classes_with_class_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
-                                                        ['baz', {:arity => 0}]]},
-                      'BatClass' => {:class_methods => [['ding', {:arity => 0}],
-                                                        ['pwop', {:arity => 0}]]}}
-          assert_classes expected, @loader.class_definitions
+        def test_should_return_array_of_expected_classes_when_sent_classes
+          foo_class = stub('FooClass', :class => Class,
+                                       :_defined_methods => %w(bar baz),
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooClass').returns foo_class
+          bat_class = stub('BatClass', :class => Class,
+                                       :_defined_methods => %w(ding pwop),
+                                       :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BatClass').returns bat_class
+          expected = {foo_class => {:class_methods => %w(bar baz)},
+                      bat_class => {:class_methods => %w(ding pwop)}}
+          assert_classes expected, @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('classes_with_class_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('classes_with_class_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -315,14 +355,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['classes_with_instance_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('classes_with_instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('classes_with_instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -330,38 +373,46 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('classes_with_instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          expected = {'FooClass' => {:instance_methods => [['bar', {:arity => 0}],
-                                                           ['baz', {:arity => 0}]]},
-                      'BatClass' => {:instance_methods => [['ding', {:arity => 0}],
-                                                           ['pwop', {:arity => 0}]]}}
-          assert_classes expected, @loader.class_definitions
+        def test_should_return_array_of_expected_classes_when_sent_classes
+          foo_class = stub('FooClass', :class => Class,
+                                       :_defined_methods => [],
+                                       :_defined_instance_methods => %w(bar
+                                                                        baz))
+          @loader.stubs(:constantize).with('FooClass').returns foo_class
+          bat_class = stub('BatClass', :class => Class,
+                                       :_defined_methods => [],
+                                       :_defined_instance_methods => %w(ding
+                                                                        pwop))
+          @loader.stubs(:constantize).with('BatClass').returns bat_class
+          expected = {foo_class => {:instance_methods => %w(bar baz)},
+                      bat_class => {:instance_methods => %w(ding pwop)}}
+          assert_classes expected, @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('classes_with_instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('classes_with_instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -397,6 +448,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -404,8 +457,9 @@ module Trapeze::LoaderTest
                        @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -413,46 +467,54 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_array_of_expected_class_definitions_when_sent_class_definitions
-          expected = {'FooClass' => {:class_methods => [['bar', {:arity => 0}],
-                                                        ['baz', {:arity => 0}],
-                                                        ['fizz', {:arity => 0}],
-                                                        ['fuzz', {:arity => 0}]],
-                                     :instance_methods => [['bat', {:arity => 0}],
-                                                           ['pwop', {:arity => 0}]]},
-                      'DingClass' => {:class_methods => [['biz', {:arity => 0}],
-                                                         ['buzz', {:arity => 0}],
-                                                         ['deet', {:arity => 0}],
-                                                         ['doot', {:arity => 0}]],
-                                      :instance_methods => [['dit', {:arity => 0}],
-                                                            ['dot', {:arity => 0}]]}}
-          assert_classes expected, @loader.class_definitions
+        def test_should_return_array_of_expected_classes_when_sent_classes
+          foo_class = stub('FooClass', :class => Class,
+                                       :_defined_methods => %w(bar
+                                                               baz
+                                                               fizz
+                                                               fuzz),
+                                       :_defined_instance_methods => %w(bat
+                                                                        pwop))
+          @loader.stubs(:constantize).with('FooClass').returns foo_class
+          ding_class = stub('DingClass', :class => Class,
+                                         :_defined_methods => %w(biz
+                                                                 buzz
+                                                                 deet
+                                                                 doot),
+                                         :_defined_instance_methods => %w(dit
+                                                                          dot))
+          @loader.stubs(:constantize).with('DingClass').returns ding_class
+          expected = {foo_class => {:class_methods => %w(bar baz fizz fuzz),
+                                    :instance_methods => %w(bat pwop)},
+                      ding_class => {:class_methods => %w(biz buzz deet doot),
+                                     :instance_methods => %w(dit dot)}}
+          assert_classes expected, @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -474,14 +536,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('methodless_modules.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['methodless_modules.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('methodless_modules.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('methodless_modules.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -489,35 +554,43 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('methodless_modules.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('methodless_modules.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          expected = {'FooModule' => {}, 'BarModule' => {}}
-          assert_modules expected, @loader.module_definitions
+        def test_should_return_array_of_expected_modules_when_sent_modules
+          foo_module = stub('FooModule', :class => Module,
+                                         :_defined_methods => [],
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooModule').returns foo_module
+          bar_module = stub('BarModule', :class => Module,
+                                         :_defined_methods => [],
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BarModule').returns bar_module
+          expected = {foo_module => {}, bar_module => {}}
+          assert_modules expected, @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('methodless_modules.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -545,14 +618,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['modules_with_metaclass_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('modules_with_metaclass_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('modules_with_metaclass_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -560,38 +636,44 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('modules_with_metaclass_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('modules_with_metaclass_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
-                                                         ['baz', {:arity => 0}]]},
-                      'BatModule' => {:class_methods => [['ding', {:arity => 0}],
-                                                         ['pwop', {:arity => 0}]]}}
-          assert_modules expected, @loader.module_definitions
+        def test_should_return_array_of_expected_modules_when_sent_modules
+          foo_module = stub('FooModule', :class => Module,
+                                         :_defined_methods => %w(bar baz),
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooModule').returns foo_module
+          bat_module = stub('BatModule', :class => Module,
+                                         :_defined_methods => %w(ding pwop),
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BatModule').returns bat_module
+          expected = {foo_module => {:module_methods => %w(bar baz)},
+                      bat_module => {:module_methods => %w(ding pwop)}}
+          assert_modules expected, @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('modules_with_metaclass_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -615,14 +697,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_class_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['modules_with_class_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('modules_with_class_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('modules_with_class_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -630,39 +715,44 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('modules_with_class_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('modules_with_class_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          File.stubs(:read).returns @source
-          expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
-                                                         ['baz', {:arity => 0}]]},
-                      'BatModule' => {:class_methods => [['ding', {:arity => 0}],
-                                                         ['pwop', {:arity => 0}]]}}
-          assert_modules expected, @loader.module_definitions
+        def test_should_return_array_of_expected_modules_when_sent_modules
+          foo_module = stub('FooModule', :class => Module,
+                                         :_defined_methods => %w(bar baz),
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('FooModule').returns foo_module
+          bat_module = stub('BatModule', :class => Module,
+                                         :_defined_methods => %w(ding pwop),
+                                         :_defined_instance_methods => [])
+          @loader.stubs(:constantize).with('BatModule').returns bat_module
+          expected = {foo_module => {:module_methods => %w(bar baz)},
+                      bat_module => {:module_methods => %w(ding pwop)}}
+          assert_modules expected, @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('modules_with_class_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -686,14 +776,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['modules_with_instance_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('modules_with_instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('modules_with_instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -701,38 +794,46 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('modules_with_instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('modules_with_instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          expected = {'FooModule' => {:instance_methods => [['bar', {:arity => 0}],
-                                                            ['baz', {:arity => 0}]]},
-                      'BatModule' => {:instance_methods => [['ding', {:arity => 0}],
-                                                            ['pwop', {:arity => 0}]]}}
-          assert_modules expected, @loader.module_definitions
+        def test_should_return_array_of_expected_modules_when_sent_modules
+          foo_module = stub('FooModule', :class => Module,
+                                         :_defined_methods => [],
+                                         :_defined_instance_methods => %w(bar
+                                                                          baz))
+          @loader.stubs(:constantize).with('FooModule').returns foo_module
+          bat_module = stub('BatModule', :class => Module,
+                                         :_defined_methods => [],
+                                         :_defined_instance_methods => %w(ding
+                                                                          pwop))
+          @loader.stubs(:constantize).with('BatModule').returns bat_module
+          expected = {foo_module => {:instance_methods => %w(bar baz)},
+                      bat_module => {:instance_methods => %w(ding pwop)}}
+          assert_modules expected, @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('modules_with_instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -768,6 +869,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything(:class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -775,8 +878,9 @@ module Trapeze::LoaderTest
                        @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -784,46 +888,54 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_array_of_expected_module_definitions_when_sent_module_definitions
-          expected = {'FooModule' => {:class_methods => [['bar', {:arity => 0}],
-                                                         ['baz', {:arity => 0}],
-                                                         ['fizz', {:arity => 0}],
-                                                         ['fuzz', {:arity => 0}]],
-                                      :instance_methods => [['bat', {:arity => 0}],
-                                                            ['pwop', {:arity => 0}]]},
-                      'DingModule' => {:class_methods => [['biz', {:arity => 0}],
-                                                          ['buzz', {:arity => 0}],
-                                                          ['deet', {:arity => 0}],
-                                                          ['doot', {:arity => 0}]],
-                                       :instance_methods => [['dit', {:arity => 0}],
-                                                             ['dot', {:arity => 0}]]}}
-          assert_modules expected, @loader.module_definitions
+        def test_should_return_array_of_expected_modules_when_sent_modules
+          foo_module = stub('FooModule', :class => Module,
+                                         :_defined_methods => %w(bar
+                                                                 baz
+                                                                 fizz
+                                                                 fuzz),
+                                         :_defined_instance_methods => %w(bat
+                                                                          pwop))
+          @loader.stubs(:constantize).with('FooModule').returns foo_module
+          ding_module = stub('DingModule', :class => Module,
+                                         :_defined_methods => %w(biz
+                                                                 buzz
+                                                                 deet
+                                                                 doot),
+                                         :_defined_instance_methods => %w(dit
+                                                                          dot))
+          @loader.stubs(:constantize).with('DingModule').returns ding_module
+          expected = {foo_module => {:module_methods => %w(bar baz fizz fuzz),
+                                     :instance_methods => %w(bat pwop)},
+                      ding_module => {:module_methods => %w(biz buzz deet doot),
+                                      :instance_methods => %w(dit dot)}}
+          assert_modules expected, @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_empty_array_when_sent_top_level_methods
+          assert_equal [], @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -847,14 +959,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['metaclass_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('metaclass_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('metaclass_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -862,34 +977,35 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('metaclass_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('metaclass_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('metaclass_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_array_of_expected_methods_when_sent_top_level_methods
+          expected = %w(bar foo)
+          assert_equal expected, @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -907,14 +1023,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('class_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['class_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('class_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('class_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -922,34 +1041,35 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('class_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('class_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('class_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_empty_array_when_sent_method_definitions
-          assert_equal [], @loader.method_definitions
+        def test_should_return_array_of_expected_methods_when_sent_top_level_methods
+          expected = %w(bar foo)
+          assert_equal expected, @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -967,14 +1087,17 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
           assert_equal ['instance_methods.rb'], @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -982,35 +1105,35 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
-          expected = [['bar', {:arity => 0}], ['foo', {:arity => 0}]]
-          assert_methods(expected, @loader.method_definitions)
+        def test_should_return_array_of_expected_methods_when_sent_top_level_methods
+          expected = %w(bar foo)
+          assert_equal expected, @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions
@@ -1034,6 +1157,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
+          @loader.stubs(:unsandbox!).returns stub_everything
+          @loader.stubs(:constantize).returns stub_everything
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -1041,8 +1166,9 @@ module Trapeze::LoaderTest
                        @loader.filenames
         end
         
-        def test_should_call_file_read_when_sent_loadEXCLAMATION
-          File.expects(:read).with('metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
+        def test_should_call_file_read_once_when_sent_loadEXCLAMATION_twice
+          File.expects(:read).with('metaclass_methods_and_class_methods_and_instance_methods.rb').returns ''
+          @loader.load!
           @loader.load!
         end
         
@@ -1050,35 +1176,35 @@ module Trapeze::LoaderTest
           assert_equal @loader, @loader.load!
         end
         
-        def test_should_call_file_read_once_when_sent_class_definitions_twice
+        def test_should_call_file_read_once_when_sent_classes_twice
           File.expects(:read).with('metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.class_definitions
-          @loader.class_definitions
+          @loader.classes
+          @loader.classes
         end
         
-        def test_should_return_empty_array_when_sent_class_definitions
-          assert_equal [], @loader.class_definitions
+        def test_should_return_empty_array_when_sent_classes
+          assert_equal [], @loader.classes
         end
         
-        def test_should_call_file_read_once_when_sent_module_definitions_twice
+        def test_should_call_file_read_once_when_sent_modules_twice
           File.expects(:read).with('metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.module_definitions
-          @loader.module_definitions
+          @loader.modules
+          @loader.modules
         end
         
-        def test_should_return_empty_array_when_sent_module_definitions
-          assert_equal [], @loader.module_definitions
+        def test_should_return_empty_array_when_sent_modules
+          assert_equal [], @loader.modules
         end
         
-        def test_should_call_file_read_once_when_sent_method_definitions_twice
+        def test_should_call_file_read_once_when_sent_top_level_methods_twice
           File.expects(:read).with('metaclass_methods_and_class_methods_and_instance_methods.rb').returns @source
-          @loader.method_definitions
-          @loader.method_definitions
+          @loader.top_level_methods
+          @loader.top_level_methods
         end
         
-        def test_should_return_array_of_expected_method_definitions_when_sent_method_definitions
-          expected = [['ding', {:arity => 0}], ['pwop', {:arity => 0}]]
-          assert_methods(expected, @loader.method_definitions)
+        def test_should_return_array_of_expected_methods_when_sent_top_level_methods
+          expected = %w(bar bat baz ding foo pwop)
+          assert_equal expected, @loader.top_level_methods
         end
         
         def test_should_return_empty_array_when_sent_exceptions

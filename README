@@ -28,10 +28,11 @@ Enter Trapeze, the safety-net generator for Ruby.
 
 Trapeze generates a suite of unit tests or specifications for existing Ruby
 source code. This is accomplished through dynamic analysis, by reflecting on the
-public interfaces of classes, modules and global methods defined in the source.
-Trapeze then exercises each object, module and method, recording the behavior of
-the code. This recorded behavior is captured in a suite of test cases or
-specifications that can be rendered as test code or executable specifications.
+public interfaces of classes, modules and top-level methods defined in the
+source. Trapeze then exercises each object, module and method, recording the
+behavior of the code. This recorded behavior is captured in a suite of test
+cases or specifications that can be rendered as test code or executable
+specifications.
 
 There is a built-in suite renderer for the Test::Unit library. Other tools such
 as the RSpec library and Jay Fields's Expectations library may be supported also
@@ -87,10 +88,10 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
 
 == To do
 
+* Build a system test coverage Rake task that leverages the _aggregate_ option
+  of RCov to aggregate the results of all the system tests
 * Search classes and modules recursively for nested classes and modules
 * Assert the values of user-defined constants and the superclasses of classes
-* Test not just user-defined types but also methods and constants added to all
-  types in the system
 * Add support for --verbose/-v command-line option
 * Add support for thrown symbols and raised errors in addition to returned
   objects

@@ -1,5 +1,4 @@
 require File.expand_path("#{File.dirname __FILE__}/test")
-require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/application")
 require File.expand_path("#{File.dirname __FILE__}/../lib/trapeze/inflections_extension")
 require 'test/unit'
 require File.expand_path("#{File.dirname __FILE__}/assertion_helpers_extension")
@@ -36,12 +35,14 @@ system_test_dirs.each do |d|
       output_truth_dir    = File.expand_path("#{d}/output_truth")
       FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
       FileUtils.mkdir_p output_dir
-      application = Trapeze::Application.new('--input-files-pattern',
-                                             input_files_pattern,
-                                             '--output-dir',
-                                             output_dir,
-                                             '--quiet')
-      application.run!
+      trapeze_rb = File.expand_path("#{File.dirname __FILE__}/../lib/trapeze.rb")
+      system %Q<ruby -e >                                            +
+             %Q<"load '#{trapeze_rb}'; >                             +
+             %Q<application = Trapeze::Application.new(>             +
+             %Q<'--input-files-pattern', '#{input_files_pattern}', > +
+             %Q<'--output-dir', '#{output_dir}', >                   +
+             %Q<'--quiet'); >                                        +
+             %Q<application.run!">
       assert_dirs_identical output_truth_dir, output_dir
     end
   end

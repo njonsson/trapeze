@@ -68,14 +68,6 @@ module Trapeze::DescribeExtensionTest
                    Foo.new._describe
     end
     
-    def test_sandboxed_object_should_return_expected_description_when_sent_describe
-      stubbed_class = ('Foo')
-      stubbed_class.stubs(:name).returns 'Trapeze::Sandbox1234::Foo'
-      stubbed_object = mock('Foo object')
-      stubbed_object.stubs(:class).returns stubbed_class
-      assert_equal 'a Foo object', stubbed_object._describe
-    end
-    
     def test_true_should_return_expected_description_when_sent_describe
       assert_equal 'true', true._describe
     end

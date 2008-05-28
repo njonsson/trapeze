@@ -31,14 +31,6 @@ Rake::TestTask.new(:test) do |t|
 end
 
 namespace :test do
-  unless rcov_missing
-    desc 'Create a code coverage report for the tests'
-    Rcov::RcovTask.new(:coverage) do |t|
-      t.test_files = 'test/SUITE.rb'
-      t.verbose = true
-    end
-  end
-  
   Rake::TestTask.new(:unit) do |t|
     t.test_files = 'test/UNIT_TESTS.rb'
     t.verbose = true
@@ -61,15 +53,6 @@ namespace :test do
   end
   
   namespace :system do
-    unless rcov_missing
-      desc 'Create a code coverage report for the tests in test/system'
-      Rcov::RcovTask.new(:coverage) do |t|
-        t.output_dir = 'coverage-system'
-        t.test_files = 'test/SYSTEM_TESTS.rb'
-        t.verbose = true
-      end
-    end
-    
     desc 'Run generated system tests'
     task :generated do
       Dir.glob("#{File.dirname __FILE__}/test/system/**/output/**/SUITE.rb") do |f|

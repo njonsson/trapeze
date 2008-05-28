@@ -35,4 +35,4 @@ module Trapeze::ToMethodExtension
   
 end
 
-String.module_eval { include Trapeze::ToMethodExtension }
+String.class_eval { include Trapeze::ToMethodExtension }
