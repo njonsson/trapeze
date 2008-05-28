@@ -56,14 +56,14 @@ namespace :test do
     desc 'Run generated system tests'
     task :generated do
       Dir.glob("#{File.dirname __FILE__}/test/system/**/output/**/SUITE.rb") do |f|
-        system %Q(ruby #{File.expand_path f})
+        system %Q(ruby "#{File.expand_path f}")
       end
     end
     
     desc 'Run truth-file system tests'
     task :truth do
       Dir.glob("#{File.dirname __FILE__}/test/system/**/output_truth/**/SUITE.rb") do |f|
-        system %Q(ruby #{File.expand_path f})
+        system %Q(ruby "#{File.expand_path f}")
       end
     end
   end
