@@ -43,9 +43,8 @@ class Trapeze::Probe
   # Returns the results of probing classes in _loader_, calling probe! if they
   # have not been obtained already. Results are supplied in an array of hashes
   # of the form: <tt>{:class => _class_,
-  # :class_method_probings => _array_of_Message_objects_,
-  # :instantiation => _Message_,
-  # :instance_method_probings => _array_of_Message_objects_}</tt>.
+  # :class_method_probings => _array_of_hashes_, :instantiation => _hash_,
+  # :instance_method_probings => _array_of_hashes_}</tt>.
   def class_probe_results
     probe_or_get_results :class
   end
@@ -53,8 +52,8 @@ class Trapeze::Probe
   # Returns the results of probing modules in _loader_, calling probe! if they
   # have not been obtained already. Results are supplied in an array of hashes
   # of the form: <tt>{:module => _module_,
-  # :module_method_probings => _array_of_Message_objects_,
-  # :instance_method_probings => _array_of_Message_objects_}</tt>.
+  # :module_method_probings => _array_of_hashes_,
+  # :instance_method_probings => _array_of_hashes_}</tt>.
   def module_probe_results
     probe_or_get_results :module
   end
@@ -71,7 +70,7 @@ class Trapeze::Probe
   
   # Returns the results of probing top-level methods in _loader_, calling probe!
   # if they have not been obtained already. Results are supplied in an array of
-  # Message objects.
+  # hashes.
   def top_level_method_probe_results
     probe_or_get_results :top_level_method
   end

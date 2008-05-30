@@ -3,9 +3,9 @@
 require File.expand_path("#{File.dirname __FILE__}/envelope")
 
 # Captures any method call made on it and returns another Trapeze::Courier
-# object. Information about method calls is recorded in Trapeze::Message
-# objects. A Trapeze::Courier object can be used to describe the interface that
-# the calling code expects to use.
+# object. Information about method calls is recorded in hashes. A
+# Trapeze::Courier object can be used to describe the interface that the calling
+# code expects to use.
 class Trapeze::Courier
   
   # Instantiates a new Trapeze::Courier.
