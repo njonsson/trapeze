@@ -8,7 +8,7 @@ module Trapeze::CourierTest
   
   class Untouched < Test::Unit::TestCase
     
-    def test_should_return_empty_envelope_when_sent___seal_envelope__
+    def test_should_return_empty_envelope_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
       courier = Trapeze::Courier.new
       assert_equal Trapeze::Envelope.new, courier.__seal_envelope__
     end
@@ -24,7 +24,7 @@ module Trapeze::CourierTest
         @courier.foo
       end
       
-      def test_should_return_envelope_containing_expected_message_when_sent___seal_envelope__
+      def test_should_return_envelope_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
         assert_envelope [{:method_name => 'foo',
                           :returned => Trapeze::Envelope.new}],
                         @courier.__seal_envelope__
@@ -41,7 +41,7 @@ module Trapeze::CourierTest
           @courier.foo 'bar'
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar'],
                             :returned => Trapeze::Envelope.new}],
@@ -57,7 +57,7 @@ module Trapeze::CourierTest
           @courier.foo [:'1', '2', 3]
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => [[:'1', '2', 3]],
                             :returned => Trapeze::Envelope.new}],
@@ -73,7 +73,7 @@ module Trapeze::CourierTest
           @courier.foo 'bar' => :baz
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => [{'bar' => :baz}],
                             :returned => Trapeze::Envelope.new}],
@@ -90,7 +90,7 @@ module Trapeze::CourierTest
           @courier.foo { @time }
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :block => lambda { @time },
                             :returned => Trapeze::Envelope.new}],
@@ -110,7 +110,7 @@ module Trapeze::CourierTest
           @courier.foo 'bar', :baz
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar', :baz],
                             :returned => Trapeze::Envelope.new}],
@@ -126,7 +126,7 @@ module Trapeze::CourierTest
           @courier.foo [:'1', '2', 3], [:'4', '5', 6]
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => [[:'1', '2', 3], [:'4', '5', 6]],
                             :returned => Trapeze::Envelope.new}],
@@ -142,7 +142,7 @@ module Trapeze::CourierTest
           @courier.foo 'bar', :baz => :bat
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar', {:baz => :bat}],
                             :returned => Trapeze::Envelope.new}],
@@ -159,7 +159,7 @@ module Trapeze::CourierTest
           @courier.foo('bar') { @time }
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar'],
                             :block => lambda { @time },
@@ -180,7 +180,7 @@ module Trapeze::CourierTest
           @courier.foo 'bar', :baz, :bat
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar', :baz, :bat],
                             :returned => Trapeze::Envelope.new}],
@@ -196,7 +196,7 @@ module Trapeze::CourierTest
           @courier.foo [:'1', '2', 3], [:'4', '5', 6], [:'7', '8', 9]
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => [[:'1', '2', 3],
                                       [:'4', '5', 6],
@@ -215,7 +215,7 @@ module Trapeze::CourierTest
           @courier.foo('bar', :baz => :bat) { @time }
         end
         
-        def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :args => ['bar',
                                       {:baz => :bat}],
@@ -242,7 +242,7 @@ module Trapeze::CourierTest
           @courier.foo
         end
         
-        def test_should_return_array_containing_expected_messages_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_messages_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :returned => Trapeze::Envelope.new},
                            {:method_name => 'foo',
@@ -264,7 +264,7 @@ module Trapeze::CourierTest
           @courier.bar
         end
         
-        def test_should_return_array_containing_expected_messages_when_sent___seal_envelope__
+        def test_should_return_array_containing_expected_messages_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
           assert_envelope [{:method_name => 'foo',
                             :returned => Trapeze::Envelope.new},
                            {:method_name => 'bar',
@@ -288,11 +288,11 @@ module Trapeze::CourierTest
         @foo.bar
       end
       
-      def test_should_return_array_containing_expected_message_when_sent___seal_envelope__
-        inner_message = Trapeze::Message.returned(:method_name => 'bar',
-                                                  :returned => Trapeze::Envelope.new)
-        assert_envelope [{:method_name => 'foo',
-                          :returned => Trapeze::Envelope.new(inner_message)}],
+      def test_should_return_array_containing_expected_message_when_sent_UNDERSCOREUNDERSCOREseal_envelopeUNDERSCOREUNDERSCORE
+        returned = Trapeze::Envelope.new
+        returned << {:method_name => 'bar',
+                     :returned => Trapeze::Envelope.new}
+        assert_envelope [{:method_name => 'foo', :returned => returned}],
                         @courier.__seal_envelope__
       end
       

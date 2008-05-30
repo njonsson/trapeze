@@ -114,15 +114,15 @@ module Trapeze::AssertionHelpersExtension
     end
   end
   
-  def assert_envelope(expected_description, actual, message=nil)
-    actual_description = messages_to_descriptions(actual)
-    (expected_description + actual_description).each do |m|
+  def assert_envelope(expected, actual, message=nil)
+    format_messages! actual
+    (expected + actual).each do |m|
       if (block = m[:block])
         m[:block] = block.call
       end
     end
     with_clean_backtrace do
-      assert_equal expected_description, actual_description, message
+      assert_equal expected, actual, message
     end
   end
   
@@ -155,18 +155,18 @@ module Trapeze::AssertionHelpersExtension
         if r[:class_method_probings].empty?
           r.delete :class_method_probings
         else
-          r[:class_method_probings].collect! { |m| message_to_description m }
+          r[:class_method_probings].collect! { |m| format_message! m }
         end
       end
       if r[:module_method_probings]
         if r[:module_method_probings].empty?
           r.delete :module_method_probings
         else
-          r[:module_method_probings].collect! { |m| message_to_description m }
+          r[:module_method_probings].collect! { |m| format_message! m }
         end
       end
       if r[:instantiation]
-        instantiation = message_to_description(r[:instantiation])
+        instantiation = format_message!(r[:instantiation])
         instantiation.delete :returned if instantiation.include?(:returned)
         r[:instantiation] = instantiation
       end
@@ -174,7 +174,7 @@ module Trapeze::AssertionHelpersExtension
         if r[:instance_method_probings].empty?
           r.delete :instance_method_probings
         else
-          r[:instance_method_probings].collect! { |m| message_to_description m }
+          r[:instance_method_probings].collect! { |m| format_message! m }
         end
       end
     end
@@ -208,16 +208,26 @@ module Trapeze::AssertionHelpersExtension
   
 private
   
-  def message_to_description(message)
-    hash = message.reply.merge(:method_name => message.method_name)
-    args = message.args.collect { |a| messages_to_descriptions(a) rescue a }
-    hash.merge!(:args => args) unless args.empty?
-    hash.merge!(:block => message.block) if message.block
-    hash
+  def format_message!(message)
+    if message.include?(:args)
+      args = message[:args]
+      if args.nil? || args.empty?
+        message.delete :args
+      else
+        args.collect! do |a|
+          a.instance_of?(Trapeze::Envelope) ? format_messages!(a) : a
+        end
+      end
+    end
+    message.delete(:block) if (message.include?(:block) && message[:block].nil?)
+    if message[:returned].instance_of?(Trapeze::Envelope)
+      format_messages! message[:returned]
+    end
+    message
   end
   
-  def messages_to_descriptions(messages)
-    messages.collect { |m| message_to_description m }
+  def format_messages!(messages)
+    messages.collect! { |m| format_message! m }
   end
   
   def method_description(method)

@@ -45,7 +45,7 @@ private
         if (instantiation = r[:instantiation])
           generate_test!(:file => f, :method_name => 'setup') do
             f.print "    #{instance_var_name} = "
-            f.puts "#{class_name}.#{instantiation.method_name}"
+            f.puts "#{class_name}.#{instantiation[:method_name]}"
           end
         end
         generate_test!(:file => f,
@@ -65,7 +65,7 @@ private
     instance_var_name = options[:instance_var_name]
     method_probings   = options[:method_probings]
     method_probings.each do |m|
-      method_name, returned = m.method_name, m.reply[:returned]
+      method_name, returned = m[:method_name], m[:returned]
       value_as_var_name = returned._describe._variablize
       test_method_name = 'test_should_return_'                           +
                          "#{value_as_var_name.gsub /^_/, ''}_when_sent_" +
@@ -107,7 +107,7 @@ private
   
       end_print
       probe.top_level_method_probe_results.each do |r|
-        method_name, returned = r.method_name, r.reply[:returned]
+        method_name, returned = r[:method_name], r[:returned]
         value_as_var_name = returned._describe._variablize
         test_method_name = 'test_should_return_'                           +
                            "#{value_as_var_name.gsub /^_/, ''}_when_sent_" +
@@ -124,7 +124,7 @@ private
       f.puts
       probe.top_level_method_probe_results.each do |r|
         f.print <<-end_print
-Test_.top_level_method_calls[:#{r.method_name}] = lambda { #{r.method_name} }
+Test_.top_level_method_calls[:#{r[:method_name]}] = lambda { #{r[:method_name]} }
         end_print
       end
     end
