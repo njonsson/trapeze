@@ -10,7 +10,7 @@ module Trapeze::ProbeTest
   class WithEmptyLoader < Test::Unit::TestCase
     
     def setup
-      @mock_loader = mock
+      @mock_loader = mock('Trapeze::Loader')
       @mock_loader.stubs(:classes).returns []
       @mock_loader.stubs(:modules).returns []
       @mock_loader.stubs(:top_level_methods).returns []

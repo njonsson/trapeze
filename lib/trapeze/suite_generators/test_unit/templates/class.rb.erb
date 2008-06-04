@@ -1,0 +1,21 @@
+<%= render :partial => 'boilerplate' %>
+
+require 'test/unit'
+
+<% instance_var_name = class_name._variablize -%>
+class <%= class_name %>Test < Test::Unit::TestCase
+  
+<% unless self[:instance_method_probings].empty? -%>
+  def setup
+    @<%= instance_var_name %> = <%= class_name %>.<%= self[:instantiation][:method_name] %>
+  end
+  
+<% end -%>
+  def test_should_be_instance_of_class
+    assert_instance_of Class, <%= class_name %>
+  end
+  
+<%= render :partial => 'equality_test',
+           :collection => self[:instance_method_probings],
+           :locals => {:type_name => class_name} -%>
+end

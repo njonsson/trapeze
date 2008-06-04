@@ -5,23 +5,12 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  class << self
-    
-    def top_level_method_calls
-      @top_level_method_calls ||= {}
-    end
-    
+  def test_top_level_method_bar_should_return_1_11
+    assert_equal Rational(1, 11), eval('bar', TOPLEVEL_BINDING)
   end
   
-  def test_should_return_1_11_when_sent_bar
-    assert_equal Rational(1, 11), Test_.top_level_method_calls[:bar].call
-  end
-  
-  def test_should_return_1_11_when_sent_foo
-    assert_equal Rational(1, 11), Test_.top_level_method_calls[:foo].call
+  def test_top_level_method_foo_should_return_1_11
+    assert_equal Rational(1, 11), eval('foo', TOPLEVEL_BINDING)
   end
   
 end
-
-Test_.top_level_method_calls[:bar] = lambda { bar }
-Test_.top_level_method_calls[:foo] = lambda { foo }

@@ -5,23 +5,12 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  class << self
-    
-    def top_level_method_calls
-      @top_level_method_calls ||= {}
-    end
-    
+  def test_top_level_method_bar_should_return_2002_02_02_t02_02_02_00_00
+    assert_equal DateTime.parse("2002-02-02T02:02:02+00:00"), eval('bar', TOPLEVEL_BINDING)
   end
   
-  def test_should_return_2002_02_02_t02_02_02_00_00_when_sent_bar
-    assert_equal DateTime.parse("2002-02-02T02:02:02+00:00"), Test_.top_level_method_calls[:bar].call
-  end
-  
-  def test_should_return_2001_01_01_t01_01_01_00_00_when_sent_foo
-    assert_equal DateTime.parse("2001-01-01T01:01:01+00:00"), Test_.top_level_method_calls[:foo].call
+  def test_top_level_method_foo_should_return_2001_01_01_t01_01_01_00_00
+    assert_equal DateTime.parse("2001-01-01T01:01:01+00:00"), eval('foo', TOPLEVEL_BINDING)
   end
   
 end
-
-Test_.top_level_method_calls[:bar] = lambda { bar }
-Test_.top_level_method_calls[:foo] = lambda { foo }

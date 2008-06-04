@@ -1,0 +1,20 @@
+  <%- method_name, returned = self[:method_name], self[:returned] -%>
+  <%- value_as_var_name = returned._describe._variablize -%>
+  <%- test_method_name  = 'test_should_return_'                           +
+                          "#{value_as_var_name.gsub /^_/, ''}_when_sent_" +
+                          method_name -%>
+  def <%= test_method_name %>
+  <%- actual_expression = "@#{type_name._variablize}.#{method_name}" -%>
+  <%- if (assertion = equality_assertion(returned, actual_expression)) -%>
+    <%= assertion %>
+  <%- else -%>
+    assert_instance_of <%= returned.class.name %>, <%= actual_expression %>
+    <%- returned.instance_variables.sort.each do |v| -%>
+      <%- value = returned.instance_variable_get(v) -%>
+      <%- assertion = equality_assertion(value,
+                      "#{actual_expression}.instance_variable_get('#{v}')") -%>
+    <%= assertion %>
+    <%- end -%>
+  <%- end -%>
+  end
+  

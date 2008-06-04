@@ -12,8 +12,8 @@ module Trapeze::LoaderTest
     def setup
       @loader = Trapeze::Loader.new
       File.stubs(:read).returns ''
-      @loader.stubs(:unsandbox!).returns stub_everything
-      @loader.stubs(:constantize).returns stub_everything
+      @loader.stubs :unsandbox!
+      @loader.stubs(:constantize).returns stub_everything('constant')
     end
     
     def test_should_return_empty_array_when_sent_filenames
@@ -50,8 +50,8 @@ module Trapeze::LoaderTest
       def setup
         @loader = Trapeze::Loader.new('empty.rb')
         File.stubs(:read).returns ''
-        @loader.stubs(:unsandbox!).returns stub_everything
-        @loader.stubs(:constantize).returns stub_everything
+        @loader.stubs :unsandbox!
+        @loader.stubs(:constantize).returns stub_everything('constant')
       end
       
       def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -115,8 +115,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('methodless_classes.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Class)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Class',
+                                                              :class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -197,8 +198,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Class)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Class',
+                                                              :class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -276,8 +278,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_class_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Class)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Class',
+                                                              :class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -355,8 +358,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Class)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Class',
+                                                              :class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -448,8 +452,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('classes_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Class)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Class',
+                                                              :class => Class)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -536,8 +541,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('methodless_modules.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Module)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Module',
+                                                              :class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -618,8 +624,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Module)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Module',
+                                                              :class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -697,8 +704,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_class_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Module)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Module',
+                                                              :class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -776,8 +784,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Module)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Module',
+                                                              :class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -869,8 +878,9 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('modules_with_metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything(:class => Module)
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('Module',
+                                                              :class => Module)
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -959,8 +969,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('constant')
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -1023,8 +1033,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('class_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('constant')
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -1087,8 +1097,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('constant')
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames
@@ -1157,8 +1167,8 @@ module Trapeze::LoaderTest
           end_source
           @loader = Trapeze::Loader.new('metaclass_methods_and_class_methods_and_instance_methods.rb')
           File.stubs(:read).returns @source
-          @loader.stubs(:unsandbox!).returns stub_everything
-          @loader.stubs(:constantize).returns stub_everything
+          @loader.stubs :unsandbox!
+          @loader.stubs(:constantize).returns stub_everything('constant')
         end
         
         def test_should_return_array_of_expected_filenames_when_sent_filenames

@@ -1,0 +1,9 @@
+<% method_name, returned = self[:method_name], self[:returned] -%>
+<% value_as_var_name = returned._describe._variablize -%>
+<% test_method_name = "test_top_level_method_#{method_name}_should_return_" +
+                      value_as_var_name.gsub(/^_/, '') -%>
+  def <%= test_method_name %>
+    <%= equality_assertion returned,
+                           "eval('#{method_name}', TOPLEVEL_BINDING)" %>
+  end
+  

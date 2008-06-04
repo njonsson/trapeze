@@ -1,0 +1,9 @@
+<%= render :partial => 'boilerplate' %>
+
+require 'test/unit'
+
+class Test_ < Test::Unit::TestCase
+  
+<%= render :partial => 'top_level_method_test',
+           :collection => probe.top_level_method_probe_results -%>
+end

@@ -5,23 +5,12 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  class << self
-    
-    def top_level_method_calls
-      @top_level_method_calls ||= {}
-    end
-    
+  def test_top_level_method_bat_should_return_a_hash_containing_ding_with_a_key_of_pwop
+    assert_equal({:pwop=>:ding}, eval('bat', TOPLEVEL_BINDING))
   end
   
-  def test_should_return_a_hash_containing_ding_with_a_key_of_pwop_when_sent_bat
-    assert_equal({:pwop=>:ding}, Test_.top_level_method_calls[:bat].call)
-  end
-  
-  def test_should_return_a_hash_containing_baz_with_a_key_of_bar_when_sent_foo
-    assert_equal({:bar=>:baz}, Test_.top_level_method_calls[:foo].call)
+  def test_top_level_method_foo_should_return_a_hash_containing_baz_with_a_key_of_bar
+    assert_equal({:bar=>:baz}, eval('foo', TOPLEVEL_BINDING))
   end
   
 end
-
-Test_.top_level_method_calls[:bat] = lambda { bat }
-Test_.top_level_method_calls[:foo] = lambda { foo }
