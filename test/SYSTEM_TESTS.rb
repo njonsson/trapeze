@@ -36,7 +36,8 @@ system_test_dirs.each do |d|
       FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
       FileUtils.mkdir_p output_dir
       trapeze_rb = File.expand_path("#{File.dirname __FILE__}/../lib/trapeze.rb")
-      system %Q<ruby -e >                                            +
+      ruby_exe = RUBY_PLATFORM =~ /mswin/i ? 'rubyw' : 'ruby'
+      system %Q<#{ruby_exe} -e >                                     +
              %Q<"load '#{trapeze_rb}'; >                             +
              %Q<application = Trapeze::Application.new(>             +
              %Q<'--input-files-pattern', '#{input_files_pattern}', > +
