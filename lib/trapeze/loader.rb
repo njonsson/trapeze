@@ -152,13 +152,13 @@ private
   
   def sandbox_all_and_extract
     sandbox = Module.new
-    exceptions = @filenames.inject([]) do |exceptions, filename|
+    exceptions = @filenames.inject([]) do |result, filename|
       begin
         sandbox.module_eval File.read(filename)
       rescue Exception => e
-        exceptions << [filename, e]
+        result << [filename, e]
       end
-      exceptions
+      result
     end
     extract_all(sandbox).merge :exceptions => exceptions
   end
