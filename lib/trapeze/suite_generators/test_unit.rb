@@ -34,9 +34,12 @@ private
   
   def target_for(template, options={})
     case template
-      when 'class':             "#{options[:class_name]._pathify}_test"
-      when 'module':            "#{options[:module_name]._pathify}_test"
-      when 'top_level_methods': '_test'
+      when 'class'
+        "#{options[:class_name]._pathify}_test"
+      when 'module'
+        "#{options[:module_name]._pathify}_test"
+      when 'top_level_methods'
+        '_test'
       else
         raise ArgumentError, "unexpected template #{template.inspect}"
     end
