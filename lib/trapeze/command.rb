@@ -12,14 +12,6 @@ private
   
 public
   
-  # Instantiates a new Trapeze::Command object with the specified _attributes_.
-  # See _args_, options, _valid_options_, and errors for details on these
-  # attributes.
-  def initialize(attributes={})
-    @args          = Array(attributes[:args])
-    @valid_options = attributes[:valid_options] || {}
-  end
-  
   # The command-line arguments.
   attr_reader :args
   
@@ -42,6 +34,14 @@ public
   # The long form of the option name is the key to the short form of the option
   # name.
   attr_reader :valid_options
+  
+  # Instantiates a new Trapeze::Command object with the specified _attributes_.
+  # See _args_, options, _valid_options_, and errors for details on these
+  # attributes.
+  def initialize(attributes={})
+    @args          = Array(attributes[:args])
+    @valid_options = attributes[:valid_options] || {}
+  end
   
   # Returns a hash in which the keys are invalid _args_ and the values are error
   # messages, calling valid? if they have not been validated already. The hash
