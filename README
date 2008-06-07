@@ -97,6 +97,7 @@ Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
   objects
 * Create mocks and stubs of core- and standard-library IO classes in order to
   make the generated suite more "unit-ish"
+* Add Rake tasks for preparing RCov aggregate statistics on the system tests
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it
 * Address the elephant-in-the-room question of code execution paths and how to
