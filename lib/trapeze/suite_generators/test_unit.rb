@@ -21,15 +21,24 @@ private
   
   def equality_assertion(expected_value, actual_expr)
     return "assert_nil #{actual_expr}" if expected_value.nil?
-    return nil unless (literal = LITERALS[expected_value.class.to_s])
-    literal_value = literal.call(expected_value)
+    return nil unless (literal_value = literal_for(expected_value))
+    assertion = 'assert_equal'
+    if literal_value.kind_of?(Regexp)
+      literal_value = literal_value.inspect
+      assertion = 'assert_match'
+    end
     args = "#{literal_value}, #{actual_expr}"
     if args[0..0] == '{'
       args = "(#{args})"
     else
       args = " #{args}"
     end
-    "assert_equal#{args}"
+    "#{assertion}#{args}"
+  end
+  
+  def literal_for(value)
+    return nil unless (literal = LITERALS[value.class.to_s])
+    literal.call value
   end
   
   def target_for(template, options={})

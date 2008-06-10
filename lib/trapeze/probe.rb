@@ -12,7 +12,12 @@ class Trapeze::Probe
     
     def probe_method(method) #:nodoc:
       args = (1..method.arity.abs).collect { |i| Trapeze::Courier.new }
-      returned = method.call(*args)
+      reply = {}
+      begin
+        reply[:returned] = method.call(*args)
+      rescue Exception => e
+        reply[:raised] = e
+      end
       
       args.collect! do |a|
 #        begin
@@ -22,12 +27,14 @@ class Trapeze::Probe
 #        end
       end
       
-      begin
-        returned = returned.__seal_envelope__
-      rescue NoMethodError
+      if reply.include?(:returned)
+        begin
+          reply[:returned] = reply[:returned].__seal_envelope__
+        rescue NoMethodError
+        end
       end
       
-      {:args => args, :returned => returned}
+      reply.merge :args => args
     end
     
   end
@@ -98,9 +105,7 @@ private
     
     klass._defined_methods.each do |m|
       reply = self.class.probe_method(m._to_method(klass))
-      class_method_probings << {:method_name => m,
-                                :args => reply[:args],
-                                :returned => reply[:returned]}
+      class_method_probings << reply.merge(:method_name => m)
     end
     self
   end
@@ -109,9 +114,7 @@ private
     top_level_method_probe_results = (@results[:top_level_method_probe_results] = [])
     @loader.top_level_methods.each do |m|
       reply = self.class.probe_method(m._to_method(Object))
-      top_level_method_probe_results << {:method_name => m,
-                                         :args => reply[:args],
-                                         :returned => reply[:returned]}
+      top_level_method_probe_results << reply.merge(:method_name => m)
     end
     self
   end
@@ -126,9 +129,7 @@ private
                                                 :returned => instance}
     klass._defined_instance_methods.each do |m|
       reply = self.class.probe_method(m._to_method(instance))
-      instance_method_probings << {:method_name => m,
-                                   :args => reply[:args],
-                                   :returned => reply[:returned]}
+      instance_method_probings << reply.merge(:method_name => m)
     end
     self
   end
@@ -142,9 +143,7 @@ private
     instance = klass.new
     mod._defined_instance_methods.each do |m|
       reply = self.class.probe_method(m._to_method(instance))
-      instance_method_probings << {:method_name => m,
-                                   :args => reply[:args],
-                                   :returned => reply[:returned]}
+      instance_method_probings << reply.merge(:method_name => m)
     end
     self
   end
@@ -165,9 +164,7 @@ private
     
     mod._defined_methods.each do |m|
       reply = self.class.probe_method(m._to_method(mod))
-      module_method_probings << {:method_name => m,
-                                 :args => reply[:args],
-                                 :returned => reply[:returned]}
+      module_method_probings << reply.merge(:method_name => m)
     end
     self
   end

@@ -15,7 +15,7 @@ class <%= class_name %>Test < Test::Unit::TestCase
     assert_instance_of Class, <%= class_name %>
   end
   
-<%= render :partial => 'equality_test',
+<%= render :partial => 'instance_method_test',
            :collection => self[:instance_method_probings],
            :locals => {:type_name => class_name} -%>
 end

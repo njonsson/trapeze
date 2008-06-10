@@ -1,5 +1,7 @@
 # Defines Trapeze::DescribeExtension.
 
+require File.expand_path("#{File.dirname __FILE__}/string_matcher")
+
 # Adds a <i>_describe</i> method to all objects that provides a description of
 # their identity and state.
 # 
@@ -72,7 +74,14 @@ public
       end
     elsif (self == true) || (self == false)
       to_s
-    elsif nil? || instance_of?(String) || instance_of?(Symbol)
+    elsif instance_of?(String)
+      string_matcher = Trapeze::StringMatcher.new(self)
+      if string_matcher.pattern_required?
+        string_matcher._describe
+      else
+        inspect
+      end
+    elsif nil? || instance_of?(Symbol)
       inspect
     elsif instance_of?(Class) || instance_of?(Module)
       name

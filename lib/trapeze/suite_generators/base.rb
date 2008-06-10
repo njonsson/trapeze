@@ -3,6 +3,7 @@
 require 'erb'
 require 'fileutils'
 require File.expand_path("#{File.dirname __FILE__}/../inflections_extension")
+require File.expand_path("#{File.dirname __FILE__}/../string_matcher")
 require File.expand_path("#{File.dirname __FILE__}/../suite_generators")
 
 # The base class for library-specific generators in Trapeze::SuiteGenerators.
@@ -43,7 +44,14 @@ class Trapeze::SuiteGenerators::Base
               'Range'      => INSPECT_LITERAL,
               'Rational'   => INSPECT_LITERAL,
               'Regexp'     => INSPECT_LITERAL,
-              'String'     => INSPECT_LITERAL,
+              'String'     => lambda do |o|
+                                string_matcher = Trapeze::StringMatcher.new(o)
+                                if string_matcher.pattern_required?
+                                  string_matcher.pattern
+                                else
+                                  o.inspect
+                                end
+                              end,
               'Symbol'     => INSPECT_LITERAL,
               'Time'       => lambda do |o|
                                 utc = o.utc
