@@ -1,10 +1,8 @@
 class Bat
   
   def pwop
-    'PWOP!'
+    raise NoMethodError, 'this error was raised intentionally'
   end
-  
-  self.this_is_a_nonexistent_method
   
   def ding
     'DING!'

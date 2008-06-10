@@ -4,7 +4,7 @@ module Bat
     'PWOP!'
   end
   
-  self.this_is_a_nonexistent_method
+  1 / 0
   
   def ding
     'DING!'

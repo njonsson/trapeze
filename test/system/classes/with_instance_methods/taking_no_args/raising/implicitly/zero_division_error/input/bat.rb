@@ -1,10 +1,8 @@
 class Bat
   
   def pwop
-    'PWOP!'
+    1 / 0
   end
-  
-  self.this_is_a_nonexistent_method
   
   def ding
     'DING!'

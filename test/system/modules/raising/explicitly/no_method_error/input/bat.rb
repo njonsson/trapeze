@@ -4,7 +4,7 @@ module Bat
     'PWOP!'
   end
   
-  self.this_is_a_nonexistent_method
+  raise NoMethodError, 'this error was raised intentionally'
   
   def ding
     'DING!'

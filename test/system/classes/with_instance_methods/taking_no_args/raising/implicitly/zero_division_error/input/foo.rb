@@ -1,10 +1,8 @@
 class Foo
   
   def bar
-    'BAR!'
+    1 / 0
   end
-  
-  self.this_method_also_does_not_exist
   
   def baz
     'BAZ!'

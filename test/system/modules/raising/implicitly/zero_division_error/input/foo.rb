@@ -4,7 +4,7 @@ module Foo
     'BAR!'
   end
   
-  self.this_method_also_does_not_exist
+  1 / 0
   
   def baz
     'BAZ!'

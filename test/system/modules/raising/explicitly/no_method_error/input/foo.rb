@@ -4,7 +4,7 @@ module Foo
     'BAR!'
   end
   
-  self.this_method_also_does_not_exist
+  raise NoMethodError, 'this error also was raised intentionally'
   
   def baz
     'BAZ!'
