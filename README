@@ -15,12 +15,16 @@ executable specifications. There are more degrees of freedom in Ruby code and
 therefore more dark places for bugs to hide.
 
 So automated tests and executable specifications are good things. <i>But lots of
-code doesn't have test cases or specs.</i> In many cases, code that has them is
-inadequately covered. This is a sad reality.
+code doesn't have test cases or specs.</i> And just because there's a
+<i>test</i> directory in a project tree doesn't mean that the test cases it
+contains are worth much. They may have been wrong when they were written, they
+may be wrong because they haven't been maintained along with the code, they may
+be difficult to maintain, or there just may not be enough of them to provide
+decent coverage. This is a sad reality for too many software projects.
 
-What to do? Wouldn't it be nice if you could have test cases generated for you
-automatically? At least then you would have a guard against regression when you
-make changes to a program.
+What to do? Wouldn't it be nice if you could have high-quality test cases
+generated for you automatically? At least then you would have a guard against
+regression when you make changes to a program.
 
 == About Trapeze
 
@@ -34,9 +38,9 @@ behavior of the code. This recorded behavior is captured in a suite of test
 cases or specifications that can be rendered as test code or executable
 specifications.
 
-There is a built-in suite renderer for the Test::Unit library. Other tools such
-as the RSpec library and Jay Fields's Expectations library may be supported also
-at some future time.
+There is a built-in suite renderer for the Test::Unit library. Other libraries
+such as RSpec, Shoulda and Jay Fields's Expectations may be supported also at
+some future time.
 
 In essence, Trapeze is a tool for characterizing Ruby source code. Trapeze lets
 you fly high as you maintain and enhance a Ruby codebase that lacks test or spec
@@ -59,8 +63,8 @@ path.
 
 == How to use Trapeze
 
-Trapeze does just one thing: generate a suite of test cases for a given Ruby
-codebase. After you generate the suite you can run it.
+Trapeze does just one thing: it generates a suite of test cases for a given Ruby
+codebase.
 
 === Generate a suite
 
@@ -77,14 +81,17 @@ in a different output directory.
 
 === Run the suite
 
-Find the file named <i>SUITE.rb</i> which is located in the generated output
-directory. (By default this directory is <i>test/trapeze</i>.)
+You can run a generated suite any time you want to check the behavior of your
+code against what is captured in the suite. Find the file named <i>SUITE.rb</i>
+which is located in the generated output directory. (By default this directory
+is <i>test/trapeze</i>.)
 
-Execute this file: <tt>ruby SUITE.rb</tt>.
+Execute it: <tt>ruby SUITE.rb</tt>.
 
 == Credits
 
-Authored by Nils Jonsson (nils@alumni.rice.edu). Released under the MIT License.
+Trapeze's author is <b>Nils Jonsson</b> (nils@alumni.rice.edu). Released under
+the MIT License.
 
 == To do
 
