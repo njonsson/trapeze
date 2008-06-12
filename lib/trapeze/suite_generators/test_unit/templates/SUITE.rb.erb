@@ -1,9 +1,9 @@
 <%= render :partial => 'boilerplate' %>
 
-Dir.glob(File.expand_path("#{File.dirname __FILE__}/../input/**/*.rb")) do |source_file|
+Dir.glob(File.expand_path("#{File.dirname __FILE__}/<%= relative_path_to_input_files_pattern %>")) do |source_file|
   require File.expand_path(source_file)
 end
 
-Dir.glob(File.expand_path("#{File.dirname __FILE__}/**/*_test.rb")) do |test_file|
+Dir.glob(File.expand_path("#{File.dirname __FILE__}/<%= generated_files_pattern %>")) do |test_file|
   require File.expand_path(test_file)
 end

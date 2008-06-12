@@ -36,6 +36,10 @@ private
     "#{assertion}#{args}"
   end
   
+  def generated_files_pattern
+    '**/*_test.rb'
+  end
+  
   def literal_for(value)
     return nil unless (literal = LITERALS[value.class.to_s])
     literal.call value
