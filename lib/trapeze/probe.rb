@@ -138,9 +138,8 @@ private
     instance_method_probings = (@results[:module_probe_results].last[:instance_method_probings] = [])
     return false if mod._defined_instance_methods.empty?
     
-    klass = Class.new
-    klass.class_eval { include mod }
-    instance = klass.new
+    instance = Object.new
+    instance.extend mod
     mod._defined_instance_methods.each do |m|
       reply = self.class.probe_method(m._to_method(instance))
       instance_method_probings << reply.merge(:method_name => m)
