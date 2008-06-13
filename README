@@ -95,6 +95,9 @@ the MIT License.
 
 == To do
 
+* Add system test runners (alternative <i>SUITE.rb</i> files?) that swallow
+  exceptions where they are expected. They would +rescue+ while including files
+  under test
 * Build a system test coverage Rake task that leverages the _aggregate_ option
   of RCov to aggregate the results of all the system tests
 * Search classes and modules recursively for nested classes and modules
