@@ -52,19 +52,30 @@ namespace :test do
     t.verbose = true
   end
   
+  def run_system_tests(output_dir)
+    pattern = "#{File.dirname __FILE__}/test/system/**/#{output_dir}/SUITE.rb"
+    ruby_exe = (RUBY_PLATFORM =~ /mswin/i) ? 'ruby' : '/usr/bin/env ruby'
+    Dir.glob(pattern) do |f|
+      quiet_suite = File.expand_path("#{File.dirname f}/../SUITE_quiet.rb")
+      if File.file?(quiet_suite)
+        $output_dir = output_dir
+        system %Q(#{ruby_exe} ) +
+               %Q(-e "$output_dir = '#{output_dir}'; load '#{quiet_suite}'")
+      else
+        system %Q(#{ruby_exe} "#{File.expand_path f}")
+      end
+    end
+  end
+  
   namespace :system do
     desc 'Run generated system tests'
     task :generated do
-      Dir.glob("#{File.dirname __FILE__}/test/system/**/output/**/SUITE.rb") do |f|
-        system %Q(ruby "#{File.expand_path f}")
-      end
+      run_system_tests 'output'
     end
     
     desc 'Run truth-file system tests'
     task :truth do
-      Dir.glob("#{File.dirname __FILE__}/test/system/**/output_truth/**/SUITE.rb") do |f|
-        system %Q(ruby "#{File.expand_path f}")
-      end
+      run_system_tests 'output_truth'
     end
   end
 end
