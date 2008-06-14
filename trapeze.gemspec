@@ -2,7 +2,7 @@ require 'rubygems'
 
 spec = Gem::Specification.new do |s|
   s.name        = 'trapeze'
-  s.version     = '0.1.15'
+  s.version     = '0.1.16'
   s.author      = 'Nils Jonsson'
   s.email       = 'nils@alumni.rice.edu'
   s.homepage    = 'http://trapeze.rubyforge.org/'
