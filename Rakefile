@@ -58,9 +58,7 @@ namespace :test do
     Dir.glob(pattern) do |f|
       quiet_suite = File.expand_path("#{File.dirname f}/../SUITE_quiet.rb")
       if File.file?(quiet_suite)
-        $output_dir = output_dir
-        system %Q(#{ruby_exe} ) +
-               %Q(-e "$output_dir = '#{output_dir}'; load '#{quiet_suite}'")
+        system %Q(#{ruby_exe} "#{quiet_suite}" "#{output_dir}")
       else
         system %Q(#{ruby_exe} "#{File.expand_path f}")
       end

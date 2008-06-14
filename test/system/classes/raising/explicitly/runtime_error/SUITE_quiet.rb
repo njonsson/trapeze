@@ -3,23 +3,25 @@
 
 require 'test/unit'
 
-runtime_errors_count = 0
+class SystemTest < Test::Unit::TestCase
+  
+  def test_should_raise_expected_errors_when_loading_source
+    assert_equal 2,
+                 $errors_count,
+                 "source was expected to raise RuntimeError a certain number of times"
+  end
+  
+end
+
+$errors_count = 0
 Dir.glob(File.expand_path("#{File.dirname __FILE__}/input/**/*.rb")) do |source_file|
   begin
     require File.expand_path(source_file)
   rescue RuntimeError
-    runtime_errors_count += 1
+    $errors_count += 1
   end
 end
-unless runtime_errors_count == 2
-  raise Test::Unit::AssertionFailedError,
-        "expected RuntimeError to be raised once but happened #{runtime_errors_count} time(s)"
-end
 
-unless $output_dir
-  raise Test::Unit::AssertionFailedError,
-        'expected $output_dir to be set to the name of the output directory'
-end
-Dir.glob(File.expand_path("#{File.dirname __FILE__}/#$output_dir/**/*_test.rb")) do |test_file|
+Dir.glob(File.expand_path("#{File.dirname __FILE__}/#{ARGV.first}/**/*_test.rb")) do |test_file|
   require File.expand_path(test_file)
 end

@@ -95,8 +95,6 @@ the MIT License.
 
 == To do
 
-* Improve system test Rake tasks to report unexpected errors that are showing up
-  in +stderr+ but not in the Test::Unit statistics lines
 * Build a system test coverage Rake task that leverages the _aggregate_ option
   of RCov to aggregate the results of all the system tests
 * Search classes and modules recursively for nested classes and modules

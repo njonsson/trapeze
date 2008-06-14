@@ -36,14 +36,14 @@ system_test_dirs.each do |d|
       FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
       FileUtils.mkdir_p output_dir
       trapeze_rb = File.expand_path("#{File.dirname __FILE__}/../lib/trapeze.rb")
-      ruby_exe = RUBY_PLATFORM =~ /mswin/i ? 'rubyw' : 'ruby'
-      system %Q<#{ruby_exe} -e >                                     +
-             %Q<"load '#{trapeze_rb}'; >                             +
-             %Q<application = Trapeze::Application.new(>             +
-             %Q<'--input-files-pattern', '#{input_files_pattern}', > +
-             %Q<'--output-dir', '#{output_dir}', >                   +
-             %Q<'--quiet'); >                                        +
-             %Q<application.run!">
+      ruby_exe = (RUBY_PLATFORM =~ /mswin/i) ? 'rubyw' : '/usr/bin/env ruby'
+      system %Q[#{ruby_exe} -e ]                                     +
+             %Q["load '#{trapeze_rb}'; ]                             +
+             %Q[application = Trapeze::Application.new(]             +
+             %Q['--input-files-pattern', '#{input_files_pattern}', ] +
+             %Q['--output-dir', '#{output_dir}', ]                   +
+             %Q['--quiet'); ]                                        +
+             %Q[application.run!"]
       assert_dirs_identical output_truth_dir, output_dir
     end
   end
