@@ -27,42 +27,6 @@ class Trapeze::SuiteGenerators::Base
     
   end
   
-  INSPECT_LITERAL = lambda { |o| o.inspect }
-  TYPE_LITERAL    = lambda { |o| o.name }
-  LITERALS = {'Array'      => INSPECT_LITERAL,
-              'BigDecimal' => lambda { |o| %Q<BigDecimal.new("#{o}")> },
-              'Bignum'     => INSPECT_LITERAL,
-              'Class'      => TYPE_LITERAL,
-              'Complex'    => INSPECT_LITERAL,
-              'Date'       => lambda { |o| %Q<Date.parse("#{o}")> },
-              'DateTime'   => lambda { |o| %Q<DateTime.parse("#{o}")> },
-              'FalseClass' => INSPECT_LITERAL,
-              'Fixnum'     => INSPECT_LITERAL,
-              'Float'      => INSPECT_LITERAL,
-              'Hash'       => INSPECT_LITERAL,
-              'Module'     => TYPE_LITERAL,
-              'Range'      => INSPECT_LITERAL,
-              'Rational'   => INSPECT_LITERAL,
-              'Regexp'     => INSPECT_LITERAL,
-              'String'     => lambda do |o|
-                                string_matcher = Trapeze::StringMatcher.new(o)
-                                if string_matcher.pattern_required?
-                                  string_matcher.pattern
-                                else
-                                  o.inspect
-                                end
-                              end,
-              'Symbol'     => INSPECT_LITERAL,
-              'Time'       => lambda do |o|
-                                utc = o.utc
-                                expr = %w(year month day
-                                          hour min sec usec).collect do |attr|
-                                  utc.send(attr).to_s
-                                end.join(', ')
-                                "Time.utc(#{expr})"
-                              end,
-              'TrueClass'  => INSPECT_LITERAL}
-  
   # The Dir.glob pattern used to find source files being analyzed.
   attr_reader :input_files_pattern
   

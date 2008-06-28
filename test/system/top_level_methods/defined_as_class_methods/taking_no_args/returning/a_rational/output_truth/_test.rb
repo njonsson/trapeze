@@ -6,11 +6,11 @@ require 'test/unit'
 class Test_ < Test::Unit::TestCase
   
   def test_top_level_method_bar_should_return_1_11
-    assert_equal Rational(1, 11), eval('bar', TOPLEVEL_BINDING)
+    assert_equal Rational(1, 11), eval('bar', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
   def test_top_level_method_foo_should_return_1_11
-    assert_equal Rational(1, 11), eval('foo', TOPLEVEL_BINDING)
+    assert_equal Rational(1, 11), eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
 end

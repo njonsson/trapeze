@@ -6,11 +6,11 @@ require 'test/unit'
 class Test_ < Test::Unit::TestCase
   
   def test_top_level_method_bat_should_return_a_hash_containing_ding_with_a_key_of_pwop
-    assert_equal({:pwop=>:ding}, eval('bat', TOPLEVEL_BINDING))
+    assert_equal({:pwop=>:ding}, eval('bat', TOPLEVEL_BINDING, __FILE__, __LINE__))
   end
   
   def test_top_level_method_foo_should_return_a_hash_containing_baz_with_a_key_of_bar
-    assert_equal({:bar=>:baz}, eval('foo', TOPLEVEL_BINDING))
+    assert_equal({:bar=>:baz}, eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__))
   end
   
 end

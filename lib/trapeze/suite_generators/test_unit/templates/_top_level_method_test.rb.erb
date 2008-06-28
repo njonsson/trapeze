@@ -1,9 +1,44 @@
-<% method_name, returned = self[:method_name], self[:returned] -%>
-<% value_as_var_name = returned._describe._variablize -%>
-<% test_method_name = "test_top_level_method_#{method_name}_should_return_" +
-                      value_as_var_name.gsub(/^_/, '') -%>
+<%- method_name, = self[:method_name] -%>
+<%- if self.include?(:returned) -%>
+  <%- returned = self[:returned] -%>
+  <%- actual_expression = "eval('#{method_name}', TOPLEVEL_BINDING, " +
+                          '__FILE__, __LINE__)' -%>
+  <%- returned_as_var_name = returned._describe._variablize -%>
+  <%- test_method_name = "test_top_level_method_#{method_name}_should_return_" +
+                         returned_as_var_name.gsub(/^_/, '') -%>
   def <%= test_method_name %>
-    <%= equality_assertion returned,
-                           "eval('#{method_name}', TOPLEVEL_BINDING)" %>
+    <%= equality_assertion returned, actual_expression %>
   end
   
+<%- elsif self.include?(:raised) -%>
+  <%- raised = self[:raised] -%>
+  <%- raised_as_var_name = raised.class.name._variablize -%>
+  <%- actual_expression = "eval '#{method_name}', TOPLEVEL_BINDING, " +
+                          '__FILE__, __LINE__' -%>
+  <%- attribute_names = (raised.class.instance_methods -
+                         Exception.instance_methods +
+                         %w(message)).sort -%>
+  <%- attributes = attribute_names.collect do |a| -%>
+    <%- [a, raised.send(a)] -%>
+  <%- end -%>
+  <%- if attributes.empty? -%>
+    <%- attributes_description = '' -%>
+  <%- else -%>
+    <%- attributes_description = '_with_' + attributes.collect do |name, value| -%>
+      <%- "#{name}_of_#{value._describe._variablize}" -%>
+    <%- end.join('_and_') -%>
+  <%- end -%>
+  <%- raised_description = "#{raised_as_var_name.gsub /^_/, ''}#{attributes_description}" -%>
+  <%- test_method_name = "test_top_level_method_#{method_name}_should_raise_#{raised_description}" -%>
+  def <%= test_method_name %>
+    begin
+      <%= actual_expression %>
+    rescue Exception => e
+      assert_instance_of <%= raised.class.name %>, e
+      <%- attributes.each do |name, value| -%>
+      <%= equality_assertion value, "e.#{name}" %>
+      <%- end -%>
+    end
+  end
+  
+<%- end -%>

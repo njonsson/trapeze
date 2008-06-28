@@ -1209,7 +1209,7 @@ module Trapeze::ProbeTest
     
   end
   
-  class WithLoaderHavingInstanceMethodsThatDoNothing < Test::Unit::TestCase
+  class WithLoaderHavingTopLevelMethodsThatDoNothing < Test::Unit::TestCase
     
     module MethodsModule
       
@@ -1220,16 +1220,14 @@ module Trapeze::ProbeTest
     end
     
     def setup
-      @bar = 'bar'
-      @bar.stubs(:_to_method).returns stub_everything('Method', :arity => 0)
-      @baz = 'baz'
-      @baz.stubs(:_to_method).returns stub_everything('Method', :arity => 0)
-      @top_level_methods = [@bar, @baz]
+      Trapeze::Probe.stubs(:invoke_top_level_method).returns nil
+      @top_level_methods = %w(bar baz)
       @mock_loader = mock
       @mock_loader.stubs(:classes).returns []
       @mock_loader.stubs(:modules).returns []
       @mock_loader.stubs(:top_level_methods).returns @top_level_methods
       @probe = Trapeze::Probe.new(@mock_loader)
+      @probe
     end
     
     def test_should_return_expected_object_when_sent_loader
@@ -1265,8 +1263,8 @@ module Trapeze::ProbeTest
     end
     
     def test_should_return_expected_results_when_sent_top_level_method_probe_results
-      expected = [{:method_name => @bar, :returned => nil},
-                  {:method_name => @baz, :returned => nil}]
+      expected = [{:method_name => 'bar', :returned => nil},
+                  {:method_name => 'baz', :returned => nil}]
       assert_envelope expected, @probe.top_level_method_probe_results
     end
     

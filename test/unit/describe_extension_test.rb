@@ -11,7 +11,9 @@ module Trapeze::DescribeExtensionTest
   
   class Scalar < Test::Unit::TestCase
     
-    class Foo; end
+    class FooClass; end
+    
+    module BarModule; end
     
     def test_nil_should_return_expected_description_when_sent_describe
       assert_equal 'nil', nil._describe
@@ -56,7 +58,13 @@ module Trapeze::DescribeExtensionTest
     end
     
     def test_class_should_return_expected_description_when_sent_describe
-      assert_equal 'Trapeze::DescribeExtensionTest::Scalar::Foo', Foo._describe
+      assert_equal 'Trapeze::DescribeExtensionTest::Scalar::FooClass',
+                   FooClass._describe
+    end
+    
+    def test_module_should_return_expected_description_when_sent_describe
+      assert_equal 'Trapeze::DescribeExtensionTest::Scalar::BarModule',
+                   BarModule._describe
     end
     
     def test_object_should_return_expected_description_when_sent_describe
@@ -64,8 +72,8 @@ module Trapeze::DescribeExtensionTest
     end
     
     def test_custom_object_should_return_expected_description_when_sent_describe
-      assert_equal 'a Trapeze::DescribeExtensionTest::Scalar::Foo object',
-                   Foo.new._describe
+      assert_equal 'a Trapeze::DescribeExtensionTest::Scalar::FooClass object',
+                   FooClass.new._describe
     end
     
     def test_true_should_return_expected_description_when_sent_describe
@@ -84,7 +92,7 @@ module Trapeze::DescribeExtensionTest
       assert_equal '1999-12-31', Date.civil(1999, 12, 31)._describe
     end
     
-    def test_datetime_should_return_expected_description_when_sent_describe
+    def test_date_time_should_return_expected_description_when_sent_describe
       assert_equal '1999-12-31T23:59:59+00:00',
                    DateTime.civil(1999, 12, 31, 23, 59, 59)._describe
     end

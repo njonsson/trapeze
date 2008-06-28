@@ -6,11 +6,11 @@ require 'test/unit'
 class Test_ < Test::Unit::TestCase
   
   def test_top_level_method_baz_should_return_a_regexp_object
-    assert_equal /BAT!/, eval('baz', TOPLEVEL_BINDING)
+    assert_equal /BAT!/, eval('baz', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
   def test_top_level_method_foo_should_return_a_regexp_object
-    assert_equal /BAR!/, eval('foo', TOPLEVEL_BINDING)
+    assert_equal /BAR!/, eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
 end

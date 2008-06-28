@@ -104,6 +104,7 @@ the MIT License.
   objects
 * Create mocks and stubs of core- and standard-library IO classes in order to
   make the generated suite more "unit-ish"
+* Figure out a way to probe top-level methods that have required parameters
 * Add Rake tasks for preparing RCov aggregate statistics on the system tests
 * Add support for excluding source code files and method name patterns from
   scanning, since the engine executes code in order to inspect it

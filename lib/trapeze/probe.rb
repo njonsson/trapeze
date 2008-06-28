@@ -6,9 +6,16 @@ require File.expand_path("#{File.dirname __FILE__}/to_method_extension")
 
 # Explores the source code contained in _loader_ in order to discover its
 # behavior.
+# 
+# <b>Note:</b> Top-level methods that have required parameters will be probed
+# <i>without arguments.</i> This will raise an ArgumentError.
 class Trapeze::Probe
   
   class << self
+    
+    def invoke_top_level_method(method_name)
+      eval method_name, TOPLEVEL_BINDING, __FILE__, __LINE__
+    end
     
     def probe_method(method) #:nodoc:
       args = (1..method.arity.abs).collect { |i| Trapeze::Courier.new }
@@ -35,6 +42,24 @@ class Trapeze::Probe
       end
       
       reply.merge :args => args
+    end
+    
+    def probe_top_level_method(method_name) #:nodoc:
+      reply = {}
+      begin
+        reply[:returned] = invoke_top_level_method(method_name)
+      rescue Exception => e
+        reply[:raised] = e
+      end
+      
+      if reply.include?(:returned)
+        begin
+          reply[:returned] = reply[:returned].__seal_envelope__
+        rescue NoMethodError
+        end
+      end
+      
+      reply.merge :args => []
     end
     
   end
@@ -113,7 +138,7 @@ private
   def probe_top_level_methods!
     top_level_method_probe_results = (@results[:top_level_method_probe_results] = [])
     @loader.top_level_methods.each do |m|
-      reply = self.class.probe_method(m._to_method(Object))
+      reply = self.class.probe_top_level_method(m)
       top_level_method_probe_results << reply.merge(:method_name => m)
     end
     self

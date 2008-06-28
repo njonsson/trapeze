@@ -6,11 +6,11 @@ require 'test/unit'
 class Test_ < Test::Unit::TestCase
   
   def test_top_level_method_bat_should_return_an_array_containing_pwop_and_ding
-    assert_equal [:pwop, :ding], eval('bat', TOPLEVEL_BINDING)
+    assert_equal [:pwop, :ding], eval('bat', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
   def test_top_level_method_foo_should_return_an_array_containing_bar_and_baz
-    assert_equal [:bar, :baz], eval('foo', TOPLEVEL_BINDING)
+    assert_equal [:bar, :baz], eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
 end

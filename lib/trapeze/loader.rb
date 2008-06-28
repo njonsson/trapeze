@@ -163,15 +163,14 @@ private
     extract_all(sandbox).merge :exceptions => exceptions
   end
   
-  def unsandbox!(source)
-    Object.class_eval source
-    self
+  def unsandbox!(source_filename)
+    load source_filename
   end
   
   def unsandbox_all!
     @filenames.each do |f|
       begin
-        unsandbox! File.read(f)
+        unsandbox! f
       rescue Exception
       end
     end
