@@ -5,12 +5,12 @@ require 'test/unit'
 
 class Test_ < Test::Unit::TestCase
   
-  def test_top_level_method_bar_should_return_sat_feb_02_08_02_02_utc_2002
-    assert_equal Time.utc(2002, 2, 2, 8, 2, 2, 2), eval('bar', TOPLEVEL_BINDING, __FILE__, __LINE__)
+  def test_top_level_method_bar_should_return_sat_feb_02_02_02_02_utc_2002
+    assert_equal Time.utc(2002, 2, 2, 2, 2, 2, 2), eval('bar', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
-  def test_top_level_method_foo_should_return_mon_jan_01_07_01_01_utc_2001
-    assert_equal Time.utc(2001, 1, 1, 7, 1, 1, 1), eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__)
+  def test_top_level_method_foo_should_return_mon_jan_01_01_01_01_utc_2001
+    assert_equal Time.utc(2001, 1, 1, 1, 1, 1, 1), eval('foo', TOPLEVEL_BINDING, __FILE__, __LINE__)
   end
   
 end

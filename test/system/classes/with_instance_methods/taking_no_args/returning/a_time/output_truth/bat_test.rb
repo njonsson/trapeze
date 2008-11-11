@@ -13,12 +13,12 @@ class BatTest < Test::Unit::TestCase
     assert_instance_of Class, Bat
   end
   
-  def test_should_return_sun_apr_04_09_04_04_utc_2004_when_sent_ding
-    assert_equal Time.utc(2004, 4, 4, 9, 4, 4, 4), @bat.ding
+  def test_should_return_sun_apr_04_04_04_04_utc_2004_when_sent_ding
+    assert_equal Time.utc(2004, 4, 4, 4, 4, 4, 4), @bat.ding
   end
   
-  def test_should_return_mon_mar_03_09_03_03_utc_2003_when_sent_pwop
-    assert_equal Time.utc(2003, 3, 3, 9, 3, 3, 3), @bat.pwop
+  def test_should_return_mon_mar_03_03_03_03_utc_2003_when_sent_pwop
+    assert_equal Time.utc(2003, 3, 3, 3, 3, 3, 3), @bat.pwop
   end
   
 end
