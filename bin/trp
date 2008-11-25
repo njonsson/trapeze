@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # A shell script that defines the command-line interface for Trapeze.
 
 begin
