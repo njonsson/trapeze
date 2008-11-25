@@ -17,7 +17,7 @@ task :default => :test
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'doc'
   rdoc.title    = 'Trapeze'
-  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('MIT-LICENSE')
   rdoc.rdoc_files.include('bin/trp')
   rdoc.rdoc_files.include('lib/**/*.rb')
