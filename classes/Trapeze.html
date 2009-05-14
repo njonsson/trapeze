@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Trapeze</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Trapeze</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/trapeze_rb.html">
+                lib/trapeze.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+<a href="Trapeze.html">Trapeze</a> is a regression safety-net generator for
+Ruby.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Module <a href="Trapeze/DefinedInstanceMethodsExtension.html" class="link">Trapeze::DefinedInstanceMethodsExtension</a><br />
+Module <a href="Trapeze/DefinedMethodsExtension.html" class="link">Trapeze::DefinedMethodsExtension</a><br />
+Module <a href="Trapeze/DescribeExtension.html" class="link">Trapeze::DescribeExtension</a><br />
+Module <a href="Trapeze/InflectionsExtension.html" class="link">Trapeze::InflectionsExtension</a><br />
+Module <a href="Trapeze/NameExtension.html" class="link">Trapeze::NameExtension</a><br />
+Module <a href="Trapeze/StringComparisonExtension.html" class="link">Trapeze::StringComparisonExtension</a><br />
+Module <a href="Trapeze/SuiteGenerators.html" class="link">Trapeze::SuiteGenerators</a><br />
+Module <a href="Trapeze/ToMethodExtension.html" class="link">Trapeze::ToMethodExtension</a><br />
+Class <a href="Trapeze/Application.html" class="link">Trapeze::Application</a><br />
+Class <a href="Trapeze/Command.html" class="link">Trapeze::Command</a><br />
+Class <a href="Trapeze/Courier.html" class="link">Trapeze::Courier</a><br />
+Class <a href="Trapeze/Envelope.html" class="link">Trapeze::Envelope</a><br />
+Class <a href="Trapeze/Literals.html" class="link">Trapeze::Literals</a><br />
+Class <a href="Trapeze/Loader.html" class="link">Trapeze::Loader</a><br />
+Class <a href="Trapeze/Probe.html" class="link">Trapeze::Probe</a><br />
+Class <a href="Trapeze/StringMatcher.html" class="link">Trapeze::StringMatcher</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Wed May 13 20:34:41 -0500 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h2>Introduction</h2>
+<p>
+Writing bug-free code is very difficult. Some of the difficulty can be
+mitigated through the use of automated tests or executable specifications
+which can give programmers reasons for confidence in the code they write.
+With automated tests or executable specifications, the programmer expresses
+his intent twice &#8212; once in the code itself and once in the tests or
+specs. Without a double-check of programmer intent, it is easy for defects
+to creep into a program undetected.
+</p>
+<p>
+Programs written in statically-typed languages are hard enough to get
+right. Any programmer worth her salt knows that just because her code
+compiles cleanly doesn&#8216;t mean that it works. An interpreted,
+dynamically-typed language like Ruby compounds the problem for programmers
+who don&#8216;t make use of automated tests or executable specifications.
+There are more degrees of freedom in Ruby code and therefore more dark
+places for bugs to hide.
+</p>
+<p>
+So automated tests and executable specifications are good things. <em>But
+lots of code doesn&#8216;t have test cases or specs.</em> And just because
+there&#8216;s a <em>test</em> directory in a project tree doesn&#8216;t
+mean that the test cases it contains are worth much. They may have been
+wrong when they were written, they may be wrong because they haven&#8216;t
+been maintained along with the code, they may be difficult to maintain, or
+there just may not be enough of them to provide decent coverage. This is a
+sad reality for too many software projects.
+</p>
+<p>
+What to do? Wouldn&#8216;t it be nice if you could have high-quality test
+cases generated for you automatically? At least then you would have a guard
+against regression when you make changes to a program.
+</p>
+<h2>About <a href="../classes/Trapeze.html">Trapeze</a></h2>
+<p>
+Enter <a href="../classes/Trapeze.html">Trapeze</a>, the safety-net
+generator for Ruby.
+</p>
+<p>
+<a href="../classes/Trapeze.html">Trapeze</a> generates a suite of unit
+tests or specifications for existing Ruby source code. This is accomplished
+through dynamic analysis, by reflecting on the public interfaces of
+classes, modules and top-level methods defined in the source. <a
+href="../classes/Trapeze.html">Trapeze</a> then exercises each object,
+module and method, recording the behavior of the code. This recorded
+behavior is captured in a suite of test cases or specifications that can be
+rendered as test code or executable specifications.
+</p>
+<p>
+There is a built-in suite renderer for the Test::Unit library. Other
+libraries such as RSpec, Shoulda and Jay Fields&#8216;s Expectations may be
+supported also at some future time.
+</p>
+<p>
+In essence, <a href="../classes/Trapeze.html">Trapeze</a> is a tool for
+characterizing Ruby source code. <a
+href="../classes/Trapeze.html">Trapeze</a> lets you fly high as you
+maintain and enhance a Ruby codebase that lacks test or spec coverage,
+knowing that you have a regression safety net underneath you.
+</p>
+<p>
+<b><a href="../classes/Trapeze.html">Trapeze</a> is a pre-alpha
+product.</b> Multiple major features are not yet ready for prime time. Stay
+tuned.
+</p>
+<h2>How to install <a href="../classes/Trapeze.html">Trapeze</a></h2>
+<p>
+<a href="../classes/Trapeze.html">Trapeze</a> is packaged as a RubyGem. You
+will need the RubyGems tool installed in order to take advantage of a
+one-step installation procedure. With RubyGems installed, type the
+following:
+</p>
+<pre>
+  gem install --source http://trapeze.rubyforge.org trapeze
+</pre>
+<p>
+If the installation is successful, you should have the latest version of <a
+href="../classes/Trapeze.html">Trapeze</a> installed on your system, and
+along with it, the <tt>trp</tt> command in your path.
+</p>
+<h2>How to use <a href="../classes/Trapeze.html">Trapeze</a></h2>
+<p>
+<a href="../classes/Trapeze.html">Trapeze</a> does just one thing: it
+generates a suite of test cases for a given Ruby codebase.
+</p>
+<h3>Generate a suite</h3>
+<p>
+From the root of your Ruby project, type:
+</p>
+<pre>
+  trp
+</pre>
+<p>
+This will search for files matching the pattern <em>lib/**/*.rb</em> and
+generate a safety-net suite in the directory <em>test/trapeze</em>.
+</p>
+<p>
+Type <tt>trp -h</tt> to learn about available options, including how to
+search for source code files matching a different pattern and how to
+generate a suite in a different output directory.
+</p>
+<h3>Run the suite</h3>
+<p>
+You can run a generated suite any time you want to check the behavior of
+your code against what is captured in the suite. Find the file named
+<em>SUITE.rb</em> which is located in the generated output directory. (By
+default this directory is <em>test/trapeze</em>.)
+</p>
+<p>
+Execute it: <tt>ruby SUITE.rb</tt>.
+</p>
+<h2>Credits</h2>
+<p>
+<a href="../classes/Trapeze.html">Trapeze</a>&#8216;s author is <b>Nils
+Jonsson</b> (nils@alumni.rice.edu). Released under the MIT License.
+</p>
+<h2>To do</h2>
+<ul>
+<li>Build a system test coverage Rake task that leverages the
+<em>aggregate</em> option of RCov to aggregate the results of all the
+system tests
+
+</li>
+<li>Search classes and modules recursively for nested classes and modules
+
+</li>
+<li>Assert the values of user-defined constants and the superclasses of classes
+
+</li>
+<li>Add support for &#8212;verbose/-v command-line option
+
+</li>
+<li>Add support for thrown symbols and raised errors in addition to returned
+objects
+
+</li>
+<li>Create mocks and stubs of core- and standard-library IO classes in order to
+make the generated suite more &quot;unit-ish&quot;
+
+</li>
+<li>Figure out a way to probe top-level methods that have required parameters
+
+</li>
+<li>Add Rake tasks for preparing RCov aggregate statistics on the system tests
+
+</li>
+<li>Add support for excluding source code files and method name patterns from
+scanning, since the engine executes code in order to inspect it
+
+</li>
+<li>Address the elephant-in-the-room question of code execution paths and how
+to get predictable code coverage in generated tests &#8212; create an
+alternative implementation of <a
+href="../classes/Trapeze/Probe.html">Trapeze::Probe</a> that leverages the
+ParseTree gem
+
+</li>
+</ul>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
